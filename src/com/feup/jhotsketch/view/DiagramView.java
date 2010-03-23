@@ -85,10 +85,7 @@ public class DiagramView extends Composite implements DiagramObserver{
 		redraw();
 	}
 
-	Listener listener = new Listener() {
-		private Event lastEvent = new Event();
-		private long lastEventTime = 0;
-		
+	Listener listener = new Listener() {		
 		@Override
 		public void handleEvent(Event event) {
 			switch (event.type) {

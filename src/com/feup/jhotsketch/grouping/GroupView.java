@@ -2,10 +2,12 @@ package com.feup.jhotsketch.grouping;
 
 import org.eclipse.swt.graphics.GC;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.FigureView;
 
+@PackageName("Grouping")
 public class GroupView extends FigureView {
 
 	@Override

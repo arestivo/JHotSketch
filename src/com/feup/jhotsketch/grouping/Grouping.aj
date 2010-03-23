@@ -59,16 +59,15 @@ public aspect Grouping {
 	    Point preferred = cool.computeSize(size.x, size.y);
 		cool.setPreferredSize(preferred);	    
 
-		group.addListener(SWT.Selection, new Listener() {
-			
+		group.addListener(SWT.Selection, new Listener() {			
 			@Override
 			public void handleEvent(Event event) {
 				DiagramModel diagram = JHotSketch.getInstance().getCurrentView().getDiagram();
 				Set<FigureModel> selected = diagram.getSelected();
+				if (selected.size() <= 1) return;
 				for (FigureModel figure : selected) {
 					figure.setSelected(false);
 				}
-				if (selected.size() == 0) return;
 				GroupModel group = new GroupModel();
 				group.addFigures(selected);
 				diagram.removeFigures(selected);
@@ -78,6 +77,20 @@ public aspect Grouping {
 			}
 		});
 		
+		ungroup.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				DiagramModel diagram = JHotSketch.getInstance().getCurrentView().getDiagram();
+				Set<FigureModel> selected = diagram.getSelected();
+				for (FigureModel figure : selected) {
+					if (figure instanceof GroupModel) {
+						diagram.removeFigure(figure);
+						diagram.addFigures(((GroupModel)figure).getFigures());
+						diagram.setSelect(((GroupModel)figure).getFigures());
+					}
+				}
+			}
+		});
 	}
 
 }

@@ -45,6 +45,7 @@ public class DiagramModel implements FigureObserver {
 	
 	public void removeFigure(FigureModel f){
 		figures.remove(f);
+		selected.remove(f);
 		diagramChanged();
 	}
 
@@ -128,5 +129,17 @@ public class DiagramModel implements FigureObserver {
 
 	public void removeFigures(Set<FigureModel> toRemove) {
 		figures.removeAll(toRemove);
+		selected.removeAll(toRemove);
+	}
+
+	public void addFigures(Set<FigureModel> figures) {
+		this.figures.addAll(figures);
+		diagramChanged();
+	}
+
+	public void setSelect(Set<FigureModel> figures) {
+		for (FigureModel figure : figures) {
+			setSelect(figure);
+		}
 	}
 }

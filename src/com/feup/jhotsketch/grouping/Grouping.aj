@@ -13,11 +13,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.FigureView;
 
+@PackageName("Grouping")
 public aspect Grouping {
 	pointcut createCopyPaste(JHotSketch application, CoolBar coolbar) :
 		target(application) &&

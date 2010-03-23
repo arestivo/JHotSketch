@@ -5,8 +5,10 @@ import java.util.Set;
 
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.FigureModel;
 
+@PackageName("Grouping")
 public class GroupModel extends FigureModel{
 	private HashSet<FigureModel> figures = new HashSet<FigureModel>();
 	private int width, height;

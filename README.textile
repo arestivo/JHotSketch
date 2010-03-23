@@ -11,11 +11,13 @@ Currently the following features have been implemented:
 * Line properties: width, style and color
 * Circle and square basic shapes: no creation still
 * Snap to grid (needs some refactoring)
+* Grouping
 
 The next planned features are:
 
 * Object creation
-* Grouping objects
+* Ungrouping objects
+* Propagate properties to group elements
 * Fill properties
 * Snap to objects
 * Cut, Copy and Paste

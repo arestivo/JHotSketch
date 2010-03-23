@@ -24,3 +24,4 @@ The next planned features are:
 * Intelligent Paste
 * Object resizing
 * More shapes
+* Connectors

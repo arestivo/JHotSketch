@@ -13,7 +13,8 @@ public abstract class FigureModel {
 	private boolean selected;
 	private HashSet<FigureObserver> observers = new HashSet<FigureObserver>();
 	
-	private int x, y;
+	protected int x;
+	protected int y;
 
 	private static int HANDLESIZE = 8;
 	

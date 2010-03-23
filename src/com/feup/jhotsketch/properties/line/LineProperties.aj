@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties;
+package com.feup.jhotsketch.properties.line;
 
 import org.eclipse.swt.SWT; 
 import org.eclipse.swt.layout.GridLayout;
@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.TabItem;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 
-@PackageName("Properties")
+@PackageName("LineProperties")
 public aspect LineProperties {	
 		
 	pointcut createPropertyFolder() : 

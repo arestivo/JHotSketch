@@ -125,4 +125,8 @@ public class DiagramModel implements FigureObserver {
 	public void figureChanged(FigureModel figure) {
 		diagramChanged();
 	}
+
+	public void removeFigures(Set<FigureModel> toRemove) {
+		figures.removeAll(toRemove);
+	}
 }

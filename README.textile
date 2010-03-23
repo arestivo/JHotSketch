@@ -10,10 +10,14 @@ Currently the following features have been implemented:
 * Moving objects
 * Line properties: width, style and color
 * Circle and square basic shapes: no creation still
+* Snap to grid (needs some refactoring)
 
 The next planned features are:
 
 * Object creation
 * Grouping objects
 * Fill properties
+* Snap to objects
+* Cut, Copy and Paste
+* Intelligent Paste
 

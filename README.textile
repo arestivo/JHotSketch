@@ -20,4 +20,5 @@ The next planned features are:
 * Snap to objects
 * Cut, Copy and Paste
 * Intelligent Paste
-
+* Object resizing
+* More shapes

@@ -14,7 +14,6 @@ public class DiagramModel implements FigureObserver {
 	private Set<FigureModel> selected = new HashSet<FigureModel>();
 
 	private Rectangle selectionRectangle; 
-	private Rectangle moveRectangle; 
 
 	public DiagramModel(){
 		figures.add(new SquareModel(10, 10, 50, 50));
@@ -105,20 +104,6 @@ public class DiagramModel implements FigureObserver {
 
 	public void removeSelectionRectangle() {
 		selectionRectangle = null;
-		diagramChanged();
-	}
-
-	public void setMoveRectangle(Rectangle moveRectangle) {
-		this.moveRectangle = moveRectangle;
-		diagramChanged();
-	}
-
-	public Rectangle getMoveRectangle() {
-		return moveRectangle;
-	}
-
-	public void removeMoveRectangle() {
-		moveRectangle = null;
 		diagramChanged();
 	}
 

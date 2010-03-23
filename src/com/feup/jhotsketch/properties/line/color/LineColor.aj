@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties.line;
+package com.feup.jhotsketch.properties.line.color;
 
 import java.util.Set;
 
@@ -23,7 +23,7 @@ import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.FigureView;
 
-@PackageName("LineProperties")
+@PackageName("Line.Color")
 public aspect LineColor{
 
 	// Add line color properties to Figure

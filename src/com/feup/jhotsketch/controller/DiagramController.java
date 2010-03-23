@@ -13,9 +13,9 @@ public abstract class DiagramController {
 		this.diagram = diagram;
 	}
 	
-	public abstract void mouseClick(Event event);
-	
-	public abstract void mouseDrag(Event event1, Event event2);
+	public abstract void mouseDown(Event event);
 
-	public abstract void mouseDrop(Event event1, Event event2);
+	public abstract void mouseUp(Event event);
+
+	public abstract void mouseMove(Event event);
 }

@@ -3,7 +3,7 @@ package com.feup.jhotsketch.controller;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
 
 import com.feup.contribution.aida.annotations.PackageName;
@@ -12,73 +12,79 @@ import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("Controller")
 public class PointerController extends DiagramController{
+	private enum OPERATION {NONE, SELECT, MOVE} 
+	private OPERATION operation = OPERATION.NONE;
+	
+	private Set<FigureModel> grabbed;
+	
+	private Point lastPoint;
 	
 	public PointerController(DiagramModel diagram) {
 		super(diagram);
 	}
 
-	public void mouseClick(Event event) {
-		if ((event.stateMask & SWT.CTRL) == 0) diagram.unselectAll();
-		diagram.toggleSelected(diagram.getFigureAt(event.x, event.y));
+	@Override
+	public void mouseDown(Event event) {
+		lastPoint = new Point(event.x, event.y);
+		
+		// Test if event on selected figure
+		for (FigureModel figure : diagram.getSelected()) {
+			if (figure.contains(event.x, event.y)) {
+				operation = OPERATION.MOVE;
+				grabbed = diagram.getSelected();
+				return;
+			}
+		}
+		
+		// Test if event on unselected figure
+		FigureModel figure = diagram.getFigureAt(event.x, event.y);
+		if (figure != null) {
+			if ((event.stateMask & SWT.CTRL) == 0) diagram.unselectAll();
+			diagram.setSelect(figure);
+			mouseDown(event);
+			return;
+		}
+
+		// Event on nothing
+		if ((event.stateMask & SWT.SHIFT) == 0) diagram.unselectAll();
+		operation = OPERATION.SELECT;
 	}
 
 	@Override
-	public void mouseDrag(Event event1, Event event2) {
-		int dx = event2.x - event1.x;
-		int dy = event2.y - event1.y;
-		for (FigureModel figure : diagram.getSelected()) {
-			if (figure.contains(event1.x, event1.y)) {
-				Rectangle r = null;
-				for (FigureModel f : diagram.getSelected()) {
-					if (r == null) r = f.getBounds();
-					else r.add(f.getBounds());
-				}
-				r.x = r.x + dx;	r.y = r.y + dy;
-				diagram.setMoveRectangle(r);
-				return;
-			}
+	public void mouseMove(Event event) {
+		Point newPoint = new Point(event.x, event.y);
+
+		if (operation == OPERATION.MOVE) {
+			moveFigures(grabbed, lastPoint, newPoint);
+			lastPoint = newPoint;
+		}
+		if (operation == OPERATION.SELECT) {
+			diagram.setSelectionRectangle(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+		}
+	}
+
+	private void moveFigures(Set<FigureModel> figures, Point lastPoint, Point newPoint) {
+		int dx = newPoint.x - lastPoint.x;
+		int dy = newPoint.y - lastPoint.y;
+		for (FigureModel figure : figures) {
+			diagram.moveFigure(figure, dx, dy);
+		}
+	}
+
+	@Override
+	public void mouseUp(Event event) {
+		if (operation == OPERATION.MOVE) {
+			grabbed = null;
 		}
 
-		FigureModel figure = diagram.getFigureAt(event1.x, event1.y);
-		if (figure != null) {
-			Rectangle r = figure.getBounds();
-			r.x = r.x + dx;	r.y = r.y + dy;
-			diagram.setMoveRectangle(r);
-		}
-		else
-			diagram.setSelectionRectangle(event1.x, event1.y, event2.x, event2.y);
-	}
-	
-	public void mouseDrop(Event event1, Event event2) {
-		for (FigureModel figure : diagram.getSelected()) {
-			if (figure.contains(event1.x, event1.y)) {
-				dragSelected(diagram.getSelected(), event1, event2);
-				diagram.removeMoveRectangle();
-				return;
-			}
-		}
-		FigureModel figure = diagram.getFigureAt(event1.x, event1.y);
-		if (figure != null) {
-			diagram.removeMoveRectangle();
-			diagram.unselectAll();
-			dragFigure(figure, event1, event2);
-			if (!figure.getSelected()) diagram.toggleSelected(figure);
-		} else {
+		if (operation == OPERATION.SELECT) {
+			Point newPoint = new Point(event.x, event.y);
 			diagram.removeSelectionRectangle();
-			if ((event2.stateMask & SWT.SHIFT) == 0) diagram.unselectAll();
-			for (FigureModel figure2 : diagram.getFigures()) {
-				if(figure2.inside(event1.x, event1.y, event2.x, event2.y)) diagram.setSelect(figure2);
+			for (FigureModel figure : diagram.getFigures()) {
+				if (figure.inside(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y))
+					diagram.setSelect(figure);
 			}
 		}
-	}
-
-	private void dragSelected(Set<FigureModel> selected, Event event1, Event event2) {
-		for (FigureModel figure : selected)
-			dragFigure(figure, event1, event2);
-	}
-
-	private void dragFigure(FigureModel figure, Event event1, Event event2) {
-		if (figure == null) return;
-		diagram.moveFigure(figure, event2.x - event1.x, event2.y - event1.y);
+		operation = OPERATION.NONE;
 	}
 }

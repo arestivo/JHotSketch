@@ -50,8 +50,6 @@ public class DiagramView extends Composite implements DiagramObserver{
 		gc.setLineWidth(1);
 		if (diagram.getSelectionRectangle() != null) 
 			gc.drawRectangle(diagram.getSelectionRectangle());
-		if (diagram.getMoveRectangle() != null) 
-			gc.drawRectangle(diagram.getMoveRectangle());
 	}
 
 	public DiagramModel getDiagram() {
@@ -95,23 +93,13 @@ public class DiagramView extends Composite implements DiagramObserver{
 		public void handleEvent(Event event) {
 			switch (event.type) {
 			case SWT.MouseDown:
-				lastEventTime = System.currentTimeMillis();
-				lastEvent = event;
+				controller.mouseDown(event);
 				break;
 			case SWT.MouseUp:
-				long time = System.currentTimeMillis();
-
-				if (lastEvent.type == SWT.MouseDown && time - lastEventTime < 300 && !distanced(event, lastEvent)) 
-					controller.mouseClick(event);
-				else if (lastEvent.type == SWT.MouseDown && distanced(event, lastEvent)) 
-					controller.mouseDrop(lastEvent, event);
-
-				lastEventTime = System.currentTimeMillis();
-				lastEvent = event;
+				controller.mouseUp(event);
 				break;
 			case SWT.MouseMove:
-				if (lastEvent.type == SWT.MouseDown && distanced(event, lastEvent)) 
-					controller.mouseDrag(lastEvent, event);
+				controller.mouseMove(event);
 				break;
 			}
 		}

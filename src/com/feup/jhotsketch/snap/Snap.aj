@@ -3,7 +3,6 @@ package com.feup.jhotsketch.snap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Display;
@@ -14,11 +13,12 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.controller.PointerController;
+import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.FigureModel;
-import com.feup.jhotsketch.model.DiagramModel;
 
 @PackageName("Snap")
-public aspect Snap {
+public privileged aspect Snap {
 	private boolean snapToGrid = true;
 	
 	pointcut createCopyPaste(JHotSketch application, CoolBar coolbar) :
@@ -30,33 +30,23 @@ public aspect Snap {
 		createSnapToolbar(application, coolbar);
 	}
 
-	pointcut setPoint(int v) :
-		this(DiagramModel) &&
-		target(FigureModel+) &&
-		(call(void setX(int)) || call(void setY(int))) &&
-		args(v);
-
-	pointcut setMoveRectangle(Rectangle r) :
-		target(DiagramModel) &&
-		call(void setMoveRectangle(Rectangle)) &&
-		args(r);
-	
-	void around(int x) : setPoint(x) {
-		if (snapToGrid)
-			proceed((x + 5) / 10 * 10);
-		else
-			proceed(x);
-	}
-
-	void around(Rectangle r) : setMoveRectangle(r) {
-		if (snapToGrid) {
-			r.x = (r.x + 5) / 10 * 10;
-			r.y = (r.y + 5) / 10 * 10;
+	pointcut mouseUp(PointerController controller) :
+		call(void DiagramController+.mouseUp(..)) && target(controller);
+		
+	before(PointerController controller) : mouseUp(controller) {
+		if (!snapToGrid) return;
+		if (controller.operation == PointerController.OPERATION.MOVE) {
+			for (FigureModel figure : controller.grabbed) {
+				snapToGrid(figure);
+			}
 		}
-		proceed(r);
+	}
+	
+	private void snapToGrid(FigureModel figure) {
+		figure.setX((figure.getX() + 5) / 10 * 10);
+		figure.setY((figure.getY() + 5) / 10 * 10);
 	}
 
-	
 	public void createSnapToolbar(final JHotSketch application, CoolBar coolbar) {
 		ToolBar toolbar = new ToolBar(coolbar, SWT.FLAT);
 

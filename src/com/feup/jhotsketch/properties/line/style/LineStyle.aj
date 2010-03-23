@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties.line;
+package com.feup.jhotsketch.properties.line.style;
 
 import java.util.Set;
 
@@ -21,7 +21,7 @@ import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.FigureView;
 
-@PackageName("LineProperties")
+@PackageName("Line.Style")
 public aspect LineStyle{
 
 	// Add line style properties to Figure

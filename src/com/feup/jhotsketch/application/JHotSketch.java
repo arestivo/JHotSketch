@@ -25,6 +25,8 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.ControllerFactory;
 import com.feup.jhotsketch.controller.PointerController;
 import com.feup.jhotsketch.controller.PointerControllerFactory;
+import com.feup.jhotsketch.model.CircleModel;
+import com.feup.jhotsketch.model.SquareModel;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Application")
@@ -152,11 +154,20 @@ public class JHotSketch {
 		bar.setLayoutData(gd);
 	}
 
-	private void createTool(Composite composite, String icon, String data) {
-		Button button = new Button(composite, SWT.FLAT);
+	private void createTool(Composite composite, String icon, String data) {		
+		final Button button = new Button(composite, SWT.FLAT);
 		button.setImage(new Image(Display.getCurrent(), "icons/" + icon + ".gif"));
 		button.setLayoutData(new RowData(30, 30));
 		button.setData(data);
+
+		button.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				String type = (String) button.getData();
+				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new SquareModel(10, 10, 50, 50));
+				if (type.equals("CIRCLE")) dc.getDiagram().addFigure(new CircleModel(10, 10, 50, 50));
+			}
+		});
 	}
 	
 	private void createBasicTools(ExpandBar bar) {
@@ -179,10 +190,7 @@ public class JHotSketch {
 		RowLayout layout = new RowLayout();
 		layout.pack = false;
 		composite.setLayout(layout);
-		
-		createTool(composite, "square", "SQUARE");
-		createTool(composite, "circle", "CIRCLE");
-	
+			
 		ExpandItem item = new ExpandItem (bar, SWT.NONE, 0);
 		item.setText("UML");
 		item.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);

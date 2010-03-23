@@ -121,7 +121,7 @@ public aspect LineStyle{
 		dottedButton.setSelection(false);
 		for (FigureModel figure : diagram.getSelected()) {
 			if (lineStyle == -1) lineStyle = figure.getLineStyle();
-			else if (lineStyle != figure.getLineWidth()) return;
+			else if (lineStyle != figure.getLineStyle()) return;
 		}
 		if (lineStyle == SWT.LINE_SOLID) solidButton.setSelection(true);
 		if (lineStyle == SWT.LINE_DASH) dashedButton.setSelection(true);

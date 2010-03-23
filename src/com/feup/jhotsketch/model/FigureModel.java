@@ -12,16 +12,23 @@ import com.feup.contribution.aida.annotations.PackageName;
 public abstract class FigureModel {
 	private boolean selected;
 	private HashSet<FigureObserver> observers = new HashSet<FigureObserver>();
+	HashSet<Handle> handles = null;
 	
 	protected int x;
 	protected int y;
 
-	private static int HANDLESIZE = 8;
-	
 	public FigureModel(int x, int y){
 		this.x = x;
 		this.y = y;
 		this.selected = false;
+	}
+
+	private void createHandles() {
+		handles = new HashSet<Handle>();
+		handles.add(new Handle(this, 0, 0));
+		handles.add(new Handle(this, getBounds().width, 0));
+		handles.add(new Handle(this, 0, getBounds().height));
+		handles.add(new Handle(this, getBounds().width, getBounds().height));
 	}
 
 	public abstract Rectangle getBounds();
@@ -70,12 +77,8 @@ public abstract class FigureModel {
 		return y;
 	}
 
-	public Set<Rectangle> getHandles() {
-		HashSet<Rectangle> handles = new HashSet<Rectangle>();
-		handles.add(new Rectangle(getBounds().x - HANDLESIZE/2, getBounds().y-HANDLESIZE/2, HANDLESIZE, HANDLESIZE));
-		handles.add(new Rectangle(getBounds().x - HANDLESIZE/2 + getBounds().width, getBounds().y-HANDLESIZE/2, HANDLESIZE, HANDLESIZE));
-		handles.add(new Rectangle(getBounds().x - HANDLESIZE/2, getBounds().y-HANDLESIZE/2 + getBounds().height, HANDLESIZE, HANDLESIZE));
-		handles.add(new Rectangle(getBounds().x - HANDLESIZE/2 + getBounds().width, getBounds().y-HANDLESIZE/2 + getBounds().height, HANDLESIZE, HANDLESIZE));
+	public Set<Handle> getHandles() {
+		if (handles == null) createHandles();
 		return handles;
 	}
 }

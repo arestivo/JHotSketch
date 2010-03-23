@@ -2,12 +2,12 @@ package com.feup.jhotsketch.view;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.CircleModel;
 import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.SquareModel;
 
 @PackageName("View")
@@ -15,8 +15,8 @@ public abstract class FigureView {
 	public void draw(DiagramView canvas, FigureModel figure, GC gc){
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		if (figure.getSelected()) {
-			for (Rectangle handle : figure.getHandles()) {
-				gc.fillRectangle(handle);
+			for (Handle handle : figure.getHandles()) {
+				gc.fillRectangle(handle.getBounds());
 			}
 		}
 	}

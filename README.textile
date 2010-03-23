@@ -1,0 +1,19 @@
+h1. JHotSketch
+
+A diagram editor developed using AspectJ as a testing baseline.
+
+h2. Features
+
+Currently the following features have been implemented:
+
+* Object selection: single and multiple
+* Moving objects
+* Line properties: width, style and color
+* Circle and square basic shapes: no creation still
+
+The next planned features are:
+
+* Object creation
+* Grouping objects
+* Fill properties
+

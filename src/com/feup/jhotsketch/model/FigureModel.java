@@ -56,7 +56,6 @@ public abstract class FigureModel {
 
 	public void setX(int x) {
 		this.x = x;
-		figureChanged();
 	}
 
 	public int getX() {
@@ -65,7 +64,6 @@ public abstract class FigureModel {
 
 	public void setY(int y) {
 		this.y = y;
-		figureChanged();
 	}
 
 	public int getY() {

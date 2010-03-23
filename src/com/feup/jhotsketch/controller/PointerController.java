@@ -69,6 +69,7 @@ public class PointerController extends DiagramController{
 		for (FigureModel figure : figures) {
 			diagram.moveFigure(figure, dx, dy);
 		}
+		diagram.diagramChanged();
 	}
 
 	@Override

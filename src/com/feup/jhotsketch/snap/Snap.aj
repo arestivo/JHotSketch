@@ -40,6 +40,7 @@ public privileged aspect Snap {
 				snapToGrid(figure);
 			}
 		}
+		controller.diagram.diagramChanged();
 	}
 	
 	private void snapToGrid(FigureModel figure) {

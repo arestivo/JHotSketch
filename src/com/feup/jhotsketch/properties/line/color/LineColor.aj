@@ -97,7 +97,7 @@ public aspect LineColor{
 		colorButton.setImage(new Image(Display.getCurrent(), "icons/null.gif"));
 		for (FigureModel figure : diagram.getSelected()) {
 			if (lineColor == null) lineColor = figure.getLineColor();
-			else if (!lineColor.equals(figure.getLineWidth())) return;
+			else if (!lineColor.equals(figure.getLineColor())) return;
 		}
 		if (lineColor != null) {
 			colorButton.setBackground(lineColor);

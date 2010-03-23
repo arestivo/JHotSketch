@@ -12,11 +12,11 @@ public class GroupView extends FigureView {
 
 	@Override
 	public void draw(DiagramView canvas, FigureModel figure, GC gc) {
-		super.draw(canvas, figure, gc);
 		GroupModel group = (GroupModel) figure;
 		for (FigureModel f : group.getFigures()) {
 			FigureView.createView(f).draw(canvas, f, gc);
 		}
+		super.draw(canvas, figure, gc);
 	}
 
 }

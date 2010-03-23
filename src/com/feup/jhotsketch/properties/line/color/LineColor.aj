@@ -65,7 +65,7 @@ public aspect LineColor{
 		label.setText("Color");
 		label.setLayoutData(gd_label);
 
-		colorButton = new Button(lineColorComposite, SWT.TOGGLE);
+		colorButton = new Button(lineColorComposite, SWT.PUSH);
 		colorButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		colorButton.setImage(new Image(Display.getCurrent(), "icons/null.gif"));
 		

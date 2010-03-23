@@ -41,4 +41,16 @@ public aspect GroupProperties {
 			figure.setLineColor(c);
 		}
 	}
+
+	// Set Fill Color
+
+	pointcut setFillColor(GroupModel group, Color c) :
+		call (void FigureModel.setFillColor(Color)) && target(group) && args(c);
+	
+	after(GroupModel group, Color c) : setFillColor(group, c) {
+		for (FigureModel figure : group.getFigures()) {
+			figure.setFillColor(c);
+		}
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.feup.jhotsketch.grouping;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -81,7 +83,8 @@ public aspect Grouping {
 			@Override
 			public void handleEvent(Event event) {
 				DiagramModel diagram = JHotSketch.getInstance().getCurrentView().getDiagram();
-				Set<FigureModel> selected = diagram.getSelected();
+				Set<FigureModel> selected = new HashSet<FigureModel>(); 
+				selected.addAll(diagram.getSelected());
 				for (FigureModel figure : selected) {
 					if (figure instanceof GroupModel) {
 						diagram.removeFigure(figure);

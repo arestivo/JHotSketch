@@ -11,9 +11,9 @@ public class CircleView extends FigureView{
 
 	@Override
 	public void draw(DiagramView canvas, FigureModel figure, GC gc) {
-		super.draw(canvas, figure, gc);
 		CircleModel circle = (CircleModel) figure;
 		gc.drawOval(circle.getX(), circle.getY(), circle.getWidth(), circle.getHeight());
+		super.draw(canvas, figure, gc);
 	}
 
 }

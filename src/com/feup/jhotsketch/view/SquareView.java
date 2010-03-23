@@ -11,9 +11,9 @@ public class SquareView extends FigureView{
 	
 	@Override
 	public void draw(DiagramView canvas, FigureModel figure, GC gc) {
-		super.draw(canvas, figure, gc);
 		SquareModel rectangle = (SquareModel) figure;
 		gc.drawRectangle(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+		super.draw(canvas, figure, gc);
 	}
 
 }

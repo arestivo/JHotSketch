@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
-import com.feup.jhotsketch.controller.PointerController;
 import com.feup.jhotsketch.controller.DiagramController;
+import com.feup.jhotsketch.controller.PointerController;
 import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("Snap")

@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.controller.DiagramController;
-import com.feup.jhotsketch.controller.PointerController;
+import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("Snap")
@@ -29,12 +29,12 @@ public privileged aspect Snap {
 		createSnapToolbar(application, coolbar);
 	}
 
-	pointcut mouseUp(PointerController controller) :
+	pointcut mouseUp(DiagramController controller) :
 		call(void DiagramController+.mouseUp(..)) && target(controller);
 		
-	before(PointerController controller) : mouseUp(controller) {
+	before(DiagramController controller) : mouseUp(controller) {
 		if (!snapToGrid) return;
-		if (controller.operation == PointerController.OPERATION.MOVE) {
+		if (controller.operation == DiagramController.OPERATION.MOVE) {
 			for (FigureModel figure : controller.grabbed) {
 				snapToGrid(figure);
 			}

@@ -142,8 +142,13 @@ public privileged aspect CopyPaste {
 	private void paste() {
 		if (clipboard == null) return;
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		diagram.unselectAll();
 		for (FigureModel figure : clipboard) {
-			diagram.addFigure((FigureModel) figure.clone());
+			FigureModel clone = (FigureModel) figure.clone();
+			diagram.setSelect(clone);
+			diagram.addFigure(clone);
+			diagram.moveFigure(clone, 10, 10);
+			copy();
 		}
 		diagram.diagramChanged();
 	}

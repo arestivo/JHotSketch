@@ -2,7 +2,6 @@ package com.feup.jhotsketch.application;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -10,7 +9,6 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.CoolBar;
-import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
@@ -20,13 +18,9 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.controller.ControllerFactory;
-import com.feup.jhotsketch.controller.PointerController;
-import com.feup.jhotsketch.controller.PointerControllerFactory;
+import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.CircleModel;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.SquareModel;
@@ -48,8 +42,6 @@ public class JHotSketch {
 		
 		CoolBar coolbar = new CoolBar(shell, SWT.NONE);
 		
-		createControllerToolbar(coolbar);
-
 		createExpandBar(shell);
 
 		createCanvas(shell);
@@ -108,39 +100,10 @@ public class JHotSketch {
 	public DiagramModel getCurrentDiagram() {
 		return dc.getDiagram();
 	}
-	
-	private ToolItem createController(ToolBar toolbar, String icon, final ControllerFactory factory) {
-		final ToolItem controller = new ToolItem(toolbar, SWT.RADIO);
-		controller.setImage(new Image(Display.getCurrent(), "icons/" + icon + ".gif"));
-		controller.setData(factory);
-		controller.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				dc.setController(factory.createController(dc.getDiagram()));
-			}
-		});
-		return controller;
-	}
-	
-	private void createControllerToolbar(CoolBar coolbar) {
-		ToolBar toolbar = new ToolBar(coolbar, SWT.FLAT);
-
-		createController(toolbar, "pointer", new PointerControllerFactory()).setSelection(true);
-		
-		toolbar.pack();
-		
-	    Point size = toolbar.getSize();
-
-	    CoolItem cool = new CoolItem(coolbar, SWT.NONE);
-		cool.setControl(toolbar);
-		
-	    Point preferred = cool.computeSize(size.x, size.y);
-		cool.setPreferredSize(preferred);
-	}
-	
+			
 	private DiagramView createCanvas(final Shell shell) {
 		dc = new DiagramView(shell, 0);
-		dc.setController(new PointerController(dc.getDiagram()));
+		dc.setController(new DiagramController(dc.getDiagram()));
 		
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		dc.setLayoutData(gd);

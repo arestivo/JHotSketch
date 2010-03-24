@@ -69,6 +69,17 @@ public privileged aspect CopyPaste {
 			}
 		});
 
+		copy.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				DiagramModel diagram = application.getCurrentDiagram();
+				clipboard = new HashSet<FigureModel>();
+				for (FigureModel figure : diagram.getSelected()) {
+					clipboard.add(figure.clone());
+				}
+			}
+		});
+		
 		paste.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {

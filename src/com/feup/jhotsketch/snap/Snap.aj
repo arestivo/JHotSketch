@@ -21,11 +21,11 @@ import com.feup.jhotsketch.model.FigureModel;
 public privileged aspect Snap {
 	private boolean snapToGrid = true;
 	
-	pointcut createCooolbar(JHotSketch application) :
+	pointcut createCoolbar(JHotSketch application) :
 		this(application) &&
 		call(CoolBar.new(..));
 		
-	after(JHotSketch application) returning(CoolBar coolbar): createCooolbar(application) {
+	after(JHotSketch application) returning(CoolBar coolbar): createCoolbar(application) {
 		createSnapToolbar(application, coolbar);
 	}
 

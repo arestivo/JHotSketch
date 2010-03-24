@@ -25,11 +25,11 @@ import com.feup.jhotsketch.model.FigureModel;
 public privileged aspect CopyPaste {
 	private Set<FigureModel> clipboard = null;
 	
-	pointcut createCooolbar(JHotSketch application) :
+	pointcut createCoolbar(JHotSketch application) :
 		this(application) &&
 		call(CoolBar.new(..));
 		
-	after(JHotSketch application) returning(CoolBar coolbar): createCooolbar(application) {
+	after(JHotSketch application) returning(CoolBar coolbar): createCoolbar(application) {
 		createCopyPasteToolbar(application, coolbar);
 	}
 

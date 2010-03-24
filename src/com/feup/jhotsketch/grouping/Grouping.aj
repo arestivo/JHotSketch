@@ -22,12 +22,12 @@ import com.feup.jhotsketch.view.FigureView;
 
 @PackageName("Grouping")
 public aspect Grouping {
-	pointcut createCopyPaste(JHotSketch application, CoolBar coolbar) :
-		target(application) &&
-		call(void createCopyPasteToolbar(CoolBar)) && 
-		args(coolbar);
+
+	pointcut createCoolbar(JHotSketch application) :
+		this(application) &&
+		call(CoolBar.new(..));
 	
-	after(JHotSketch application, CoolBar coolbar) : createCopyPaste(application, coolbar) {
+	after(JHotSketch application) returning(CoolBar coolbar) : createCoolbar(application) {
 		createGroupToolbar(application, coolbar);
 	}
 	

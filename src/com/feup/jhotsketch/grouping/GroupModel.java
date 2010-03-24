@@ -67,7 +67,7 @@ public class GroupModel extends FigureModel{
 		for (FigureModel figure : figures) {
 			clones.add(figure.clone());
 		}
-		addFigures(clones);
+		clone.addFigures(clones);
 		return clone;
 	}
 }

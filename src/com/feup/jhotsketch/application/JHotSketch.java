@@ -44,7 +44,6 @@ public class JHotSketch {
 		CoolBar coolbar = new CoolBar(shell, SWT.NONE);
 		
 		createControllerToolbar(coolbar);
-		createCopyPasteToolbar(coolbar);
 
 		createExpandBar(shell);
 
@@ -109,29 +108,6 @@ public class JHotSketch {
 		cool.setPreferredSize(preferred);
 	}
 	
-	private void createCopyPasteToolbar(CoolBar coolbar) {
-		ToolBar toolbar = new ToolBar(coolbar, SWT.FLAT);
-
-		ToolItem copy = new ToolItem(toolbar, SWT.PUSH);
-		copy.setImage(new Image(Display.getCurrent(), "icons/copy.gif"));
-
-		ToolItem cut = new ToolItem(toolbar, SWT.PUSH);
-		cut.setImage(new Image(Display.getCurrent(), "icons/cut.gif"));
-
-		ToolItem paste = new ToolItem(toolbar, SWT.PUSH);
-		paste.setImage(new Image(Display.getCurrent(), "icons/paste.gif"));
-
-		toolbar.pack();
-		
-	    Point size = toolbar.getSize();
-
-	    CoolItem cool = new CoolItem(coolbar, SWT.NONE);
-		cool.setControl(toolbar);
-		
-	    Point preferred = cool.computeSize(size.x, size.y);
-		cool.setPreferredSize(preferred);	    
-	}
-
 	private DiagramView createCanvas(final Shell shell) {
 		dc = new DiagramView(shell, 0);
 		dc.setController(new PointerController(dc.getDiagram()));

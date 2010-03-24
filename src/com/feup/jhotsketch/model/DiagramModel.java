@@ -1,6 +1,9 @@
 package com.feup.jhotsketch.model;
 
+import java.util.Collection;
 import java.util.HashSet; 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.graphics.Rectangle;
@@ -9,7 +12,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public class DiagramModel implements FigureObserver {
-	private Set<FigureModel> figures = new HashSet<FigureModel>();
+	private List<FigureModel> figures = new LinkedList<FigureModel>();
 	private Set<DiagramObserver> observers = new HashSet<DiagramObserver>();
 	private Set<FigureModel> selected = new HashSet<FigureModel>();
 
@@ -26,7 +29,7 @@ public class DiagramModel implements FigureObserver {
 		}
 	}
 	
-	public Set<FigureModel> getFigures() {
+	public Collection<FigureModel> getFigures() {
 		return figures;
 	}
 	

@@ -1,0 +1,80 @@
+package com.feup.jhotsketch.copypaste;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.CoolBar;
+import org.eclipse.swt.widgets.CoolItem;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
+
+import com.feup.contribution.aida.annotations.PackageName;
+import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.controller.DiagramController;
+import com.feup.jhotsketch.controller.PointerController;
+import com.feup.jhotsketch.model.DiagramModel;
+import com.feup.jhotsketch.model.FigureModel;
+
+@PackageName("CopyPaste")
+public privileged aspect CopyPaste {
+	private Set<FigureModel> clipboard = null;
+	
+	pointcut createCooolbar(JHotSketch application) :
+		this(application) &&
+		call(CoolBar.new(..));
+		
+	after(JHotSketch application) returning(CoolBar coolbar): createCooolbar(application) {
+		createCopyPasteToolbar(application, coolbar);
+	}
+
+	public void createCopyPasteToolbar(final JHotSketch application, CoolBar coolbar) {
+		ToolBar toolbar = new ToolBar(coolbar, SWT.FLAT);
+
+		ToolItem copy = new ToolItem(toolbar, SWT.PUSH);
+		copy.setImage(new Image(Display.getCurrent(), "icons/copy.gif"));
+		copy.setSelection(true);
+
+		ToolItem cut = new ToolItem(toolbar, SWT.PUSH);
+		cut.setImage(new Image(Display.getCurrent(), "icons/cut.gif"));
+		cut.setSelection(true);
+
+		ToolItem paste = new ToolItem(toolbar, SWT.PUSH);
+		paste.setImage(new Image(Display.getCurrent(), "icons/paste.gif"));
+		paste.setSelection(true);
+
+		toolbar.pack();
+		
+	    Point size = toolbar.getSize();
+
+	    CoolItem cool = new CoolItem(coolbar, SWT.NONE);
+		cool.setControl(toolbar);
+		
+	    Point preferred = cool.computeSize(size.x, size.y);
+		cool.setPreferredSize(preferred);
+		
+		cut.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				DiagramModel diagram = application.getCurrentView().getDiagram();
+				clipboard = diagram.getSelected();
+				diagram.removeFigures(diagram.getSelected());
+				diagram.diagramChanged();
+			}
+		});
+
+		paste.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				DiagramModel diagram = application.getCurrentView().getDiagram();
+				diagram.addFigures(clipboard);
+				diagram.diagramChanged();
+			}
+		});
+}
+}

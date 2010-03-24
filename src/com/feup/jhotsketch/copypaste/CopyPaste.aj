@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -34,13 +36,13 @@ public privileged aspect CopyPaste {
 	public void createCopyPasteToolbar(final JHotSketch application, CoolBar coolbar) {
 		ToolBar toolbar = new ToolBar(coolbar, SWT.FLAT);
 
-		ToolItem copy = new ToolItem(toolbar, SWT.PUSH);
-		copy.setImage(new Image(Display.getCurrent(), "icons/copy.gif"));
-		copy.setSelection(true);
-
 		ToolItem cut = new ToolItem(toolbar, SWT.PUSH);
 		cut.setImage(new Image(Display.getCurrent(), "icons/cut.gif"));
 		cut.setSelection(true);
+
+		ToolItem copy = new ToolItem(toolbar, SWT.PUSH);
+		copy.setImage(new Image(Display.getCurrent(), "icons/copy.gif"));
+		copy.setSelection(true);
 
 		ToolItem paste = new ToolItem(toolbar, SWT.PUSH);
 		paste.setImage(new Image(Display.getCurrent(), "icons/paste.gif"));
@@ -59,37 +61,91 @@ public privileged aspect CopyPaste {
 		cut.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = application.getCurrentDiagram();
-				clipboard = new HashSet<FigureModel>();
-				for (FigureModel figure : diagram.getSelected()) {
-					clipboard.add(figure);
-				}
-				diagram.removeFigures(diagram.getSelected());
-				diagram.diagramChanged();
+				cut();
 			}
 		});
 
 		copy.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = application.getCurrentDiagram();
-				clipboard = new HashSet<FigureModel>();
-				for (FigureModel figure : diagram.getSelected()) {
-					clipboard.add(figure.clone());
-				}
+				copy();
 			}
 		});
 		
 		paste.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if (clipboard == null) return;
-				DiagramModel diagram = application.getCurrentDiagram();
-				for (FigureModel figure : clipboard) {
-					diagram.addFigure((FigureModel) figure.clone());
-				}
-				diagram.diagramChanged();
+				paste();
 			}
 		});
 	}
+
+	pointcut fileMenuCreated(Menu menu) : 
+		call (MenuItem.new(Menu, int)) && args(menu, ..) && within(JHotSketch);
+	
+	after(Menu menu) : fileMenuCreated(menu) {
+	    MenuItem fileItem = new MenuItem(menu, SWT.CASCADE);
+	    fileItem.setText("Edit");
+
+	    Menu fileMenu = new Menu(menu.getShell(), SWT.DROP_DOWN);
+	    fileItem.setMenu(fileMenu);
+
+	    MenuItem cut = new MenuItem(fileMenu, SWT.PUSH);
+	    cut.setText("Cut");
+	    cut.setAccelerator(SWT.CONTROL | 'X');
+	    cut.addListener(SWT.Selection, new Listener() {
+	    	@Override
+			public void handleEvent(Event event) {
+	    		cut();
+			}
+		});
+	    
+	    MenuItem copy = new MenuItem(fileMenu, SWT.PUSH);
+	    copy.setText("Copy");
+	    copy.setAccelerator(SWT.CONTROL | 'C');
+	    copy.addListener(SWT.Selection, new Listener() {
+	    	@Override
+			public void handleEvent(Event event) {
+	    		copy();
+			}
+		});
+
+	    MenuItem paste = new MenuItem(fileMenu, SWT.PUSH);
+	    paste.setText("Paste");
+	    paste.setAccelerator(SWT.CONTROL | 'V');
+	    paste.addListener(SWT.Selection, new Listener() {
+	    	@Override
+			public void handleEvent(Event event) {
+	    		paste();
+			}
+		});
+	}
+	
+	private void cut() {
+		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		clipboard = new HashSet<FigureModel>();
+		for (FigureModel figure : diagram.getSelected()) {
+			clipboard.add(figure);
+		}
+		diagram.removeFigures(diagram.getSelected());
+		diagram.diagramChanged();
+	}
+	
+	private void copy() {
+		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		clipboard = new HashSet<FigureModel>();
+		for (FigureModel figure : diagram.getSelected()) {
+			clipboard.add(figure.clone());
+		}
+	}
+
+	private void paste() {
+		if (clipboard == null) return;
+		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		for (FigureModel figure : clipboard) {
+			diagram.addFigure((FigureModel) figure.clone());
+		}
+		diagram.diagramChanged();
+	}
+	
 }

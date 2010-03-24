@@ -16,6 +16,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.ToolBar;
@@ -38,10 +40,12 @@ public class JHotSketch {
 	private void run() {
 		final Display display = new Display();
 		final Shell shell = new Shell(display);
-		
+
 		GridLayout layout = new GridLayout(3, false);
 		shell.setLayout(layout);
 
+		createMenu(shell);		
+		
 		CoolBar coolbar = new CoolBar(shell, SWT.NONE);
 		
 		createControllerToolbar(coolbar);
@@ -49,7 +53,7 @@ public class JHotSketch {
 		createExpandBar(shell);
 
 		createCanvas(shell);
-
+		
 		createPropertyFolder(shell);
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
@@ -67,6 +71,27 @@ public class JHotSketch {
 		display.dispose();
 	}
 	
+	private void createMenu(Shell shell) {
+		Menu menu = new Menu(shell, SWT.BAR);
+	    shell.setMenuBar(menu);
+		
+	    MenuItem fileItem = new MenuItem(menu, SWT.CASCADE);
+	    fileItem.setText("File");
+
+	    Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
+	    fileItem.setMenu(fileMenu);
+
+	    MenuItem exit = new MenuItem(fileMenu, SWT.PUSH);
+	    exit.setText("Exit");
+	    exit.setAccelerator(SWT.CONTROL | 'Q');
+	    exit.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				System.exit(0);
+			}
+		});
+	}
+
 	private void createPropertyFolder(Shell shell) {
 		TabFolder folder = new TabFolder(shell, SWT.NONE);
 		

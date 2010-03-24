@@ -81,4 +81,7 @@ public abstract class FigureModel {
 		if (handles == null) createHandles();
 		return handles;
 	}
+
+	@Override
+	public abstract FigureModel clone();
 }

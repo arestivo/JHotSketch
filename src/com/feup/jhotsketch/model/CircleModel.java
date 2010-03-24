@@ -59,4 +59,10 @@ public class CircleModel extends FigureModel {
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), width, height);
 	}
+
+	@Override
+	public FigureModel clone() {
+		CircleModel clone = new CircleModel(x, y, width, height);
+		return clone;
+	}
 }

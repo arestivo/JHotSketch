@@ -101,7 +101,7 @@ public aspect FillColor{
 				ColorDialog dialog = new ColorDialog(fillComposite.getShell());
 				dialog.open();
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setFillColor(color);

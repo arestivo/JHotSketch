@@ -63,7 +63,7 @@ public aspect Grouping {
 		group.addListener(SWT.Selection, new Listener() {			
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = JHotSketch.getInstance().getCurrentView().getDiagram();
+				DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 				Set<FigureModel> selected = diagram.getSelected();
 				if (selected.size() <= 1) return;
 				for (FigureModel figure : selected) {
@@ -81,7 +81,7 @@ public aspect Grouping {
 		ungroup.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = JHotSketch.getInstance().getCurrentView().getDiagram();
+				DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 				Set<FigureModel> selected = new HashSet<FigureModel>(); 
 				selected.addAll(diagram.getSelected());
 				for (FigureModel figure : selected) {

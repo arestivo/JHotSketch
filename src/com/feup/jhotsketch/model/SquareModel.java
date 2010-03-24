@@ -34,5 +34,11 @@ public class SquareModel extends FigureModel{
 	@Override
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), width, height);
+	}
+
+	@Override
+	public FigureModel clone() {
+		SquareModel clone = new SquareModel(x, y, width, height);
+		return clone;
 	}	
 }

@@ -74,7 +74,7 @@ public aspect LineWidth {
 		scale.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				int width = scale.getSelection();
 				for (FigureModel figure : selected) {
 					figure.setLineWidth(width);

@@ -16,8 +16,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
-import com.feup.jhotsketch.controller.DiagramController;
-import com.feup.jhotsketch.controller.PointerController;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.FigureModel;
 
@@ -61,8 +59,11 @@ public privileged aspect CopyPaste {
 		cut.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = application.getCurrentView().getDiagram();
-				clipboard = diagram.getSelected();
+				DiagramModel diagram = application.getCurrentDiagram();
+				clipboard = new HashSet<FigureModel>();
+				for (FigureModel figure : diagram.getSelected()) {
+					clipboard.add(figure);
+				}
 				diagram.removeFigures(diagram.getSelected());
 				diagram.diagramChanged();
 			}
@@ -71,10 +72,13 @@ public privileged aspect CopyPaste {
 		paste.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = application.getCurrentView().getDiagram();
-				diagram.addFigures(clipboard);
+				if (clipboard == null) return;
+				DiagramModel diagram = application.getCurrentDiagram();
+				for (FigureModel figure : clipboard) {
+					diagram.addFigure((FigureModel) figure.clone());
+				}
 				diagram.diagramChanged();
 			}
 		});
-}
+	}
 }

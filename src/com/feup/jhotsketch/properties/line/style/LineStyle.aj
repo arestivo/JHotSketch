@@ -77,7 +77,7 @@ public aspect LineStyle{
 		solidButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_SOLID);
@@ -88,7 +88,7 @@ public aspect LineStyle{
 		dashedButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_DASH);

@@ -59,4 +59,15 @@ public class GroupModel extends FigureModel{
 		}
 		super.setY(y);
 	}
+
+	@Override
+	public FigureModel clone() {
+		GroupModel clone = new GroupModel(x, y);
+		Set<FigureModel> clones = new HashSet<FigureModel>();
+		for (FigureModel figure : figures) {
+			clones.add(figure.clone());
+		}
+		addFigures(clones);
+		return clone;
+	}
 }

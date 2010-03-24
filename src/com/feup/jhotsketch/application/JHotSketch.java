@@ -26,6 +26,7 @@ import com.feup.jhotsketch.controller.ControllerFactory;
 import com.feup.jhotsketch.controller.PointerController;
 import com.feup.jhotsketch.controller.PointerControllerFactory;
 import com.feup.jhotsketch.model.CircleModel;
+import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.SquareModel;
 import com.feup.jhotsketch.view.DiagramView;
 
@@ -77,6 +78,10 @@ public class JHotSketch {
 
 	public DiagramView getCurrentView() {
 		return dc;
+	}
+
+	public DiagramModel getCurrentDiagram() {
+		return dc.getDiagram();
 	}
 	
 	private ToolItem createController(ToolBar toolbar, String icon, final ControllerFactory factory) {

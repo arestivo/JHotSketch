@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.line.style;
 
-import java.util.Set;
+import java.util.Set; 
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -127,4 +127,16 @@ public aspect LineStyle{
 		if (lineStyle == SWT.LINE_DASH) dashedButton.setSelection(true);
 		if (lineStyle == SWT.LINE_DOT) dottedButton.setSelection(true);
 	}	
+
+	// Clone line style
+	
+	pointcut clone(FigureModel figure) :
+		call (FigureModel clone()) && target(figure);
+
+	FigureModel around(FigureModel figure) : clone(figure) {
+		FigureModel clone = proceed(figure);
+		clone.setLineStyle(figure.getLineStyle());
+		return clone;
+	}
+
 }

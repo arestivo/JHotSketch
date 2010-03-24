@@ -130,4 +130,15 @@ public aspect FillColor{
 			colorButton.setImage(new Image(Display.getCurrent(), "icons/square.gif"));
 		}
 	}	
+	
+	// Clone fill color
+	
+	pointcut clone(FigureModel figure) :
+		call (FigureModel clone()) && target(figure);
+
+	FigureModel around(FigureModel figure) : clone(figure) {
+		FigureModel clone = proceed(figure);
+		clone.setFillColor(figure.getFillColor());
+		return clone;
+	}
 }

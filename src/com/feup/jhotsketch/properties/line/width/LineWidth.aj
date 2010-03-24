@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.line.width;
 
-import java.util.Set;
+import java.util.Set; 
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -102,4 +102,14 @@ public aspect LineWidth {
 		scale.setSelection(lineWidth);
 	}
 	
+	// Clone line width
+	
+	pointcut clone(FigureModel figure) :
+		call (FigureModel clone()) && target(figure);
+
+	FigureModel around(FigureModel figure) : clone(figure) {
+		FigureModel clone = proceed(figure);
+		clone.setLineWidth(figure.getLineWidth());
+		return clone;
+	}
 }

@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.line.color;
 
-import java.util.Set;
+import java.util.Set; 
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -104,4 +104,16 @@ public aspect LineColor{
 			colorButton.setImage(new Image(Display.getCurrent(), "icons/solid.gif"));
 		}
 	}	
+	
+	// Clone line color
+	
+	pointcut clone(FigureModel figure) :
+		call (FigureModel clone()) && target(figure);
+
+	FigureModel around(FigureModel figure) : clone(figure) {
+		FigureModel clone = proceed(figure);
+		clone.setLineColor(figure.getLineColor());
+		return clone;
+	}
+
 }

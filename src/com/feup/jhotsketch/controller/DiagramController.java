@@ -22,32 +22,32 @@ public class DiagramController{
 	private DiagramModel diagram;
 	
 	public DiagramController(DiagramModel diagram) {
-		this.diagram = diagram;
+		this.setDiagram(diagram);
 	}
 
 	public void mouseDown(Event event) {
 		lastPoint = new Point(event.x, event.y);
 		
 		// Test if event on selected figure
-		for (FigureModel figure : diagram.getSelected()) {
+		for (FigureModel figure : getDiagram().getSelected()) {
 			if (figure.contains(event.x, event.y)) {
 				operation = OPERATION.MOVE;
-				grabbed = diagram.getSelected();
+				grabbed = getDiagram().getSelected();
 				return;
 			}
 		}
 		
 		// Test if event on unselected figure
-		FigureModel figure = diagram.getFigureAt(event.x, event.y);
+		FigureModel figure = getDiagram().getFigureAt(event.x, event.y);
 		if (figure != null) {
-			if ((event.stateMask & SWT.CTRL) == 0) diagram.unselectAll();
-			diagram.setSelect(figure);
+			if ((event.stateMask & SWT.CTRL) == 0) getDiagram().unselectAll();
+			getDiagram().setSelect(figure);
 			mouseDown(event);
 			return;
 		}
 
 		// Event on nothing
-		if ((event.stateMask & SWT.SHIFT) == 0) diagram.unselectAll();
+		if ((event.stateMask & SWT.SHIFT) == 0) getDiagram().unselectAll();
 		operation = OPERATION.SELECT;
 	}
 
@@ -59,7 +59,7 @@ public class DiagramController{
 			lastPoint = newPoint;
 		}
 		if (operation == OPERATION.SELECT) {
-			diagram.setSelectionRectangle(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+			getDiagram().setSelectionRectangle(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
 		}
 	}
 
@@ -67,9 +67,9 @@ public class DiagramController{
 		int dx = newPoint.x - lastPoint.x;
 		int dy = newPoint.y - lastPoint.y;
 		for (FigureModel figure : figures) {
-			diagram.moveFigure(figure, dx, dy);
+			getDiagram().moveFigure(figure, dx, dy);
 		}
-		diagram.diagramChanged();
+		getDiagram().diagramChanged();
 	}
 
 	public void mouseUp(Event event) {
@@ -79,12 +79,20 @@ public class DiagramController{
 
 		if (operation == OPERATION.SELECT) {
 			Point newPoint = new Point(event.x, event.y);
-			diagram.removeSelectionRectangle();
-			for (FigureModel figure : diagram.getFigures()) {
+			getDiagram().removeSelectionRectangle();
+			for (FigureModel figure : getDiagram().getFigures()) {
 				if (figure.inside(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y))
-					diagram.setSelect(figure);
+					getDiagram().setSelect(figure);
 			}
 		}
 		operation = OPERATION.NONE;
+	}
+
+	public void setDiagram(DiagramModel diagram) {
+		this.diagram = diagram;
+	}
+
+	public DiagramModel getDiagram() {
+		return diagram;
 	}
 }

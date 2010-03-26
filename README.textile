@@ -15,14 +15,14 @@ Currently the following features have been implemented:
 * Grouping
 * Ungrouping
 * Cut, Copy and Paste
+* Snap to objects features
 
 The next planned features are:
 
-* Object creation
-* Snap to objects features
+* Object creation (partial)
 * Snap to object distances
 * Intelligent paste
-* Object resizing
+* Object resizing (partial)
 * More shapes
 * Connectors
-* Shortcuts
+* Shortcuts (partial)

@@ -10,31 +10,30 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public abstract class FigureModel {
-	private boolean selected;
+	private boolean selected = false;
 	private HashSet<FigureObserver> observers = new HashSet<FigureObserver>();
 	HashSet<Handle> handles = null;
-	
-	protected int x;
-	protected int y;
 
-	public FigureModel(int x, int y){
-		this.x = x;
-		this.y = y;
-		this.selected = false;
+	protected Rectangle bounds;
+
+	public FigureModel(int x, int y, int width, int height){
+		bounds = new Rectangle(x, y, width, height);
 	}
 
 	private void createHandles() {
 		handles = new HashSet<Handle>();
-		handles.add(new Handle(this, 0, 0));
-		handles.add(new Handle(this, getBounds().width, 0));
-		handles.add(new Handle(this, 0, getBounds().height));
-		handles.add(new Handle(this, getBounds().width, getBounds().height));
+		handles.add(new Handle(this, 0, 0, bounds.width, bounds.height));
+		handles.add(new Handle(this, bounds.width, 0, 0, bounds.height));
+		handles.add(new Handle(this, 0, bounds.height, bounds.width, 0));
+		handles.add(new Handle(this, bounds.width, bounds.height, 0, 0));
 	}
 
-	public abstract Rectangle getBounds();
+	public Rectangle getBounds() {
+		return bounds;
+	}
 
 	public boolean contains(int x, int y) {
-		return getBounds().contains(new Point(x, y));
+		return bounds.contains(new Point(x, y));
 	}
 
 	public void setSelected(boolean selected) {
@@ -48,7 +47,7 @@ public abstract class FigureModel {
 	
 	public boolean inside(int x1, int y1, int x2, int y2) {
 		Rectangle rectangle = new Rectangle(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1));
-		return getBounds().intersection(rectangle).equals(getBounds());
+		return bounds.intersection(rectangle).equals(bounds);
 	}
 	
 	public void addObserver(FigureObserver observer) {
@@ -61,22 +60,6 @@ public abstract class FigureModel {
 		}
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getY() {
-		return y;
-	}
-
 	public Set<Handle> getHandles() {
 		if (handles == null) createHandles();
 		return handles;
@@ -84,4 +67,13 @@ public abstract class FigureModel {
 
 	@Override
 	public abstract FigureModel clone();
+
+	public void resize(double rx, double ry, Point resizePoint){
+		//TODO
+	}
+
+	public void move(int dx, int dy) {
+		bounds.x += dx;
+		bounds.y += dy;
+	}
 }

@@ -144,10 +144,10 @@ public aspect Snap {
 		if (best.getKind() == KIND.EDGE) {
 			boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
 			for (FigureModel figure : diagram.getSelected())
-				if (top) figure.setY(best.getPosition() + figure.getBounds().y - y1);
-				else figure.setY(best.getPosition() + figure.getBounds().y - y2);
+				if (top) figure.move(0, best.getPosition() - y1);
+				else figure.move(0, best.getPosition() - y2);
 		} else for (FigureModel figure : diagram.getSelected())
-			figure.setY(best.getPosition() + figure.getBounds().y - (y1 + (y2 - y1) / 2));
+			figure.move(0, best.getPosition() - (y1 + (y2 - y1) / 2));
 		diagram.setHorizontalSnapLine(null);
 	}
 
@@ -157,10 +157,10 @@ public aspect Snap {
 		if (best.getKind() == KIND.EDGE) {
 			boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
 			for (FigureModel figure : diagram.getSelected())
-				if (left) figure.setX(best.getPosition() + figure.getBounds().x - x1);
-				else figure.setX(best.getPosition() + figure.getBounds().x - x2);
+				if (left) figure.move(best.getPosition() - x1, 0);
+				else figure.move(best.getPosition() - x2, 0);
 		} else for (FigureModel figure : diagram.getSelected())
-			figure.setX(best.getPosition() + figure.getBounds().x - (x1 + (x2 - x1) / 2));
+			figure.move(best.getPosition() - (x1 + (x2 - x1) / 2), 0);
 		diagram.setVerticalSnapLine(null);
 	}
 

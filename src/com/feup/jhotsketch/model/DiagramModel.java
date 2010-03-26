@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.feup.contribution.aida.annotations.PackageName;
@@ -92,8 +93,7 @@ public class DiagramModel implements FigureObserver {
 	}
 
 	public void moveFigure(FigureModel figure, int dx, int dy) {
-		figure.setX(figure.getX() + dx);
-		figure.setY(figure.getY() + dy);
+		figure.move(dx, dy);
 	}
 
 	public void setSelectionRectangle(int x1, int y1, int x2, int y2) {
@@ -128,5 +128,9 @@ public class DiagramModel implements FigureObserver {
 		for (FigureModel figure : figures) {
 			setSelect(figure);
 		}
+	}
+
+	public void resizeFigure(FigureModel figure, double rx, double ry,Point resizePoint) {
+		figure.resize(rx, ry, resizePoint);
 	}
 }

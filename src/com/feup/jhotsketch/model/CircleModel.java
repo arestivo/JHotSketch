@@ -1,22 +1,16 @@
 package com.feup.jhotsketch.model;
 
-import org.eclipse.swt.graphics.Rectangle;
-
 import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public class CircleModel extends FigureModel {
-	private int width;
-	private int height;
 	
 	public CircleModel(int x, int y, int width, int height) {
-		super(x, y);
-		this.setWidth(width);
-		this.setHeight(height);
+		super(x, y, width, height);
 	}
 
 	public boolean contains(int x, int y) {
-		return ovalContains(getX(), getY(), width, height, x, y);
+		return ovalContains(bounds.x, bounds.y, bounds.width, bounds.height, x, y);
 	}
 
 	// Stolen from Eclipse TPTP
@@ -39,30 +33,10 @@ public class CircleModel extends FigureModel {
 		return (rp <= ra);
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		return new Rectangle(getX(), getY(), width, height);
-	}
-
 	@Override
 	public FigureModel clone() {
-		CircleModel clone = new CircleModel(x, y, width, height);
+		CircleModel clone = new CircleModel(bounds.x, bounds.y, bounds.width, bounds.height);
 		return clone;
 	}
+
 }

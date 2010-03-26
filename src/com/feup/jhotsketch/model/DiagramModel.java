@@ -130,7 +130,7 @@ public class DiagramModel implements FigureObserver {
 		}
 	}
 
-	public void resizeFigure(FigureModel figure, double rx, double ry,Point resizePoint) {
-		figure.resize(rx, ry, resizePoint);
+	public void resizeFigure(FigureModel figure, double rx, double ry,Handle grabbedHandle) {
+		figure.resize(rx, ry, grabbedHandle);
 	}
 }

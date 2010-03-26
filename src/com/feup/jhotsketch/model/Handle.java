@@ -1,6 +1,5 @@
 package com.feup.jhotsketch.model;
 
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.feup.contribution.aida.annotations.PackageName;
@@ -10,16 +9,19 @@ public class Handle {
 	private FigureModel figure;
 	private int x;
 	private int y;
-	private int ox;
-	private int oy;
 	private static int size = 10;
+	private int id;
+
+	public final static int NW = 1;
+	public final static int NE = 2;
+	public final static int SE = 3;
+	public final static int SW = 4;
 	
-	public Handle(FigureModel figure, int x, int y, int ox, int oy) {
+	public Handle(FigureModel figure, int x, int y, int id) {
 		this.figure = figure;
 		this.x = x;
 		this.y = y;
-		this.ox = ox;
-		this.oy = oy;
+		this.setId(id);
 	}
 	
 	public void setX(int x) {
@@ -49,7 +51,11 @@ public class Handle {
 		return getBounds().contains(x, y);
 	}
 
-	public Point getOppositePoint() {
-		return new Point(figure.getBounds().x + ox, figure.getBounds().y + oy);
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
 	}
 }

@@ -22,10 +22,10 @@ public abstract class FigureModel {
 
 	private void createHandles() {
 		handles = new HashSet<Handle>();
-		handles.add(new Handle(this, 0, 0, bounds.width, bounds.height));
-		handles.add(new Handle(this, bounds.width, 0, 0, bounds.height));
-		handles.add(new Handle(this, 0, bounds.height, bounds.width, 0));
-		handles.add(new Handle(this, bounds.width, bounds.height, 0, 0));
+		handles.add(new Handle(this, 0, 0, Handle.NW));
+		handles.add(new Handle(this, bounds.width, 0, Handle.NE));
+		handles.add(new Handle(this, 0, bounds.height, Handle.SW));
+		handles.add(new Handle(this, bounds.width, bounds.height, Handle.SE));
 	}
 
 	public Rectangle getBounds() {
@@ -68,9 +68,31 @@ public abstract class FigureModel {
 	@Override
 	public abstract FigureModel clone();
 
-	public void resize(double rx, double ry, Point resizePoint){
-		bounds.width *= rx;
-		bounds.height *= ry;
+	public void resize(double rx, double ry, Handle handle){
+		switch (handle.getId()) {
+		case Handle.NW:
+			bounds.x += rx;
+			bounds.y += ry;
+			bounds.width -= rx;
+			bounds.height -= ry;
+			break;
+		case Handle.NE:
+			bounds.y += ry;
+			bounds.width += rx;
+			bounds.height -= ry;
+			break;
+		case Handle.SW:
+			bounds.x += rx;
+			bounds.width -= rx;
+			bounds.height += ry;
+			break;
+		case Handle.SE:
+			bounds.width += rx;
+			bounds.height += ry;
+			break;
+		default:
+			break;
+		}
 		createHandles();
 	}
 

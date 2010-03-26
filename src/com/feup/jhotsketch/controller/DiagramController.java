@@ -17,9 +17,9 @@ public class DiagramController{
 	private OPERATION operation = OPERATION.NONE;
 	
 	private Set<FigureModel> grabbed;
+	private Handle grabbedHandle;
 	
 	private Point lastPoint;
-	private Point resizePoint;
 
 	private DiagramModel diagram;
 	
@@ -34,9 +34,9 @@ public class DiagramController{
 		for (FigureModel figure : getDiagram().getSelected()) {
 			for (Handle handle : figure.getHandles()) {
 				if (handle.contains(event.x, event.y)) {
-					resizePoint = handle.getOppositePoint();
 					operation = OPERATION.RESIZE;
 					grabbed = getDiagram().getSelected();
+					grabbedHandle = handle;
 					return;
 				}
 			}
@@ -82,10 +82,10 @@ public class DiagramController{
 	}
 
 	private void resizeFigures(Set<FigureModel> figures, Point lastPoint, Point newPoint) {
+		int dx = newPoint.x - lastPoint.x;
+		int dy = newPoint.y - lastPoint.y;
 		for (FigureModel figure : figures) {
-			double rx = (double)(newPoint.x - lastPoint.x + figure.getBounds().width) / (double)figure.getBounds().width;
-			double ry = (double)(newPoint.y - lastPoint.y + figure.getBounds().height) / (double)figure.getBounds().height;
-			getDiagram().resizeFigure(figure, rx, ry, resizePoint);
+			getDiagram().resizeFigure(figure, dx, dy, grabbedHandle);
 		}
 		getDiagram().diagramChanged();
 	}

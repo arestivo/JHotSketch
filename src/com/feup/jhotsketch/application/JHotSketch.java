@@ -77,7 +77,6 @@ public class JHotSketch {
 	    exit.setText("Exit");
 	    exit.setAccelerator(SWT.CONTROL | 'Q');
 	    exit.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event event) {
 				System.exit(0);
 			}
@@ -130,7 +129,6 @@ public class JHotSketch {
 		button.setData(data);
 
 		button.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event event) {
 				String type = (String) button.getData();
 				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new SquareModel(10, 10, 50, 50));

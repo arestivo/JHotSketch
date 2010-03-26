@@ -80,13 +80,11 @@ public class DiagramView extends Composite implements DiagramObserver{
 		return zoom;
 	}
 
-	@Override
 	public void diagramChanged(DiagramModel diagram) {
 		redraw();
 	}
 
 	Listener listener = new Listener() {		
-		@Override
 		public void handleEvent(Event event) {
 			switch (event.type) {
 			case SWT.MouseDown:

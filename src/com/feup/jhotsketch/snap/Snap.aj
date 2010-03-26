@@ -21,6 +21,7 @@ import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.snap.SnapLine.KIND;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Snap")
@@ -119,12 +120,17 @@ public aspect Snap {
 		for (SnapLine snapLine : candidates) {
 			if (snapLine.getPosition() == x1) continue;
 			if (snapLine.getPosition() == x2) continue;
+			if (snapLine.getPosition() == x1 + (x2 - x1) / 2) continue;
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - x1) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - x1);
 				best = snapLine;
 			}
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - x2) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - x2);
+				best = snapLine;
+			}
+			if (snapLine.getKind() == SnapLine.KIND.CENTER && Math.abs(snapLine.getPosition() - (x1 + (x2 - x1) / 2)) < bestsnap) {
+				bestsnap = Math.abs(snapLine.getPosition() - (x1 + (x2 - x1) / 2));
 				best = snapLine;
 			}
 		}
@@ -135,22 +141,26 @@ public aspect Snap {
 	private void snapHorizontal(DiagramModel diagram, int y1, int y2) {
 		SnapLine best = getBestSnapHorizontal(diagram, y1, y2);
 		if (best == null) return;
-		boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
-		for (FigureModel figure : diagram.getSelected()) {
-			if (top) figure.setY(best.getPosition() + figure.getBounds().y - y1);
-			else figure.setY(best.getPosition() - (y2 - figure.getBounds().y));
-		}
+		if (best.getKind() == KIND.EDGE) {
+			boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
+			for (FigureModel figure : diagram.getSelected())
+				if (top) figure.setY(best.getPosition() + figure.getBounds().y - y1);
+				else figure.setY(best.getPosition() + figure.getBounds().y - y2);
+		} else for (FigureModel figure : diagram.getSelected())
+			figure.setY(best.getPosition() + figure.getBounds().y - (y1 + (y2 - y1) / 2));
 		diagram.setHorizontalSnapLine(null);
 	}
 
 	private void snapVertical(DiagramModel diagram, int x1, int x2) {
 		SnapLine best = getBestSnapVertical(diagram, x1, x2);
 		if (best == null) return;
-		boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
-		for (FigureModel figure : diagram.getSelected()) {
-			if (left) figure.setX(best.getPosition() + figure.getBounds().x - x1);
-			else figure.setX(best.getPosition() - (x2 - figure.getBounds().x));
-		}
+		if (best.getKind() == KIND.EDGE) {
+			boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
+			for (FigureModel figure : diagram.getSelected())
+				if (left) figure.setX(best.getPosition() + figure.getBounds().x - x1);
+				else figure.setX(best.getPosition() + figure.getBounds().x - x2);
+		} else for (FigureModel figure : diagram.getSelected())
+			figure.setX(best.getPosition() + figure.getBounds().x - (x1 + (x2 - x1) / 2));
 		diagram.setVerticalSnapLine(null);
 	}
 
@@ -213,6 +223,8 @@ public aspect Snap {
 			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y, SnapLine.KIND.EDGE));
 			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x + figure.getBounds().width, SnapLine.KIND.EDGE));
 			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y + figure.getBounds().height, SnapLine.KIND.EDGE));
+			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x + figure.getBounds().width / 2, SnapLine.KIND.CENTER));
+			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y + figure.getBounds().height / 2, SnapLine.KIND.CENTER));
 		}
 	}
 }

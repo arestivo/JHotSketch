@@ -110,7 +110,6 @@ public class DiagramModel implements FigureObserver {
 		diagramChanged();
 	}
 
-	@Override
 	public void figureChanged(FigureModel figure) {
 		diagramChanged();
 	}

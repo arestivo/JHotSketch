@@ -83,8 +83,8 @@ public class DiagramController{
 
 	private void resizeFigures(Set<FigureModel> figures, Point lastPoint, Point newPoint) {
 		for (FigureModel figure : figures) {
-			double rx = (newPoint.x - lastPoint.x + figure.getBounds().width) / figure.getBounds().width;
-			double ry = (newPoint.y - lastPoint.y + figure.getBounds().height) / figure.getBounds().height;
+			double rx = (double)(newPoint.x - lastPoint.x + figure.getBounds().width) / (double)figure.getBounds().width;
+			double ry = (double)(newPoint.y - lastPoint.y + figure.getBounds().height) / (double)figure.getBounds().height;
 			getDiagram().resizeFigure(figure, rx, ry, resizePoint);
 		}
 		getDiagram().diagramChanged();

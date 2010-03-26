@@ -74,6 +74,7 @@ public aspect LineColor{
 			public void handleEvent(Event event) {
 				ColorDialog dialog = new ColorDialog(lineComposite.getShell());
 				dialog.open();
+				if (dialog.getRGB() == null) return;
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
 				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);

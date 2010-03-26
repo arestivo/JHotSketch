@@ -69,7 +69,9 @@ public abstract class FigureModel {
 	public abstract FigureModel clone();
 
 	public void resize(double rx, double ry, Point resizePoint){
-		//TODO
+		bounds.width *= rx;
+		bounds.height *= ry;
+		createHandles();
 	}
 
 	public void move(int dx, int dy) {

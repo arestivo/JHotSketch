@@ -1,5 +1,6 @@
 package com.feup.jhotsketch.controller;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -22,6 +23,10 @@ public class DiagramController{
 	private Point lastPoint;
 
 	private DiagramModel diagram;
+
+	private boolean moved = false;
+
+	private boolean reselect;
 	
 	public DiagramController(DiagramModel diagram) {
 		this.setDiagram(diagram);
@@ -29,6 +34,8 @@ public class DiagramController{
 
 	public void mouseDown(Event event) {
 		lastPoint = new Point(event.x, event.y);
+		moved  = false;
+		reselect = false;
 		
 		// Test if event on selected figure handle
 		for (FigureModel figure : getDiagram().getSelected()) {
@@ -47,6 +54,7 @@ public class DiagramController{
 			if (figure.contains(event.x, event.y)) {
 				operation = OPERATION.MOVE;
 				grabbed = getDiagram().getSelected();
+				reselect  = true;
 				return;
 			}
 		}
@@ -66,6 +74,7 @@ public class DiagramController{
 	}
 
 	public void mouseMove(Event event) {
+		moved = true;
 		Point newPoint = new Point(event.x, event.y);
 
 		if (operation == OPERATION.RESIZE) {
@@ -102,6 +111,14 @@ public class DiagramController{
 	public void mouseUp(Event event) {
 		if (operation == OPERATION.MOVE) {
 			grabbed = null;
+			if (!moved && reselect && diagram.getSelected().size() == 1) {
+				LinkedList<FigureModel> figures = getDiagram().getFiguresAt(event.x, event.y);
+				FigureModel selected = diagram.getSelected().get(0);
+				int index = figures.indexOf(selected);
+				if (index == figures.size() - 1) index = 0; else index++;
+				diagram.unselectAll();
+				diagram.setSelect(figures.get(index));
+			}
 		}
 
 		if (operation == OPERATION.SELECT) {

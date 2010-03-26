@@ -137,4 +137,12 @@ public class DiagramModel implements FigureObserver {
 		this.figures.addAll(0, figures);
 	}
 
+	public LinkedList<FigureModel> getFiguresAt(int x, int y) {
+		LinkedList<FigureModel> found = new LinkedList<FigureModel>(); 
+		for (FigureModel figure : figures) {
+			if (figure.contains(x,y)) found.add(figure);
+		}
+		return found;
+	}
+
 }

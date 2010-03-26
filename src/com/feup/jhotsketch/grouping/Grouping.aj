@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -63,36 +65,76 @@ public aspect Grouping {
 		group.addListener(SWT.Selection, new Listener() {			
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-				List<FigureModel> selected = diagram.getSelected();
-				if (selected.size() <= 1) return;
-				for (FigureModel figure : selected) {
-					figure.setSelected(false);
-				}
-				GroupModel group = new GroupModel();
-				group.addFigures(selected);
-				diagram.removeFigures(selected);
-				diagram.addFigure(group);
-				diagram.unselectAll();
-				diagram.setSelect(group);
+				group();
 			}
 		});
 		
 		ungroup.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-				List<FigureModel> selected = new LinkedList<FigureModel>(); 
-				selected.addAll(diagram.getSelected());
-				for (FigureModel figure : selected) {
-					if (figure instanceof GroupModel) {
-						diagram.removeFigure(figure);
-						diagram.addFigures(((GroupModel)figure).getFigures());
-						diagram.setSelect(((GroupModel)figure).getFigures());
-					}
-				}
+				ungroup();
 			}
 		});
+	}
+	
+	pointcut fileMenuCreated(Menu menu) : 
+		call (MenuItem.new(Menu, int)) && args(menu, ..) && within(JHotSketch);
+	
+	after(Menu menu) : fileMenuCreated(menu) {
+	    MenuItem fileItem = new MenuItem(menu, SWT.CASCADE);
+	    fileItem.setText("Groups");
+
+	    Menu fileMenu = new Menu(menu.getShell(), SWT.DROP_DOWN);
+	    fileItem.setMenu(fileMenu);
+
+	    MenuItem group = new MenuItem(fileMenu, SWT.PUSH);
+	    group.setText("Group");
+	    group.setAccelerator(SWT.CONTROL | 'G');
+	    group.addListener(SWT.Selection, new Listener() {
+	    	@Override
+			public void handleEvent(Event event) {
+	    		group();
+			}
+
+		});
+	    
+	    MenuItem ungroup = new MenuItem(fileMenu, SWT.PUSH);
+	    ungroup.setText("Ungroup");
+	    ungroup.setAccelerator(SWT.CONTROL | 'U');
+	    ungroup.addListener(SWT.Selection, new Listener() {
+	    	@Override
+			public void handleEvent(Event event) {
+	    		ungroup();
+			}
+		});
+	}
+
+	private void group() {
+		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		List<FigureModel> selected = diagram.getSelected();
+		if (selected.size() <= 1) return;
+		for (FigureModel figure : selected) {
+			figure.setSelected(false);
+		}
+		GroupModel group = new GroupModel();
+		group.addFigures(selected);
+		diagram.removeFigures(selected);
+		diagram.addFigure(group);
+		diagram.unselectAll();
+		diagram.setSelect(group);
+	}
+
+	private void ungroup() {
+		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		List<FigureModel> selected = new LinkedList<FigureModel>(); 
+		selected.addAll(diagram.getSelected());
+		for (FigureModel figure : selected) {
+			if (figure instanceof GroupModel) {
+				diagram.removeFigure(figure);
+				diagram.addFigures(((GroupModel)figure).getFigures());
+				diagram.setSelect(((GroupModel)figure).getFigures());
+			}
+		}
 	}
 
 }

@@ -24,14 +24,11 @@ import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Snap")
-public privileged aspect Snap {
+public aspect Snap {
 	private boolean snapToObject = true;
 
 	private static int SNAPDISTANCE = 5;
 	
-	private HashMap<DiagramModel, TreeSet<SnapLine>> vgsnaps = new HashMap<DiagramModel, TreeSet<SnapLine>>();
-	private HashMap<DiagramModel, TreeSet<SnapLine>> hgsnaps = new HashMap<DiagramModel, TreeSet<SnapLine>>();
-
 	private HashMap<DiagramModel, TreeSet<SnapLine>> vosnaps = new HashMap<DiagramModel, TreeSet<SnapLine>>();
 	private HashMap<DiagramModel, TreeSet<SnapLine>> hosnaps = new HashMap<DiagramModel, TreeSet<SnapLine>>();
 	

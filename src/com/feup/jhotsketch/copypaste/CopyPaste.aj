@@ -22,7 +22,7 @@ import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("CopyPaste")
-public privileged aspect CopyPaste {
+public aspect CopyPaste {
 	private Set<FigureModel> clipboard = null;
 	
 	pointcut createCoolbar(JHotSketch application) :

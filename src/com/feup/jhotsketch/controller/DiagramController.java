@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -16,7 +16,7 @@ public class DiagramController{
 	private enum OPERATION {NONE, SELECT, MOVE, RESIZE} 
 	private OPERATION operation = OPERATION.NONE;
 	
-	private Set<FigureModel> grabbed;
+	private List<FigureModel> grabbed;
 	private Handle grabbedHandle;
 	
 	private Point lastPoint;
@@ -81,7 +81,7 @@ public class DiagramController{
 		}
 	}
 
-	private void resizeFigures(Set<FigureModel> figures, Point lastPoint, Point newPoint) {
+	private void resizeFigures(List<FigureModel> figures, Point lastPoint, Point newPoint) {
 		int dx = newPoint.x - lastPoint.x;
 		int dy = newPoint.y - lastPoint.y;
 		for (FigureModel figure : figures) {
@@ -90,7 +90,7 @@ public class DiagramController{
 		getDiagram().diagramChanged();
 	}
 
-	private void moveFigures(Set<FigureModel> figures, Point lastPoint, Point newPoint) {
+	private void moveFigures(List<FigureModel> figures, Point lastPoint, Point newPoint) {
 		int dx = newPoint.x - lastPoint.x;
 		int dy = newPoint.y - lastPoint.y;
 		for (FigureModel figure : figures) {

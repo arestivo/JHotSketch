@@ -1,7 +1,7 @@
 package com.feup.jhotsketch.grouping;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.swt.graphics.Rectangle;
 
@@ -10,13 +10,13 @@ import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("Grouping")
 public class GroupModel extends FigureModel{
-	private HashSet<FigureModel> figures = new HashSet<FigureModel>();
+	private List<FigureModel> figures = new LinkedList<FigureModel>();
 	
 	public GroupModel() {
 		super(0, 0, 0, 0);
 	}
 
-	public void addFigures(Set<FigureModel> figures) {
+	public void addFigures(List<FigureModel> figures) {
 		this.figures.addAll(figures);
 		int x = 100000;	int y = 100000;
 		int width = 0; int height = 0;
@@ -31,13 +31,13 @@ public class GroupModel extends FigureModel{
 		bounds = new Rectangle(x, y, width, height);
 	}
 	
-	public Set<FigureModel> getFigures() {
+	public List<FigureModel> getFigures() {
 		return figures;
 	}
 
 	@Override
 	public FigureModel clone() {
-		Set<FigureModel> clones = new HashSet<FigureModel>();
+		List<FigureModel> clones = new LinkedList<FigureModel>();
 		for (FigureModel figure : figures) {
 			clones.add(figure.clone());
 		}

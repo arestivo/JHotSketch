@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.line.color;
 
-import java.util.Set; 
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -76,7 +76,7 @@ public aspect LineColor{
 				dialog.open();
 				if (dialog.getRGB() == null) return;
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setLineColor(color);

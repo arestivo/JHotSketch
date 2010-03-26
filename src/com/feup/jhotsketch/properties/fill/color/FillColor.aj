@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.fill.color;
 
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -101,7 +101,7 @@ public aspect FillColor{
 				ColorDialog dialog = new ColorDialog(fillComposite.getShell());
 				dialog.open();
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setFillColor(color);

@@ -1,7 +1,7 @@
 package com.feup.jhotsketch.grouping;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -64,7 +64,7 @@ public aspect Grouping {
 			@Override
 			public void handleEvent(Event event) {
 				DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-				Set<FigureModel> selected = diagram.getSelected();
+				List<FigureModel> selected = diagram.getSelected();
 				if (selected.size() <= 1) return;
 				for (FigureModel figure : selected) {
 					figure.setSelected(false);
@@ -82,7 +82,7 @@ public aspect Grouping {
 			@Override
 			public void handleEvent(Event event) {
 				DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-				Set<FigureModel> selected = new HashSet<FigureModel>(); 
+				List<FigureModel> selected = new LinkedList<FigureModel>(); 
 				selected.addAll(diagram.getSelected());
 				for (FigureModel figure : selected) {
 					if (figure instanceof GroupModel) {

@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.line.style;
 
-import java.util.Set; 
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -77,7 +77,7 @@ public aspect LineStyle{
 		solidButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_SOLID);
@@ -88,7 +88,7 @@ public aspect LineStyle{
 		dashedButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_DASH);
@@ -99,7 +99,7 @@ public aspect LineStyle{
 		dottedButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
 				for (FigureModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_DOT);

@@ -1,7 +1,6 @@
 package com.feup.jhotsketch.properties.line.width;
 
-import java.util.Set; 
-
+import java.util.List; 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
@@ -74,7 +73,7 @@ public aspect LineWidth {
 		scale.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Set<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				int width = scale.getSelection();
 				for (FigureModel figure : selected) {
 					figure.setLineWidth(width);

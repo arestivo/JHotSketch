@@ -14,7 +14,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 public class DiagramModel implements FigureObserver {
 	private List<FigureModel> figures = new LinkedList<FigureModel>();
 	private Set<DiagramObserver> observers = new HashSet<DiagramObserver>();
-	private Set<FigureModel> selected = new HashSet<FigureModel>();
+	private List<FigureModel> selected = new LinkedList<FigureModel>();
 
 	private Rectangle selectionRectangle; 
 
@@ -62,7 +62,7 @@ public class DiagramModel implements FigureObserver {
 		return null;
 	}
 
-	public Set<FigureModel> getSelected() {
+	public List<FigureModel> getSelected() {
 		return selected ;
 	}
 
@@ -113,17 +113,17 @@ public class DiagramModel implements FigureObserver {
 		diagramChanged();
 	}
 
-	public void removeFigures(Set<FigureModel> toRemove) {
+	public void removeFigures(List<FigureModel> toRemove) {
 		figures.removeAll(toRemove);
 		selected.removeAll(toRemove);
 	}
 
-	public void addFigures(Set<FigureModel> figures) {
+	public void addFigures(List<FigureModel> figures) {
 		this.figures.addAll(figures);
 		diagramChanged();
 	}
 
-	public void setSelect(Set<FigureModel> figures) {
+	public void setSelect(List<FigureModel> figures) {
 		for (FigureModel figure : figures) {
 			setSelect(figure);
 		}
@@ -132,4 +132,9 @@ public class DiagramModel implements FigureObserver {
 	public void resizeFigure(FigureModel figure, double rx, double ry,Handle grabbedHandle) {
 		figure.resize(rx, ry, grabbedHandle);
 	}
+
+	public void addFiguresAtStart(LinkedList<FigureModel> figures) {
+		this.figures.addAll(0, figures);
+	}
+
 }

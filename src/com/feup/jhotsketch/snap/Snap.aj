@@ -101,12 +101,17 @@ public aspect Snap {
 		for (SnapLine snapLine : candidates) {
 			if (snapLine.getPosition() == y1) continue;
 			if (snapLine.getPosition() == y2) continue;
+			if (snapLine.getPosition() == y1 + (y2 - y1) / 2) continue;
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - y1) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - y1);
 				best = snapLine;
 			}
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - y2) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - y2);
+				best = snapLine;
+			}
+			if (snapLine.getKind() == SnapLine.KIND.CENTER && Math.abs(snapLine.getPosition() - (y1 + (y2 - y1) / 2)) < bestsnap) {
+				bestsnap = Math.abs(snapLine.getPosition() - (y1 + (y2 - y1) / 2));
 				best = snapLine;
 			}
 		}

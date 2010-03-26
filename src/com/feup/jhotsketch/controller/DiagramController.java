@@ -13,7 +13,7 @@ import com.feup.jhotsketch.model.Handle;
 
 @PackageName("Controller")
 public class DiagramController{
-	private enum OPERATION {NONE, SELECT, MOVE, RESIZE} 
+	public enum OPERATION {NONE, SELECT, MOVE, RESIZE} 
 	private OPERATION operation = OPERATION.NONE;
 	
 	private List<FigureModel> grabbed;
@@ -121,5 +121,9 @@ public class DiagramController{
 
 	public DiagramModel getDiagram() {
 		return diagram;
+	}
+
+	public OPERATION getOperation() {
+		return operation;
 	}
 }

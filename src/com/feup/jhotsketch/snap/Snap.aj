@@ -80,6 +80,7 @@ public aspect Snap {
 		call(void DiagramController+.mouseMove(..)) && target(controller);
 		
 	after(DiagramController controller) : mouseMove(controller) {
+		if (controller.getOperation() != DiagramController.OPERATION.MOVE) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
 		for (FigureModel figure : diagram.getSelected()) {
@@ -99,9 +100,7 @@ public aspect Snap {
 		int bestsnap = SNAPDISTANCE + 1; SnapLine best = null;
 		SortedSet<SnapLine> candidates = hosnaps.get(diagram).subSet(new SnapLine(y1 - SNAPDISTANCE), new SnapLine(y2 + SNAPDISTANCE));
 		for (SnapLine snapLine : candidates) {
-			if (snapLine.getPosition() == y1) continue;
-			if (snapLine.getPosition() == y2) continue;
-			if (snapLine.getPosition() == y1 + (y2 - y1) / 2) continue;
+			if (diagram.getSelected().contains(snapLine.getFigure())) continue;
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - y1) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - y1);
 				best = snapLine;
@@ -123,9 +122,7 @@ public aspect Snap {
 		int bestsnap = SNAPDISTANCE + 1; SnapLine best = null;
 		SortedSet<SnapLine> candidates = vosnaps.get(diagram).subSet(new SnapLine(x1 - SNAPDISTANCE), new SnapLine(x2 + SNAPDISTANCE));
 		for (SnapLine snapLine : candidates) {
-			if (snapLine.getPosition() == x1) continue;
-			if (snapLine.getPosition() == x2) continue;
-			if (snapLine.getPosition() == x1 + (x2 - x1) / 2) continue;
+			if (diagram.getSelected().contains(snapLine.getFigure())) continue;
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - x1) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - x1);
 				best = snapLine;
@@ -224,12 +221,12 @@ public aspect Snap {
 		vosnaps.put(diagram, new TreeSet<SnapLine>());
 		hosnaps.put(diagram, new TreeSet<SnapLine>());
 		for (FigureModel figure : diagram.getFigures()) {
-			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x, SnapLine.KIND.EDGE));
-			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y, SnapLine.KIND.EDGE));
-			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x + figure.getBounds().width, SnapLine.KIND.EDGE));
-			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y + figure.getBounds().height, SnapLine.KIND.EDGE));
-			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x + figure.getBounds().width / 2, SnapLine.KIND.CENTER));
-			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y + figure.getBounds().height / 2, SnapLine.KIND.CENTER));
+			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x, SnapLine.KIND.EDGE, figure));
+			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y, SnapLine.KIND.EDGE, figure));
+			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x + figure.getBounds().width, SnapLine.KIND.EDGE, figure));
+			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y + figure.getBounds().height, SnapLine.KIND.EDGE, figure));
+			vosnaps.get(diagram).add(new SnapLine(figure.getBounds().x + figure.getBounds().width / 2, SnapLine.KIND.CENTER, figure));
+			hosnaps.get(diagram).add(new SnapLine(figure.getBounds().y + figure.getBounds().height / 2, SnapLine.KIND.CENTER, figure));
 		}
 	}
 }

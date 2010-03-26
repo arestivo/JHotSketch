@@ -1,12 +1,11 @@
 package com.feup.jhotsketch.model;
 
 import java.util.Collection;
-import java.util.HashSet; 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.feup.contribution.aida.annotations.PackageName;

@@ -143,6 +143,7 @@ public privileged aspect Snap {
 			if (top) figure.setY(best.getPosition() + figure.getBounds().y - y1);
 			else figure.setY(best.getPosition() - (y2 - figure.getBounds().y));
 		}
+		diagram.setHorizontalSnapLine(null);
 	}
 
 	private void snapVertical(DiagramModel diagram, int x1, int x2) {
@@ -153,6 +154,7 @@ public privileged aspect Snap {
 			if (left) figure.setX(best.getPosition() + figure.getBounds().x - x1);
 			else figure.setX(best.getPosition() - (x2 - figure.getBounds().x));
 		}
+		diagram.setVerticalSnapLine(null);
 	}
 
 	public void createSnapToolbar(final JHotSketch application, CoolBar coolbar) {

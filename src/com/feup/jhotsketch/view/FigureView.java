@@ -14,11 +14,6 @@ import com.feup.jhotsketch.model.SquareModel;
 public abstract class FigureView {
 	public void draw(DiagramView canvas, FigureModel figure, GC gc){
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-		if (figure.getSelected()) {
-			for (Handle handle : figure.getHandles()) {
-				gc.fillRectangle(handle.getBounds());
-			}
-		}
 	}
 
 	public static FigureView createView(FigureModel figure) {

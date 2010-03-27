@@ -14,6 +14,7 @@ import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.DiagramObserver;
 import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.Handle;
 
 @PackageName("View")
 public class DiagramView extends Composite implements DiagramObserver{
@@ -46,10 +47,21 @@ public class DiagramView extends Composite implements DiagramObserver{
 		for (FigureModel figure : diagram.getFigures()) {
 			FigureView.createView(figure).draw(this, figure, gc);
 		}
+		for (FigureModel figure : diagram.getFigures()) {
+			drawHandles(gc, figure);
+		}
 		gc.setLineStyle(SWT.LINE_DOT);
 		gc.setLineWidth(1);
 		if (diagram.getSelectionRectangle() != null) 
 			gc.drawRectangle(diagram.getSelectionRectangle());
+	}
+
+	private void drawHandles(GC gc, FigureModel figure) {
+		if (figure.getSelected()) {
+			for (Handle handle : figure.getHandles()) {
+				gc.fillRectangle(handle.getBounds());
+			}
+		}
 	}
 
 	public DiagramModel getDiagram() {

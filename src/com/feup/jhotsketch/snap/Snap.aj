@@ -60,6 +60,7 @@ public aspect Snap {
 		call(void DiagramController+.mouseUp(..)) && target(controller);
 		
 	after(DiagramController controller) : mouseUp(controller) {
+		if (!snapToObject) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
 		for (FigureModel figure : diagram.getSelected()) {
@@ -80,6 +81,7 @@ public aspect Snap {
 		call(void DiagramController+.mouseMove(..)) && target(controller);
 		
 	after(DiagramController controller) : mouseMove(controller) {
+		if (!snapToObject) return;
 		if (controller.getOperation() != DiagramController.OPERATION.MOVE) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
@@ -141,29 +143,33 @@ public aspect Snap {
 	}
 	
 	private void snapHorizontal(DiagramModel diagram, int y1, int y2) {
-		SnapLine best = getBestSnapHorizontal(diagram, y1, y2);
-		if (best == null) return;
-		if (best.getKind() == KIND.EDGE) {
-			boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
-			for (FigureModel figure : diagram.getSelected())
-				if (top) figure.move(0, best.getPosition() - y1);
-				else figure.move(0, best.getPosition() - y2);
-		} else for (FigureModel figure : diagram.getSelected())
-			figure.move(0, best.getPosition() - (y1 + (y2 - y1) / 2));
-		diagram.setHorizontalSnapLine(null);
+		if (snapToObject) {
+			SnapLine best = getBestSnapHorizontal(diagram, y1, y2);
+			if (best == null) return;
+			if (best.getKind() == KIND.EDGE) {
+				boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
+				for (FigureModel figure : diagram.getSelected())
+					if (top) figure.move(0, best.getPosition() - y1);
+					else figure.move(0, best.getPosition() - y2);
+			} else for (FigureModel figure : diagram.getSelected())
+				figure.move(0, best.getPosition() - (y1 + (y2 - y1) / 2));
+			diagram.setHorizontalSnapLine(null);
+		}
 	}
 
 	private void snapVertical(DiagramModel diagram, int x1, int x2) {
-		SnapLine best = getBestSnapVertical(diagram, x1, x2);
-		if (best == null) return;
-		if (best.getKind() == KIND.EDGE) {
-			boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
-			for (FigureModel figure : diagram.getSelected())
-				if (left) figure.move(best.getPosition() - x1, 0);
-				else figure.move(best.getPosition() - x2, 0);
-		} else for (FigureModel figure : diagram.getSelected())
-			figure.move(best.getPosition() - (x1 + (x2 - x1) / 2), 0);
-		diagram.setVerticalSnapLine(null);
+		if (snapToObject) {
+			SnapLine best = getBestSnapVertical(diagram, x1, x2);
+			if (best == null) return;
+			if (best.getKind() == KIND.EDGE) {
+				boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
+				for (FigureModel figure : diagram.getSelected())
+					if (left) figure.move(best.getPosition() - x1, 0);
+					else figure.move(best.getPosition() - x2, 0);
+			} else for (FigureModel figure : diagram.getSelected())
+				figure.move(best.getPosition() - (x1 + (x2 - x1) / 2), 0);
+			diagram.setVerticalSnapLine(null);
+		}
 	}
 
 	public void createSnapToolbar(final JHotSketch application, CoolBar coolbar) {

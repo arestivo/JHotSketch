@@ -109,6 +109,16 @@ public aspect FillColor{
 				colorButton.setSelection(false);
 			}
 		});
+		
+		noneButton.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				for (FigureModel figure : selected) {
+					figure.setFillColor(null);
+				}
+			}
+		});
 	}
 
 	// Update Fill Editor

@@ -10,10 +10,10 @@ import com.feup.jhotsketch.model.ShapeModel;
 public class RectangleView extends ShapeView{
 	
 	@Override
-	public void draw(DiagramView canvas, ShapeModel shape, GC gc) {
+	public void draw(ShapeModel shape, GC gc) {
 		RectangleModel rectangle = (RectangleModel) shape;
 		gc.drawRectangle(rectangle.getBounds().x, rectangle.getBounds().y, rectangle.getBounds().width, rectangle.getBounds().height);
-		super.draw(canvas, shape, gc);
+		super.draw(shape, gc);
 	}
 
 }

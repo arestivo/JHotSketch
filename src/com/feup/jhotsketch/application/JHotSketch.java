@@ -1,29 +1,21 @@
 package com.feup.jhotsketch.application;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.DiagramController;
-import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.RectangleModel;
-import com.feup.jhotsketch.model.RoundedRectangleModel;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Application")
@@ -106,37 +98,20 @@ public class JHotSketch {
 		gd.widthHint = 200;
 		bar.setLayoutData(gd);
 	}
-
-	private void createTool(Composite composite, String icon, String data) {		
-		final Button button = new Button(composite, SWT.FLAT);
-		button.setImage(new Image(Display.getCurrent(), "icons/" + icon + ".gif"));
-		button.setLayoutData(new RowData(30, 30));
-		button.setData(data);
-
-		button.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				String type = (String) button.getData();
-				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new RectangleModel(10, 10, 50, 50));
-				if (type.equals("CIRCLE")) dc.getDiagram().addFigure(new OvalModel(10, 10, 50, 50));
-				if (type.equals("ROUNDED")) dc.getDiagram().addFigure(new RoundedRectangleModel(10, 10, 50, 50));
-			}
-		});
-	}
 	
 	private void createBasicTools(ExpandBar bar) {
 		Composite composite = new Composite (bar, SWT.NONE);
 		RowLayout layout = new RowLayout();
-		layout.pack = false;
 		composite.setLayout(layout);
-		
-		createTool(composite, "square", "SQUARE");
-		createTool(composite, "circle", "CIRCLE");
-		createTool(composite, "rounded", "ROUNDED");
-				
+
+		new ShapeControl(composite, SWT.NONE, "OVAL");
+		new ShapeControl(composite, SWT.NONE, "RECTANGLE");
+		new ShapeControl(composite, SWT.NONE, "ROUNDED");
+
 		ExpandItem item = new ExpandItem (bar, SWT.NONE, 0);
 		item.setText("Basic");
-		item.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		item.setControl(composite);
+		item.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 1);
+		item.setControl(composite);	
 	}
 
 	private void createUMLTools(ExpandBar bar) {

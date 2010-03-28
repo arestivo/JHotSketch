@@ -12,7 +12,7 @@ import com.feup.jhotsketch.model.RectangleModel;
 
 @PackageName("View")
 public abstract class ShapeView {
-	public void draw(DiagramView canvas, ShapeModel shape, GC gc){
+	public void draw(ShapeModel shape, GC gc){
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 	}
 

@@ -1,13 +1,12 @@
 package com.feup.jhotsketch.view;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWT; 
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.CircleModel;
 import com.feup.jhotsketch.model.FigureModel;
-import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.SquareModel;
 
 @PackageName("View")

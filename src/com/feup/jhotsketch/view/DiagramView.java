@@ -40,6 +40,7 @@ public class DiagramView extends Composite implements DiagramObserver{
 		addListener(SWT.MouseUp, listener);
 		addListener(SWT.MouseDown, listener);
 		addListener(SWT.MouseMove, listener);
+		addListener(SWT.MouseDoubleClick, listener);
 	}
 	
 	private void paint(GC gc) {
@@ -107,6 +108,9 @@ public class DiagramView extends Composite implements DiagramObserver{
 				break;
 			case SWT.MouseMove:
 				controller.mouseMove(event);
+				break;
+			case SWT.MouseDoubleClick:
+				controller.mouseDoubleClick(event);
 				break;
 			}
 		}

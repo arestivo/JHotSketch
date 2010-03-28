@@ -143,4 +143,7 @@ public class DiagramController{
 	public OPERATION getOperation() {
 		return operation;
 	}
+
+	public void mouseDoubleClick(Event event) {
+	}
 }

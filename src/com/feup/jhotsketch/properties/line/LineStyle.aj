@@ -18,7 +18,6 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.ShapeModel;
-import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
 @PackageName("Line.Properties")
@@ -39,12 +38,12 @@ public aspect LineStyle{
 
 	// Apply line style when drawing
 	
-	pointcut drawFigure(DiagramView canvas, ShapeModel shape, GC gc) :
+	pointcut drawFigure(ShapeModel shape, GC gc) :
 		target(ShapeView+) &&
-		call(void draw(DiagramView, ShapeModel, GC)) && 
-		args(canvas, shape, gc);
+		call(void draw(ShapeModel, GC)) && 
+		args(shape, gc);
 
-	before(DiagramView canvas, ShapeModel shape, GC gc) : drawFigure(canvas, shape, gc) {
+	before(ShapeModel shape, GC gc) : drawFigure(shape, gc) {
 		gc.setLineStyle(shape.getLineStyle());
 	}
 	

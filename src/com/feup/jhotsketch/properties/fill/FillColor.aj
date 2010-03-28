@@ -1,6 +1,6 @@
 package com.feup.jhotsketch.properties.fill;
 
-import java.util.List;
+import java.util.List; 
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -20,7 +20,6 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.ShapeModel;
-import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
 @PackageName("Fill.Properties")
@@ -41,15 +40,15 @@ public aspect FillColor{
 
 	// Apply fill color when drawing
 	
-	pointcut drawFigure(DiagramView canvas, ShapeModel shape, GC gc) :
+	pointcut drawFigure(ShapeModel shape, GC gc) :
 		target(ShapeView+) &&
-		call(void draw(DiagramView, ShapeModel, GC)) && 
-		args(canvas, shape, gc);
+		call(void draw(ShapeModel, GC)) && 
+		args(shape, gc);
 	
 	pointcut drawOval(GC gc, int x, int y, int w, int h, ShapeModel shape) : 
 		call (void GC.drawOval(int, int, int, int)) && 
 		args(x, y, w, h) && target(gc) &&
-		cflow(drawFigure(DiagramView, shape, GC));
+		cflow(drawFigure(shape, GC));
 		
 	void around(GC gc, int x, int y, int w, int h, ShapeModel shape) : drawOval(gc, x, y, w, h, shape) {
 		if (shape.getFillColor() != null) {
@@ -62,7 +61,7 @@ public aspect FillColor{
 	pointcut drawRectangle(GC gc, int x, int y, int w, int h, ShapeModel shape) : 
 		call (void GC.drawRectangle(int, int, int, int)) && 
 		args(x, y, w, h) && target(gc) &&
-		cflow(drawFigure(DiagramView, shape, GC));
+		cflow(drawFigure(shape, GC));
 
 	void around(GC gc, int x, int y, int w, int h, ShapeModel shape) : drawRectangle(gc, x, y, w, h, shape) {
 		if (shape.getFillColor() != null) {
@@ -75,7 +74,7 @@ public aspect FillColor{
 	pointcut drawRoundedRectangle(GC gc, int x, int y, int w, int h, int r1, int r2, ShapeModel shape) : 
 		call (void GC.drawRoundRectangle(int, int, int, int, int , int)) && 
 		args(x, y, w, h, r1, r2) && target(gc) &&
-		cflow(drawFigure(DiagramView, shape, GC));
+		cflow(drawFigure(shape, GC));
 
 	void around(GC gc, int x, int y, int w, int h, int r1, int r2, ShapeModel shape) : drawRoundedRectangle(gc, x, y, w, h, r1, r2, shape) {
 		if (shape.getFillColor() != null) {

@@ -56,6 +56,7 @@ public class ShapeControl extends Composite{
 		gc.setAntialias(SWT.ON);
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRectangle(0, 0, CONTROLWIDTH, CONTROLHEIGHT);
+		gc.drawRectangle(0, 0, CONTROLWIDTH, CONTROLHEIGHT);
 		ShapeView.createView(model).draw(model, gc);
 	}
 

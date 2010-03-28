@@ -26,6 +26,7 @@ public class DiagramModel implements FigureObserver {
 		shapes.add(new OvalModel(100, 100, 40, 40));
 		for (ShapeModel shape : shapes) {
 			shape.addObserver(this);
+			shape.setText("Just Some Text");
 		}
 	}
 	

@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.snap.SnapLine.KIND;
 
+@PackageName("Snap")
 public class SnapController {
 	private static int SNAPDISTANCE = 5;
 	private static SnapController instance;

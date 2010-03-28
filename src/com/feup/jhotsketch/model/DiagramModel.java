@@ -20,10 +20,10 @@ public class DiagramModel implements FigureObserver {
 
 	public DiagramModel(){
 		figures.add(new RectangleModel(10, 10, 40, 40));
-		figures.add(new CircleModel(150, 150, 40, 40));
-		figures.add(new CircleModel(50, 150, 40, 40));
-		figures.add(new CircleModel(150, 50, 40, 40));
-		figures.add(new CircleModel(100, 100, 40, 40));
+		figures.add(new OvalModel(150, 150, 40, 40));
+		figures.add(new OvalModel(50, 150, 40, 40));
+		figures.add(new OvalModel(150, 50, 40, 40));
+		figures.add(new OvalModel(100, 100, 40, 40));
 		for (FigureModel figure : figures) {
 			figure.addObserver(this);
 		}

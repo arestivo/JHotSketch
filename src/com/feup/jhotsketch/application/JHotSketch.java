@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.TabFolder;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.DiagramController;
-import com.feup.jhotsketch.model.CircleModel;
+import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.RectangleModel;
 import com.feup.jhotsketch.view.DiagramView;
@@ -116,7 +116,7 @@ public class JHotSketch {
 			public void handleEvent(Event event) {
 				String type = (String) button.getData();
 				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new RectangleModel(10, 10, 50, 50));
-				if (type.equals("CIRCLE")) dc.getDiagram().addFigure(new CircleModel(10, 10, 50, 50));
+				if (type.equals("CIRCLE")) dc.getDiagram().addFigure(new OvalModel(10, 10, 50, 50));
 			}
 		});
 	}

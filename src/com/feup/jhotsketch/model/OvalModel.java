@@ -3,9 +3,9 @@ package com.feup.jhotsketch.model;
 import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
-public class CircleModel extends FigureModel {
+public class OvalModel extends FigureModel {
 	
-	public CircleModel(int x, int y, int width, int height) {
+	public OvalModel(int x, int y, int width, int height) {
 		super(x, y, width, height);
 	}
 
@@ -35,7 +35,7 @@ public class CircleModel extends FigureModel {
 
 	@Override
 	public FigureModel clone() {
-		CircleModel clone = new CircleModel(bounds.x, bounds.y, bounds.width, bounds.height);
+		OvalModel clone = new OvalModel(bounds.x, bounds.y, bounds.width, bounds.height);
 		return clone;
 	}
 

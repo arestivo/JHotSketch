@@ -37,11 +37,11 @@ public class GroupModel extends FigureModel{
 
 	@Override
 	public FigureModel clone() {
+		GroupModel clone = new GroupModel();
 		List<FigureModel> clones = new LinkedList<FigureModel>();
 		for (FigureModel figure : figures) {
 			clones.add(figure.clone());
 		}
-		GroupModel clone = new GroupModel();
 		clone.addFigures(clones);
 		return clone;
 	}

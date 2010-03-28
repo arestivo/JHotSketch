@@ -8,11 +8,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.CoolItem;
+import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -77,17 +79,17 @@ public aspect Grouping {
 		});
 	}
 	
-	pointcut fileMenuCreated(Menu menu) : 
-		call (MenuItem.new(Menu, int)) && args(menu, ..) && within(JHotSketch);
-	
-	after(Menu menu) : fileMenuCreated(menu) {
-	    MenuItem fileItem = new MenuItem(menu, SWT.CASCADE);
-	    fileItem.setText("Groups");
+	pointcut menuCreated(Shell shell, int type) : 
+		call (Menu.new(Decorations, int)) && args(shell, type) && within(JHotSketch) && if(type==SWT.BAR);
 
-	    Menu fileMenu = new Menu(menu.getShell(), SWT.DROP_DOWN);
-	    fileItem.setMenu(fileMenu);
+	after(Shell shell, int type) returning(Menu menu) : menuCreated(shell, type) {
+	    MenuItem groupItem = new MenuItem(menu, SWT.CASCADE);
+	    groupItem.setText("Groups");
 
-	    MenuItem group = new MenuItem(fileMenu, SWT.PUSH);
+	    Menu groupMenu = new Menu(shell, SWT.DROP_DOWN);
+	    groupItem.setMenu(groupMenu);
+
+	    MenuItem group = new MenuItem(groupMenu, SWT.PUSH);
 	    group.setText("Group");
 	    group.setAccelerator(SWT.CONTROL | 'G');
 	    group.addListener(SWT.Selection, new Listener() {
@@ -98,7 +100,7 @@ public aspect Grouping {
 
 		});
 	    
-	    MenuItem ungroup = new MenuItem(fileMenu, SWT.PUSH);
+	    MenuItem ungroup = new MenuItem(groupMenu, SWT.PUSH);
 	    ungroup.setText("Ungroup");
 	    ungroup.setAccelerator(SWT.CONTROL | 'U');
 	    ungroup.addListener(SWT.Selection, new Listener() {

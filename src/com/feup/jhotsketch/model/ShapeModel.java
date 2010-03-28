@@ -9,14 +9,14 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
-public abstract class FigureModel {
+public abstract class ShapeModel {
 	private boolean selected = false;
 	private HashSet<FigureObserver> observers = new HashSet<FigureObserver>();
 	HashSet<Handle> handles = null;
 
 	protected Rectangle bounds;
 
-	public FigureModel(int x, int y, int width, int height){
+	public ShapeModel(int x, int y, int width, int height){
 		bounds = new Rectangle(x, y, width, height);
 	}
 
@@ -66,7 +66,7 @@ public abstract class FigureModel {
 	}
 
 	@Override
-	public abstract FigureModel clone();
+	public abstract ShapeModel clone();
 
 	public void resize(double rx, double ry, Handle handle){
 		switch (handle.getId()) {

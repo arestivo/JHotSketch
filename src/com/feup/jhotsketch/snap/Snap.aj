@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Snap")
@@ -35,7 +35,7 @@ public aspect Snap {
 		if (!SnapController.getInstance().snapToObject()) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
-		for (FigureModel figure : diagram.getSelected()) {
+		for (ShapeModel figure : diagram.getSelected()) {
 			x1 = Math.min(x1, figure.getBounds().x);
 			y1 = Math.min(y1, figure.getBounds().y);
 			x2 = Math.max(x2, figure.getBounds().x + figure.getBounds().width);
@@ -57,7 +57,7 @@ public aspect Snap {
 		if (controller.getOperation() != DiagramController.OPERATION.MOVE) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
-		for (FigureModel figure : diagram.getSelected()) {
+		for (ShapeModel figure : diagram.getSelected()) {
 			x1 = Math.min(x1, figure.getBounds().x);
 			y1 = Math.min(y1, figure.getBounds().y);
 			x2 = Math.max(x2, figure.getBounds().x + figure.getBounds().width);
@@ -96,7 +96,7 @@ public aspect Snap {
 	
 	after(DiagramModel diagram) : diagramChanged(diagram){
 		SnapController.getInstance().createSnapLines(diagram);
-		for (FigureModel figure : diagram.getFigures()) {
+		for (ShapeModel figure : diagram.getFigures()) {
 			SnapController.getInstance().addVerticalSnapLine(diagram, figure.getBounds().x, SnapLine.KIND.EDGE, figure);
 			SnapController.getInstance().addHorizontalSnapLine(diagram, figure.getBounds().y, SnapLine.KIND.EDGE, figure);
 			SnapController.getInstance().addVerticalSnapLine(diagram, figure.getBounds().x + figure.getBounds().width, SnapLine.KIND.EDGE, figure);

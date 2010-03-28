@@ -4,5 +4,5 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public interface FigureObserver {
-	public void figureChanged(FigureModel figure);
+	public void figureChanged(ShapeModel figure);
 }

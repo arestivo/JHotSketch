@@ -1,18 +1,18 @@
 package com.feup.jhotsketch.snap;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("Snap")
 public class SnapLine implements Comparable<SnapLine>{
 	public enum KIND {EDGE, CENTER};
 
 	private int position;
-	private FigureModel figure;
+	private ShapeModel figure;
 
 	private KIND kind;
 	
-	public SnapLine(int position, KIND kind, FigureModel figure) {
+	public SnapLine(int position, KIND kind, ShapeModel figure) {
 		this(position);
 		this.figure = figure;
 		this.setKind(kind);
@@ -43,7 +43,7 @@ public class SnapLine implements Comparable<SnapLine>{
 		return kind;
 	}
 
-	public FigureModel getFigure() {
+	public ShapeModel getFigure() {
 		return figure;
 	}
 }

@@ -4,7 +4,7 @@ package com.feup.jhotsketch.properties.group;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.groups.GroupModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("Group.Properties")
 public aspect GroupProperties {
@@ -12,10 +12,10 @@ public aspect GroupProperties {
 	// Set Line Style
 	
 	pointcut setLineStyle(GroupModel group, int s) :
-		call (void FigureModel.setLineStyle(int)) && target(group) && args(s);
+		call (void ShapeModel.setLineStyle(int)) && target(group) && args(s);
 	
 	after(GroupModel group, int s) : setLineStyle(group, s) {
-		for (FigureModel figure : group.getFigures()) {
+		for (ShapeModel figure : group.getFigures()) {
 			figure.setLineStyle(s);
 		}
 	}
@@ -23,10 +23,10 @@ public aspect GroupProperties {
 	// Set Line Width
 	
 	pointcut setLineWidth(GroupModel group, int w) :
-		call (void FigureModel.setLineWidth(int)) && target(group) && args(w);
+		call (void ShapeModel.setLineWidth(int)) && target(group) && args(w);
 	
 	after(GroupModel group, int w) : setLineWidth(group, w) {
-		for (FigureModel figure : group.getFigures()) {
+		for (ShapeModel figure : group.getFigures()) {
 			figure.setLineWidth(w);
 		}
 	}
@@ -34,10 +34,10 @@ public aspect GroupProperties {
 	// Set Line Color
 
 	pointcut setLineColor(GroupModel group, Color c) :
-		call (void FigureModel.setLineColor(Color)) && target(group) && args(c);
+		call (void ShapeModel.setLineColor(Color)) && target(group) && args(c);
 	
 	after(GroupModel group, Color c) : setLineColor(group, c) {
-		for (FigureModel figure : group.getFigures()) {
+		for (ShapeModel figure : group.getFigures()) {
 			figure.setLineColor(c);
 		}
 	}
@@ -45,10 +45,10 @@ public aspect GroupProperties {
 	// Set Fill Color
 
 	pointcut setFillColor(GroupModel group, Color c) :
-		call (void FigureModel.setFillColor(Color)) && target(group) && args(c) && !within(GroupModel);
+		call (void ShapeModel.setFillColor(Color)) && target(group) && args(c) && !within(GroupModel);
 	
 	after(GroupModel group, Color c) : setFillColor(group, c) {
-		for (FigureModel figure : group.getFigures()) {
+		for (ShapeModel figure : group.getFigures()) {
 			figure.setFillColor(c);
 		}
 	}

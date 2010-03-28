@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Event;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.model.Handle;
 
 @PackageName("Controller")
@@ -17,7 +17,7 @@ public class DiagramController{
 	public enum OPERATION {NONE, SELECT, MOVE, RESIZE} 
 	private OPERATION operation = OPERATION.NONE;
 	
-	private List<FigureModel> grabbed;
+	private List<ShapeModel> grabbed;
 	private Handle grabbedHandle;
 	
 	private Point lastPoint;
@@ -38,7 +38,7 @@ public class DiagramController{
 		reselect = false;
 		
 		// Test if event on selected figure handle
-		for (FigureModel figure : getDiagram().getSelected()) {
+		for (ShapeModel figure : getDiagram().getSelected()) {
 			for (Handle handle : figure.getHandles()) {
 				if (handle.contains(event.x, event.y)) {
 					operation = OPERATION.RESIZE;
@@ -50,7 +50,7 @@ public class DiagramController{
 		}
 
 		// Test if event on selected figure
-		for (FigureModel figure : getDiagram().getSelected()) {
+		for (ShapeModel figure : getDiagram().getSelected()) {
 			if (figure.contains(event.x, event.y)) {
 				operation = OPERATION.MOVE;
 				grabbed = getDiagram().getSelected();
@@ -60,7 +60,7 @@ public class DiagramController{
 		}
 		
 		// Test if event on unselected figure
-		FigureModel figure = getDiagram().getFigureAt(event.x, event.y);
+		ShapeModel figure = getDiagram().getFigureAt(event.x, event.y);
 		if (figure != null) {
 			if ((event.stateMask & SWT.CTRL) == 0) getDiagram().unselectAll();
 			getDiagram().setSelect(figure);
@@ -90,19 +90,19 @@ public class DiagramController{
 		}
 	}
 
-	private void resizeFigures(List<FigureModel> figures, Point lastPoint, Point newPoint) {
+	private void resizeFigures(List<ShapeModel> figures, Point lastPoint, Point newPoint) {
 		int dx = newPoint.x - lastPoint.x;
 		int dy = newPoint.y - lastPoint.y;
-		for (FigureModel figure : figures) {
+		for (ShapeModel figure : figures) {
 			getDiagram().resizeFigure(figure, dx, dy, grabbedHandle);
 		}
 		getDiagram().diagramChanged();
 	}
 
-	private void moveFigures(List<FigureModel> figures, Point lastPoint, Point newPoint) {
+	private void moveFigures(List<ShapeModel> figures, Point lastPoint, Point newPoint) {
 		int dx = newPoint.x - lastPoint.x;
 		int dy = newPoint.y - lastPoint.y;
-		for (FigureModel figure : figures) {
+		for (ShapeModel figure : figures) {
 			getDiagram().moveFigure(figure, dx, dy);
 		}
 		getDiagram().diagramChanged();
@@ -112,8 +112,8 @@ public class DiagramController{
 		if (operation == OPERATION.MOVE) {
 			grabbed = null;
 			if (!moved && reselect && diagram.getSelected().size() == 1) {
-				LinkedList<FigureModel> figures = getDiagram().getFiguresAt(event.x, event.y);
-				FigureModel selected = diagram.getSelected().get(0);
+				LinkedList<ShapeModel> figures = getDiagram().getFiguresAt(event.x, event.y);
+				ShapeModel selected = diagram.getSelected().get(0);
 				int index = figures.indexOf(selected);
 				if (index == figures.size() - 1) index = 0; else index++;
 				diagram.unselectAll();
@@ -124,7 +124,7 @@ public class DiagramController{
 		if (operation == OPERATION.SELECT) {
 			Point newPoint = new Point(event.x, event.y);
 			getDiagram().removeSelectionRectangle();
-			for (FigureModel figure : getDiagram().getFigures()) {
+			for (ShapeModel figure : getDiagram().getFigures()) {
 				if (figure.inside(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y))
 					getDiagram().setSelect(figure);
 			}

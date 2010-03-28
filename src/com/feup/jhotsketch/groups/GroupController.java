@@ -6,7 +6,7 @@ import java.util.List;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("Groups")
 public class GroupController {
@@ -19,9 +19,9 @@ public class GroupController {
 	
 	public void group() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-		List<FigureModel> selected = diagram.getSelected();
+		List<ShapeModel> selected = diagram.getSelected();
 		if (selected.size() <= 1) return;
-		for (FigureModel figure : selected) {
+		for (ShapeModel figure : selected) {
 			figure.setSelected(false);
 		}
 		GroupModel group = new GroupModel();
@@ -34,9 +34,9 @@ public class GroupController {
 
 	public void ungroup() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-		List<FigureModel> selected = new LinkedList<FigureModel>(); 
+		List<ShapeModel> selected = new LinkedList<ShapeModel>(); 
 		selected.addAll(diagram.getSelected());
-		for (FigureModel figure : selected) {
+		for (ShapeModel figure : selected) {
 			if (figure instanceof GroupModel) {
 				diagram.removeFigure(figure);
 				diagram.addFigures(((GroupModel)figure).getFigures());

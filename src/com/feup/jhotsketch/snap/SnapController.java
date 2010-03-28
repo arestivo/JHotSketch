@@ -6,7 +6,7 @@ import java.util.TreeSet;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.snap.SnapLine.KIND;
 
 @PackageName("Snap")
@@ -67,10 +67,10 @@ public class SnapController {
 		if (best == null) return;
 		if (best.getKind() == KIND.EDGE) {
 			boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
-			for (FigureModel figure : diagram.getSelected())
+			for (ShapeModel figure : diagram.getSelected())
 				if (top) figure.move(0, best.getPosition() - y1);
 				else figure.move(0, best.getPosition() - y2);
-		} else for (FigureModel figure : diagram.getSelected())
+		} else for (ShapeModel figure : diagram.getSelected())
 			figure.move(0, best.getPosition() - (y1 + (y2 - y1) / 2));
 		diagram.setHorizontalSnapLine(null);
 	}
@@ -80,10 +80,10 @@ public class SnapController {
 		if (best == null) return;
 		if (best.getKind() == KIND.EDGE) {
 			boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
-			for (FigureModel figure : diagram.getSelected())
+			for (ShapeModel figure : diagram.getSelected())
 				if (left) figure.move(best.getPosition() - x1, 0);
 				else figure.move(best.getPosition() - x2, 0);
-		} else for (FigureModel figure : diagram.getSelected())
+		} else for (ShapeModel figure : diagram.getSelected())
 			figure.move(best.getPosition() - (x1 + (x2 - x1) / 2), 0);
 		diagram.setVerticalSnapLine(null);
 	}
@@ -98,11 +98,11 @@ public class SnapController {
 		hosnaps.put(diagram, new TreeSet<SnapLine>());
 	}
 
-	public void addVerticalSnapLine(DiagramModel diagram, int x, KIND kind, FigureModel figure) {
+	public void addVerticalSnapLine(DiagramModel diagram, int x, KIND kind, ShapeModel figure) {
 		vosnaps.get(diagram).add(new SnapLine(x, kind, figure));		
 	}
 
-	public void addHorizontalSnapLine(DiagramModel diagram, int y, KIND kind, FigureModel figure) {
+	public void addHorizontalSnapLine(DiagramModel diagram, int y, KIND kind, ShapeModel figure) {
 		hosnaps.get(diagram).add(new SnapLine(y, kind, figure));				
 	}
 

@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Scale;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
@@ -23,25 +23,25 @@ public aspect LineWidth {
 
 	// Add line width properties to Figure
 	
-	private int FigureModel.lineWidth = 1;
+	private int ShapeModel.lineWidth = 1;
 
-	public int FigureModel.getLineWidth(){
+	public int ShapeModel.getLineWidth(){
 		return lineWidth;
 	}
 
-	public void FigureModel.setLineWidth(int lineWidth){
+	public void ShapeModel.setLineWidth(int lineWidth){
 		this.lineWidth = lineWidth;
 		figureChanged();
 	}
 
 	// Apply line properties when drawing
 	
-	pointcut drawFigure(DiagramView canvas, FigureModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
 		target(ShapeView+) &&
-		call(void draw(DiagramView, FigureModel, GC)) && 
+		call(void draw(DiagramView, ShapeModel, GC)) && 
 		args(canvas, figure, gc);
 
-	before(DiagramView canvas, FigureModel figure, GC gc) : drawFigure(canvas, figure, gc) {
+	before(DiagramView canvas, ShapeModel figure, GC gc) : drawFigure(canvas, figure, gc) {
 		gc.setLineWidth(figure.getLineWidth());
 	}
 	
@@ -73,9 +73,9 @@ public aspect LineWidth {
 		scale.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				int width = scale.getSelection();
-				for (FigureModel figure : selected) {
+				for (ShapeModel figure : selected) {
 					figure.setLineWidth(width);
 				}
 			}
@@ -91,7 +91,7 @@ public aspect LineWidth {
 	
 	after(DiagramModel diagram) : diagramChanged(diagram){
 		int lineWidth = -1;
-		for (FigureModel figure : diagram.getSelected()) {
+		for (ShapeModel figure : diagram.getSelected()) {
 			if (lineWidth == -1) lineWidth = figure.getLineWidth();
 			else if (lineWidth != figure.getLineWidth()) {
 				scale.setSelection(1);
@@ -103,11 +103,11 @@ public aspect LineWidth {
 	
 	// Clone line width
 	
-	pointcut clone(FigureModel figure) :
-		call (FigureModel clone()) && target(figure);
+	pointcut clone(ShapeModel figure) :
+		call (ShapeModel clone()) && target(figure);
 
-	FigureModel around(FigureModel figure) : clone(figure) {
-		FigureModel clone = proceed(figure);
+	ShapeModel around(ShapeModel figure) : clone(figure) {
+		ShapeModel clone = proceed(figure);
 		clone.setLineWidth(figure.getLineWidth());
 		return clone;
 	}

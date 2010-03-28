@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Listener;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
@@ -26,25 +26,25 @@ public aspect LineStyle{
 
 	// Add line style properties to Figure
 	
-	private int FigureModel.lineStyle = SWT.LINE_SOLID;
+	private int ShapeModel.lineStyle = SWT.LINE_SOLID;
 
-	public int FigureModel.getLineStyle(){
+	public int ShapeModel.getLineStyle(){
 		return lineStyle;
 	}
 
-	public void FigureModel.setLineStyle(int lineStyle){
+	public void ShapeModel.setLineStyle(int lineStyle){
 		this.lineStyle = lineStyle;
 		figureChanged();
 	}
 
 	// Apply line style when drawing
 	
-	pointcut drawFigure(DiagramView canvas, FigureModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
 		target(ShapeView+) &&
-		call(void draw(DiagramView, FigureModel, GC)) && 
+		call(void draw(DiagramView, ShapeModel, GC)) && 
 		args(canvas, figure, gc);
 
-	before(DiagramView canvas, FigureModel figure, GC gc) : drawFigure(canvas, figure, gc) {
+	before(DiagramView canvas, ShapeModel figure, GC gc) : drawFigure(canvas, figure, gc) {
 		gc.setLineStyle(figure.getLineStyle());
 	}
 	
@@ -77,9 +77,9 @@ public aspect LineStyle{
 		solidButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (FigureModel figure : selected) {
+				for (ShapeModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_SOLID);
 				}
 			}
@@ -88,9 +88,9 @@ public aspect LineStyle{
 		dashedButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (FigureModel figure : selected) {
+				for (ShapeModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_DASH);
 				}
 			}
@@ -99,9 +99,9 @@ public aspect LineStyle{
 		dottedButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (FigureModel figure : selected) {
+				for (ShapeModel figure : selected) {
 					figure.setLineStyle(SWT.LINE_DOT);
 				}
 			}
@@ -119,7 +119,7 @@ public aspect LineStyle{
 		solidButton.setSelection(false);
 		dashedButton.setSelection(false);
 		dottedButton.setSelection(false);
-		for (FigureModel figure : diagram.getSelected()) {
+		for (ShapeModel figure : diagram.getSelected()) {
 			if (lineStyle == -1) lineStyle = figure.getLineStyle();
 			else if (lineStyle != figure.getLineStyle()) return;
 		}
@@ -130,11 +130,11 @@ public aspect LineStyle{
 
 	// Clone line style
 	
-	pointcut clone(FigureModel figure) :
-		call (FigureModel clone()) && target(figure);
+	pointcut clone(ShapeModel figure) :
+		call (ShapeModel clone()) && target(figure);
 
-	FigureModel around(FigureModel figure) : clone(figure) {
-		FigureModel clone = proceed(figure);
+	ShapeModel around(ShapeModel figure) : clone(figure) {
+		ShapeModel clone = proceed(figure);
 		clone.setLineStyle(figure.getLineStyle());
 		return clone;
 	}

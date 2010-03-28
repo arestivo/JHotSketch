@@ -13,7 +13,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.DiagramObserver;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.model.Handle;
 
 @PackageName("View")
@@ -44,10 +44,10 @@ public class DiagramView extends Composite implements DiagramObserver{
 	
 	private void paint(GC gc) {
 		gc.setAntialias(SWT.ON);
-		for (FigureModel figure : diagram.getFigures()) {
+		for (ShapeModel figure : diagram.getFigures()) {
 			ShapeView.createView(figure).draw(this, figure, gc);
 		}
-		for (FigureModel figure : diagram.getFigures()) {
+		for (ShapeModel figure : diagram.getFigures()) {
 			drawHandles(gc, figure);
 		}
 		gc.setLineStyle(SWT.LINE_DOT);
@@ -56,7 +56,7 @@ public class DiagramView extends Composite implements DiagramObserver{
 			gc.drawRectangle(diagram.getSelectionRectangle());
 	}
 
-	private void drawHandles(GC gc, FigureModel figure) {
+	private void drawHandles(GC gc, ShapeModel figure) {
 		if (figure.getSelected()) {
 			for (Handle handle : figure.getHandles()) {
 				gc.fillRectangle(handle.getBounds());

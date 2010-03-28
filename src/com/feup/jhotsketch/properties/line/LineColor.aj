@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Listener;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
@@ -28,25 +28,25 @@ public aspect LineColor{
 
 	// Add line color properties to Figure
 	
-	private Color FigureModel.lineColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+	private Color ShapeModel.lineColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
-	public Color FigureModel.getLineColor(){
+	public Color ShapeModel.getLineColor(){
 		return lineColor;
 	}
 
-	public void FigureModel.setLineColor(Color lineColor){
+	public void ShapeModel.setLineColor(Color lineColor){
 		this.lineColor = lineColor;
 		figureChanged();
 	}
 
 	// Apply line color when drawing
 	
-	pointcut drawFigure(DiagramView canvas, FigureModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
 		target(ShapeView+) &&
-		call(void draw(DiagramView, FigureModel, GC)) && 
+		call(void draw(DiagramView, ShapeModel, GC)) && 
 		args(canvas, figure, gc);
 
-	before(DiagramView canvas, FigureModel figure, GC gc) : drawFigure(canvas, figure, gc) {
+	before(DiagramView canvas, ShapeModel figure, GC gc) : drawFigure(canvas, figure, gc) {
 		gc.setForeground(figure.getLineColor());
 	}
 	
@@ -76,9 +76,9 @@ public aspect LineColor{
 				dialog.open();
 				if (dialog.getRGB() == null) return;
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (FigureModel figure : selected) {
+				for (ShapeModel figure : selected) {
 					figure.setLineColor(color);
 				}
 				colorButton.setSelection(false);
@@ -96,7 +96,7 @@ public aspect LineColor{
 		Color lineColor = null;
 		colorButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		colorButton.setImage(new Image(Display.getCurrent(), "icons/null.gif"));
-		for (FigureModel figure : diagram.getSelected()) {
+		for (ShapeModel figure : diagram.getSelected()) {
 			if (lineColor == null) lineColor = figure.getLineColor();
 			else if (!lineColor.equals(figure.getLineColor())) return;
 		}
@@ -108,11 +108,11 @@ public aspect LineColor{
 	
 	// Clone line color
 	
-	pointcut clone(FigureModel figure) :
-		call (FigureModel clone()) && target(figure);
+	pointcut clone(ShapeModel figure) :
+		call (ShapeModel clone()) && target(figure);
 
-	FigureModel around(FigureModel figure) : clone(figure) {
-		FigureModel clone = proceed(figure);
+	ShapeModel around(ShapeModel figure) : clone(figure) {
+		ShapeModel clone = proceed(figure);
 		clone.setLineColor(figure.getLineColor());
 		return clone;
 	}

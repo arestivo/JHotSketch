@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("Ordering")
 public class OrderingController {
@@ -13,7 +13,7 @@ public class OrderingController {
 
 	public void back() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-		LinkedList<FigureModel> selected = new LinkedList<FigureModel>(); selected.addAll(diagram.getSelected());
+		LinkedList<ShapeModel> selected = new LinkedList<ShapeModel>(); selected.addAll(diagram.getSelected());
 		diagram.removeFigures(selected);
 		diagram.addFiguresAtStart(selected);
 		diagram.setSelect(selected);
@@ -22,7 +22,7 @@ public class OrderingController {
 
 	public void front() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-		LinkedList<FigureModel> selected = new LinkedList<FigureModel>(); selected.addAll(diagram.getSelected());
+		LinkedList<ShapeModel> selected = new LinkedList<ShapeModel>(); selected.addAll(diagram.getSelected());
 		diagram.removeFigures(selected);
 		diagram.addFigures(selected);
 		diagram.setSelect(selected);

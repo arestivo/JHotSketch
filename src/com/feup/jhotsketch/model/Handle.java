@@ -6,7 +6,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public class Handle {
-	private FigureModel figure;
+	private ShapeModel figure;
 	private int x;
 	private int y;
 	private static int size = 10;
@@ -17,7 +17,7 @@ public class Handle {
 	public final static int SE = 3;
 	public final static int SW = 4;
 	
-	public Handle(FigureModel figure, int x, int y, int id) {
+	public Handle(ShapeModel figure, int x, int y, int id) {
 		this.figure = figure;
 		this.x = x;
 		this.y = y;

@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Listener;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
+import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
@@ -28,30 +28,30 @@ public aspect FillColor{
 
 	// Add fill color properties to Figure
 	
-	private Color FigureModel.fillColor = null;
+	private Color ShapeModel.fillColor = null;
 
-	public Color FigureModel.getFillColor(){
+	public Color ShapeModel.getFillColor(){
 		return fillColor;
 	}
 
-	public void FigureModel.setFillColor(Color fillColor){
+	public void ShapeModel.setFillColor(Color fillColor){
 		this.fillColor = fillColor;
 		figureChanged();
 	}
 
 	// Apply fill color when drawing
 	
-	pointcut drawFigure(DiagramView canvas, FigureModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
 		target(ShapeView+) &&
-		call(void draw(DiagramView, FigureModel, GC)) && 
+		call(void draw(DiagramView, ShapeModel, GC)) && 
 		args(canvas, figure, gc);
 	
-	pointcut drawOval(GC gc, int x, int y, int w, int h, FigureModel figure) : 
+	pointcut drawOval(GC gc, int x, int y, int w, int h, ShapeModel figure) : 
 		call (void GC.drawOval(int, int, int, int)) && 
 		args(x, y, w, h) && target(gc) &&
 		cflow(drawFigure(DiagramView, figure, GC));
 		
-	void around(GC gc, int x, int y, int w, int h, FigureModel figure) : drawOval(gc, x, y, w, h, figure) {
+	void around(GC gc, int x, int y, int w, int h, ShapeModel figure) : drawOval(gc, x, y, w, h, figure) {
 		if (figure.getFillColor() != null) {
 			gc.setBackground(figure.getFillColor());
 			gc.fillOval(x, y, w, h);
@@ -59,12 +59,12 @@ public aspect FillColor{
 		proceed(gc, x, y, w, h, figure);
 	}
 
-	pointcut drawRectangle(GC gc, int x, int y, int w, int h, FigureModel figure) : 
+	pointcut drawRectangle(GC gc, int x, int y, int w, int h, ShapeModel figure) : 
 		call (void GC.drawRectangle(int, int, int, int)) && 
 		args(x, y, w, h) && target(gc) &&
 		cflow(drawFigure(DiagramView, figure, GC));
 
-	void around(GC gc, int x, int y, int w, int h, FigureModel figure) : drawRectangle(gc, x, y, w, h, figure) {
+	void around(GC gc, int x, int y, int w, int h, ShapeModel figure) : drawRectangle(gc, x, y, w, h, figure) {
 		if (figure.getFillColor() != null) {
 			gc.setBackground(figure.getFillColor());
 			gc.fillRectangle(x, y, w, h);
@@ -101,9 +101,9 @@ public aspect FillColor{
 				ColorDialog dialog = new ColorDialog(fillComposite.getShell());
 				dialog.open();
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (FigureModel figure : selected) {
+				for (ShapeModel figure : selected) {
 					figure.setFillColor(color);
 				}
 				colorButton.setSelection(false);
@@ -113,8 +113,8 @@ public aspect FillColor{
 		noneButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				List<FigureModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
-				for (FigureModel figure : selected) {
+				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
+				for (ShapeModel figure : selected) {
 					figure.setFillColor(null);
 				}
 			}
@@ -131,7 +131,7 @@ public aspect FillColor{
 		Color fillColor = null;
 		colorButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		colorButton.setImage(new Image(Display.getCurrent(), "icons/null.gif"));
-		for (FigureModel figure : diagram.getSelected()) {
+		for (ShapeModel figure : diagram.getSelected()) {
 			if (fillColor == null) fillColor = figure.getFillColor();
 			else if (!fillColor.equals(figure.getFillColor())) return;
 		}
@@ -143,11 +143,11 @@ public aspect FillColor{
 	
 	// Clone fill color
 	
-	pointcut clone(FigureModel figure) :
-		call (FigureModel clone()) && target(figure);
+	pointcut clone(ShapeModel figure) :
+		call (ShapeModel clone()) && target(figure);
 
-	FigureModel around(FigureModel figure) : clone(figure) {
-		FigureModel clone = proceed(figure);
+	ShapeModel around(ShapeModel figure) : clone(figure) {
+		ShapeModel clone = proceed(figure);
 		clone.setFillColor(figure.getFillColor());
 		return clone;
 	}

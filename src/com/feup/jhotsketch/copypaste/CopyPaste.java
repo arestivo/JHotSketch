@@ -22,8 +22,8 @@ public class CopyPaste {
 	public void cut() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		clipboard = new HashSet<ShapeModel>();
-		for (ShapeModel figure : diagram.getSelected()) {
-			clipboard.add(figure);
+		for (ShapeModel shape : diagram.getSelected()) {
+			clipboard.add(shape);
 		}
 		diagram.removeFigures(diagram.getSelected());
 		diagram.diagramChanged();
@@ -32,8 +32,8 @@ public class CopyPaste {
 	public void copy() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		clipboard = new HashSet<ShapeModel>();
-		for (ShapeModel figure : diagram.getSelected()) {
-			clipboard.add(figure.clone());
+		for (ShapeModel shape : diagram.getSelected()) {
+			clipboard.add(shape.clone());
 		}
 	}
 
@@ -41,8 +41,8 @@ public class CopyPaste {
 		if (clipboard == null) return;
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		diagram.unselectAll();
-		for (ShapeModel figure : clipboard) {
-			ShapeModel clone = (ShapeModel) figure.clone();
+		for (ShapeModel shape : clipboard) {
+			ShapeModel clone = (ShapeModel) shape.clone();
 			diagram.setSelect(clone);
 			diagram.addFigure(clone);
 			diagram.moveFigure(clone, 10, 10);

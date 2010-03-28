@@ -44,11 +44,11 @@ public class DiagramView extends Composite implements DiagramObserver{
 	
 	private void paint(GC gc) {
 		gc.setAntialias(SWT.ON);
-		for (ShapeModel figure : diagram.getFigures()) {
-			ShapeView.createView(figure).draw(this, figure, gc);
+		for (ShapeModel shape : diagram.getFigures()) {
+			ShapeView.createView(shape).draw(this, shape, gc);
 		}
-		for (ShapeModel figure : diagram.getFigures()) {
-			drawHandles(gc, figure);
+		for (ShapeModel shape : diagram.getFigures()) {
+			drawHandles(gc, shape);
 		}
 		gc.setLineStyle(SWT.LINE_DOT);
 		gc.setLineWidth(1);
@@ -56,9 +56,9 @@ public class DiagramView extends Composite implements DiagramObserver{
 			gc.drawRectangle(diagram.getSelectionRectangle());
 	}
 
-	private void drawHandles(GC gc, ShapeModel figure) {
-		if (figure.getSelected()) {
-			for (Handle handle : figure.getHandles()) {
+	private void drawHandles(GC gc, ShapeModel shape) {
+		if (shape.getSelected()) {
+			for (Handle handle : shape.getHandles()) {
 				gc.fillRectangle(handle.getBounds());
 			}
 		}

@@ -8,13 +8,13 @@ public class SnapLine implements Comparable<SnapLine>{
 	public enum KIND {EDGE, CENTER};
 
 	private int position;
-	private ShapeModel figure;
+	private ShapeModel shape;
 
 	private KIND kind;
 	
-	public SnapLine(int position, KIND kind, ShapeModel figure) {
+	public SnapLine(int position, KIND kind, ShapeModel shape) {
 		this(position);
-		this.figure = figure;
+		this.shape = shape;
 		this.setKind(kind);
 	}
 
@@ -44,6 +44,6 @@ public class SnapLine implements Comparable<SnapLine>{
 	}
 
 	public ShapeModel getFigure() {
-		return figure;
+		return shape;
 	}
 }

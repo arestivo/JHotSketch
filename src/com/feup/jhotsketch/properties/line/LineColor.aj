@@ -36,18 +36,18 @@ public aspect LineColor{
 
 	public void ShapeModel.setLineColor(Color lineColor){
 		this.lineColor = lineColor;
-		figureChanged();
+		shapeChanged();
 	}
 
 	// Apply line color when drawing
 	
-	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel shape, GC gc) :
 		target(ShapeView+) &&
 		call(void draw(DiagramView, ShapeModel, GC)) && 
-		args(canvas, figure, gc);
+		args(canvas, shape, gc);
 
-	before(DiagramView canvas, ShapeModel figure, GC gc) : drawFigure(canvas, figure, gc) {
-		gc.setForeground(figure.getLineColor());
+	before(DiagramView canvas, ShapeModel shape, GC gc) : drawFigure(canvas, shape, gc) {
+		gc.setForeground(shape.getLineColor());
 	}
 	
 	// Create Line Width Editor
@@ -78,8 +78,8 @@ public aspect LineColor{
 			    Color color = new Color(Display.getCurrent(), dialog.getRGB());
 				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (ShapeModel figure : selected) {
-					figure.setLineColor(color);
+				for (ShapeModel shape : selected) {
+					shape.setLineColor(color);
 				}
 				colorButton.setSelection(false);
 			}
@@ -96,9 +96,9 @@ public aspect LineColor{
 		Color lineColor = null;
 		colorButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		colorButton.setImage(new Image(Display.getCurrent(), "icons/null.gif"));
-		for (ShapeModel figure : diagram.getSelected()) {
-			if (lineColor == null) lineColor = figure.getLineColor();
-			else if (!lineColor.equals(figure.getLineColor())) return;
+		for (ShapeModel shape : diagram.getSelected()) {
+			if (lineColor == null) lineColor = shape.getLineColor();
+			else if (!lineColor.equals(shape.getLineColor())) return;
 		}
 		if (lineColor != null) {
 			colorButton.setBackground(lineColor);
@@ -108,12 +108,12 @@ public aspect LineColor{
 	
 	// Clone line color
 	
-	pointcut clone(ShapeModel figure) :
-		call (ShapeModel clone()) && target(figure);
+	pointcut clone(ShapeModel shape) :
+		call (ShapeModel clone()) && target(shape);
 
-	ShapeModel around(ShapeModel figure) : clone(figure) {
-		ShapeModel clone = proceed(figure);
-		clone.setLineColor(figure.getLineColor());
+	ShapeModel around(ShapeModel shape) : clone(shape) {
+		ShapeModel clone = proceed(shape);
+		clone.setLineColor(shape.getLineColor());
 		return clone;
 	}
 

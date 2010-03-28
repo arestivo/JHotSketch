@@ -11,13 +11,13 @@ import com.feup.jhotsketch.model.RectangleModel;
 
 @PackageName("View")
 public abstract class ShapeView {
-	public void draw(DiagramView canvas, ShapeModel figure, GC gc){
+	public void draw(DiagramView canvas, ShapeModel shape, GC gc){
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 	}
 
-	public static ShapeView createView(ShapeModel figure) {
-		if (figure instanceof RectangleModel) return new RectangleView();
-		if (figure instanceof OvalModel) return new OvalView();		
+	public static ShapeView createView(ShapeModel shape) {
+		if (shape instanceof RectangleModel) return new RectangleView();
+		if (shape instanceof OvalModel) return new OvalView();		
 		return null;
 	}
 }

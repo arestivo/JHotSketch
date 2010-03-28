@@ -12,25 +12,25 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public class DiagramModel implements FigureObserver {
-	private List<ShapeModel> figures = new LinkedList<ShapeModel>();
+	private List<ShapeModel> shapes = new LinkedList<ShapeModel>();
 	private Set<DiagramObserver> observers = new HashSet<DiagramObserver>();
 	private List<ShapeModel> selected = new LinkedList<ShapeModel>();
 
 	private Rectangle selectionRectangle; 
 
 	public DiagramModel(){
-		figures.add(new RectangleModel(10, 10, 40, 40));
-		figures.add(new OvalModel(150, 150, 40, 40));
-		figures.add(new OvalModel(50, 150, 40, 40));
-		figures.add(new OvalModel(150, 50, 40, 40));
-		figures.add(new OvalModel(100, 100, 40, 40));
-		for (ShapeModel figure : figures) {
-			figure.addObserver(this);
+		shapes.add(new RectangleModel(10, 10, 40, 40));
+		shapes.add(new OvalModel(150, 150, 40, 40));
+		shapes.add(new OvalModel(50, 150, 40, 40));
+		shapes.add(new OvalModel(150, 50, 40, 40));
+		shapes.add(new OvalModel(100, 100, 40, 40));
+		for (ShapeModel shape : shapes) {
+			shape.addObserver(this);
 		}
 	}
 	
 	public Collection<ShapeModel> getFigures() {
-		return figures;
+		return shapes;
 	}
 	
 	public void diagramChanged() {
@@ -40,13 +40,13 @@ public class DiagramModel implements FigureObserver {
 	}
 	
 	public void addFigure(ShapeModel f){
-		figures.add(f);
+		shapes.add(f);
 		f.addObserver(this);
 		diagramChanged();
 	}
 	
 	public void removeFigure(ShapeModel f){
-		figures.remove(f);
+		shapes.remove(f);
 		selected.remove(f);
 		diagramChanged();
 	}
@@ -56,8 +56,8 @@ public class DiagramModel implements FigureObserver {
 	}
 
 	public ShapeModel getFigureAt(int x, int y) {
-		for (ShapeModel figure : figures) {
-			if (figure.contains(x,y)) return figure;
+		for (ShapeModel shape : shapes) {
+			if (shape.contains(x,y)) return shape;
 		}
 		return null;
 	}
@@ -67,32 +67,32 @@ public class DiagramModel implements FigureObserver {
 	}
 
 	public void unselectAll() {
-		for (ShapeModel figure : selected) {
-			figure.setSelected(false);
+		for (ShapeModel shape : selected) {
+			shape.setSelected(false);
 		}
 		selected.clear();
 		diagramChanged();
 	}
 
-	public void setSelect(ShapeModel figure) {
-		if (figure == null) return;
-		selected.add(figure);
-		figure.setSelected(true);			
+	public void setSelect(ShapeModel shape) {
+		if (shape == null) return;
+		selected.add(shape);
+		shape.setSelected(true);			
 	}
 
-	public void toggleSelected(ShapeModel figure) {
-		if (figure == null) return;
-		if (selected.contains(figure)) {
-			selected.remove(figure);
-			figure.setSelected(false);
+	public void toggleSelected(ShapeModel shape) {
+		if (shape == null) return;
+		if (selected.contains(shape)) {
+			selected.remove(shape);
+			shape.setSelected(false);
 		} else {
-			selected.add(figure);
-			figure.setSelected(true);			
+			selected.add(shape);
+			shape.setSelected(true);			
 		}
 	}
 
-	public void moveFigure(ShapeModel figure, int dx, int dy) {
-		figure.move(dx, dy);
+	public void moveFigure(ShapeModel shape, int dx, int dy) {
+		shape.move(dx, dy);
 	}
 
 	public void setSelectionRectangle(int x1, int y1, int x2, int y2) {
@@ -109,38 +109,38 @@ public class DiagramModel implements FigureObserver {
 		diagramChanged();
 	}
 
-	public void figureChanged(ShapeModel figure) {
+	public void shapeChanged(ShapeModel shape) {
 		diagramChanged();
 	}
 
 	public void removeFigures(List<ShapeModel> toRemove) {
-		figures.removeAll(toRemove);
+		shapes.removeAll(toRemove);
 		selected.removeAll(toRemove);
 	}
 
-	public void addFigures(List<ShapeModel> figures) {
-		this.figures.addAll(figures);
+	public void addFigures(List<ShapeModel> shapes) {
+		this.shapes.addAll(shapes);
 		diagramChanged();
 	}
 
-	public void setSelect(List<ShapeModel> figures) {
-		for (ShapeModel figure : figures) {
-			setSelect(figure);
+	public void setSelect(List<ShapeModel> shapes) {
+		for (ShapeModel shape : shapes) {
+			setSelect(shape);
 		}
 	}
 
-	public void resizeFigure(ShapeModel figure, double rx, double ry,Handle grabbedHandle) {
-		figure.resize(rx, ry, grabbedHandle);
+	public void resizeFigure(ShapeModel shape, double rx, double ry,Handle grabbedHandle) {
+		shape.resize(rx, ry, grabbedHandle);
 	}
 
-	public void addFiguresAtStart(LinkedList<ShapeModel> figures) {
-		this.figures.addAll(0, figures);
+	public void addFiguresAtStart(LinkedList<ShapeModel> shapes) {
+		this.shapes.addAll(0, shapes);
 	}
 
 	public LinkedList<ShapeModel> getFiguresAt(int x, int y) {
 		LinkedList<ShapeModel> found = new LinkedList<ShapeModel>(); 
-		for (ShapeModel figure : figures) {
-			if (figure.contains(x,y)) found.add(figure);
+		for (ShapeModel shape : shapes) {
+			if (shape.contains(x,y)) found.add(shape);
 		}
 		return found;
 	}

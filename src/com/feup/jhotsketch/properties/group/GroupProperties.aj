@@ -15,8 +15,8 @@ public aspect GroupProperties {
 		call (void ShapeModel.setLineStyle(int)) && target(group) && args(s);
 	
 	after(GroupModel group, int s) : setLineStyle(group, s) {
-		for (ShapeModel figure : group.getFigures()) {
-			figure.setLineStyle(s);
+		for (ShapeModel shape : group.getFigures()) {
+			shape.setLineStyle(s);
 		}
 	}
 
@@ -26,8 +26,8 @@ public aspect GroupProperties {
 		call (void ShapeModel.setLineWidth(int)) && target(group) && args(w);
 	
 	after(GroupModel group, int w) : setLineWidth(group, w) {
-		for (ShapeModel figure : group.getFigures()) {
-			figure.setLineWidth(w);
+		for (ShapeModel shape : group.getFigures()) {
+			shape.setLineWidth(w);
 		}
 	}
 	
@@ -37,8 +37,8 @@ public aspect GroupProperties {
 		call (void ShapeModel.setLineColor(Color)) && target(group) && args(c);
 	
 	after(GroupModel group, Color c) : setLineColor(group, c) {
-		for (ShapeModel figure : group.getFigures()) {
-			figure.setLineColor(c);
+		for (ShapeModel shape : group.getFigures()) {
+			shape.setLineColor(c);
 		}
 	}
 
@@ -48,8 +48,8 @@ public aspect GroupProperties {
 		call (void ShapeModel.setFillColor(Color)) && target(group) && args(c) && !within(GroupModel);
 	
 	after(GroupModel group, Color c) : setFillColor(group, c) {
-		for (ShapeModel figure : group.getFigures()) {
-			figure.setFillColor(c);
+		for (ShapeModel shape : group.getFigures()) {
+			shape.setFillColor(c);
 		}
 	}
 

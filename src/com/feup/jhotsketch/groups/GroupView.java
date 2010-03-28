@@ -11,12 +11,12 @@ import com.feup.jhotsketch.view.ShapeView;
 public class GroupView extends ShapeView {
 
 	@Override
-	public void draw(DiagramView canvas, ShapeModel figure, GC gc) {
-		GroupModel group = (GroupModel) figure;
+	public void draw(DiagramView canvas, ShapeModel shape, GC gc) {
+		GroupModel group = (GroupModel) shape;
 		for (ShapeModel f : group.getFigures()) {
 			ShapeView.createView(f).draw(canvas, f, gc);
 		}
-		super.draw(canvas, figure, gc);
+		super.draw(canvas, shape, gc);
 	}
 
 }

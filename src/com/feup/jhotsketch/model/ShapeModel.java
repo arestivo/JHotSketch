@@ -38,7 +38,7 @@ public abstract class ShapeModel {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
-		figureChanged();
+		shapeChanged();
 	}
 
 	public boolean getSelected() {
@@ -54,9 +54,9 @@ public abstract class ShapeModel {
 		observers.add(observer);
 	}
 	
-	public void figureChanged() {
+	public void shapeChanged() {
 		for (FigureObserver observer : observers) {
-			observer.figureChanged(this);
+			observer.shapeChanged(this);
 		}
 	}
 

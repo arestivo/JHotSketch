@@ -35,11 +35,11 @@ public aspect Snap {
 		if (!SnapController.getInstance().snapToObject()) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
-		for (ShapeModel figure : diagram.getSelected()) {
-			x1 = Math.min(x1, figure.getBounds().x);
-			y1 = Math.min(y1, figure.getBounds().y);
-			x2 = Math.max(x2, figure.getBounds().x + figure.getBounds().width);
-			y2 = Math.max(y2, figure.getBounds().y + figure.getBounds().height);
+		for (ShapeModel shape : diagram.getSelected()) {
+			x1 = Math.min(x1, shape.getBounds().x);
+			y1 = Math.min(y1, shape.getBounds().y);
+			x2 = Math.max(x2, shape.getBounds().x + shape.getBounds().width);
+			y2 = Math.max(y2, shape.getBounds().y + shape.getBounds().height);
 			found = true;
 		}
 		if (found) {
@@ -57,11 +57,11 @@ public aspect Snap {
 		if (controller.getOperation() != DiagramController.OPERATION.MOVE) return;
 		DiagramModel diagram = controller.getDiagram();
 		int x1 = 100000; int y1 = 1000000; int x2 = 0; int y2 = 0; boolean found = false;
-		for (ShapeModel figure : diagram.getSelected()) {
-			x1 = Math.min(x1, figure.getBounds().x);
-			y1 = Math.min(y1, figure.getBounds().y);
-			x2 = Math.max(x2, figure.getBounds().x + figure.getBounds().width);
-			y2 = Math.max(y2, figure.getBounds().y + figure.getBounds().height);
+		for (ShapeModel shape : diagram.getSelected()) {
+			x1 = Math.min(x1, shape.getBounds().x);
+			y1 = Math.min(y1, shape.getBounds().y);
+			x2 = Math.max(x2, shape.getBounds().x + shape.getBounds().width);
+			y2 = Math.max(y2, shape.getBounds().y + shape.getBounds().height);
 			found = true;
 		}
 		if (found) {
@@ -96,13 +96,13 @@ public aspect Snap {
 	
 	after(DiagramModel diagram) : diagramChanged(diagram){
 		SnapController.getInstance().createSnapLines(diagram);
-		for (ShapeModel figure : diagram.getFigures()) {
-			SnapController.getInstance().addVerticalSnapLine(diagram, figure.getBounds().x, SnapLine.KIND.EDGE, figure);
-			SnapController.getInstance().addHorizontalSnapLine(diagram, figure.getBounds().y, SnapLine.KIND.EDGE, figure);
-			SnapController.getInstance().addVerticalSnapLine(diagram, figure.getBounds().x + figure.getBounds().width, SnapLine.KIND.EDGE, figure);
-			SnapController.getInstance().addHorizontalSnapLine(diagram, figure.getBounds().y + figure.getBounds().height, SnapLine.KIND.EDGE, figure);
-			SnapController.getInstance().addVerticalSnapLine(diagram, figure.getBounds().x + figure.getBounds().width / 2, SnapLine.KIND.CENTER, figure);
-			SnapController.getInstance().addHorizontalSnapLine(diagram, figure.getBounds().y + figure.getBounds().height / 2, SnapLine.KIND.CENTER, figure);
+		for (ShapeModel shape : diagram.getFigures()) {
+			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x, SnapLine.KIND.EDGE, shape);
+			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y, SnapLine.KIND.EDGE, shape);
+			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x + shape.getBounds().width, SnapLine.KIND.EDGE, shape);
+			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y + shape.getBounds().height, SnapLine.KIND.EDGE, shape);
+			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x + shape.getBounds().width / 2, SnapLine.KIND.CENTER, shape);
+			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y + shape.getBounds().height / 2, SnapLine.KIND.CENTER, shape);
 		}
 	}
 }

@@ -31,18 +31,18 @@ public aspect LineWidth {
 
 	public void ShapeModel.setLineWidth(int lineWidth){
 		this.lineWidth = lineWidth;
-		figureChanged();
+		shapeChanged();
 	}
 
 	// Apply line properties when drawing
 	
-	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel shape, GC gc) :
 		target(ShapeView+) &&
 		call(void draw(DiagramView, ShapeModel, GC)) && 
-		args(canvas, figure, gc);
+		args(canvas, shape, gc);
 
-	before(DiagramView canvas, ShapeModel figure, GC gc) : drawFigure(canvas, figure, gc) {
-		gc.setLineWidth(figure.getLineWidth());
+	before(DiagramView canvas, ShapeModel shape, GC gc) : drawFigure(canvas, shape, gc) {
+		gc.setLineWidth(shape.getLineWidth());
 	}
 	
 	// Create Line Width Editor
@@ -75,8 +75,8 @@ public aspect LineWidth {
 			public void handleEvent(Event event) {
 				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				int width = scale.getSelection();
-				for (ShapeModel figure : selected) {
-					figure.setLineWidth(width);
+				for (ShapeModel shape : selected) {
+					shape.setLineWidth(width);
 				}
 			}
 		});
@@ -91,9 +91,9 @@ public aspect LineWidth {
 	
 	after(DiagramModel diagram) : diagramChanged(diagram){
 		int lineWidth = -1;
-		for (ShapeModel figure : diagram.getSelected()) {
-			if (lineWidth == -1) lineWidth = figure.getLineWidth();
-			else if (lineWidth != figure.getLineWidth()) {
+		for (ShapeModel shape : diagram.getSelected()) {
+			if (lineWidth == -1) lineWidth = shape.getLineWidth();
+			else if (lineWidth != shape.getLineWidth()) {
 				scale.setSelection(1);
 				return;
 			}
@@ -103,12 +103,12 @@ public aspect LineWidth {
 	
 	// Clone line width
 	
-	pointcut clone(ShapeModel figure) :
-		call (ShapeModel clone()) && target(figure);
+	pointcut clone(ShapeModel shape) :
+		call (ShapeModel clone()) && target(shape);
 
-	ShapeModel around(ShapeModel figure) : clone(figure) {
-		ShapeModel clone = proceed(figure);
-		clone.setLineWidth(figure.getLineWidth());
+	ShapeModel around(ShapeModel shape) : clone(shape) {
+		ShapeModel clone = proceed(shape);
+		clone.setLineWidth(shape.getLineWidth());
 		return clone;
 	}
 }

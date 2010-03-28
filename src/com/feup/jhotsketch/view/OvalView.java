@@ -10,10 +10,10 @@ import com.feup.jhotsketch.model.ShapeModel;
 public class OvalView extends ShapeView{
 
 	@Override
-	public void draw(DiagramView canvas, ShapeModel figure, GC gc) {
-		OvalModel circle = (OvalModel) figure;
+	public void draw(DiagramView canvas, ShapeModel shape, GC gc) {
+		OvalModel circle = (OvalModel) shape;
 		gc.drawOval(circle.getBounds().x, circle.getBounds().y, circle.getBounds().width, circle.getBounds().height);
-		super.draw(canvas, figure, gc);
+		super.draw(canvas, shape, gc);
 	}
 
 }

@@ -6,7 +6,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Model")
 public class Handle {
-	private ShapeModel figure;
+	private ShapeModel shape;
 	private int x;
 	private int y;
 	private static int size = 10;
@@ -17,8 +17,8 @@ public class Handle {
 	public final static int SE = 3;
 	public final static int SW = 4;
 	
-	public Handle(ShapeModel figure, int x, int y, int id) {
-		this.figure = figure;
+	public Handle(ShapeModel shape, int x, int y, int id) {
+		this.shape = shape;
 		this.x = x;
 		this.y = y;
 		this.setId(id);
@@ -44,7 +44,7 @@ public class Handle {
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle(figure.bounds.x + x - size / 2, figure.bounds.y + y - size / 2, size, size);
+		return new Rectangle(shape.bounds.x + x - size / 2, shape.bounds.y + y - size / 2, size, size);
 	}
 	
 	public boolean contains(int x, int y) {

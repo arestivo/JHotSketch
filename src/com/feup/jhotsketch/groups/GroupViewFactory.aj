@@ -7,12 +7,12 @@ import com.feup.jhotsketch.view.ShapeView;
 
 @PackageName("Groups")
 public aspect GroupViewFactory {
-	pointcut createView(ShapeModel figure) :
-		call(ShapeView ShapeView.createView(ShapeModel)) && args(figure);
+	pointcut createView(ShapeModel shape) :
+		call(ShapeView ShapeView.createView(ShapeModel)) && args(shape);
 	
-	ShapeView around(ShapeModel figure) : createView(figure) {
-		if (figure instanceof GroupModel) return new GroupView();
-		return proceed(figure);
+	ShapeView around(ShapeModel shape) : createView(shape) {
+		if (shape instanceof GroupModel) return new GroupView();
+		return proceed(shape);
 	}	
 
 }

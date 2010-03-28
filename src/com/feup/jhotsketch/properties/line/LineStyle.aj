@@ -34,18 +34,18 @@ public aspect LineStyle{
 
 	public void ShapeModel.setLineStyle(int lineStyle){
 		this.lineStyle = lineStyle;
-		figureChanged();
+		shapeChanged();
 	}
 
 	// Apply line style when drawing
 	
-	pointcut drawFigure(DiagramView canvas, ShapeModel figure, GC gc) :
+	pointcut drawFigure(DiagramView canvas, ShapeModel shape, GC gc) :
 		target(ShapeView+) &&
 		call(void draw(DiagramView, ShapeModel, GC)) && 
-		args(canvas, figure, gc);
+		args(canvas, shape, gc);
 
-	before(DiagramView canvas, ShapeModel figure, GC gc) : drawFigure(canvas, figure, gc) {
-		gc.setLineStyle(figure.getLineStyle());
+	before(DiagramView canvas, ShapeModel shape, GC gc) : drawFigure(canvas, shape, gc) {
+		gc.setLineStyle(shape.getLineStyle());
 	}
 	
 	// Create Line Width Editor
@@ -79,8 +79,8 @@ public aspect LineStyle{
 			public void handleEvent(Event event) {
 				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (ShapeModel figure : selected) {
-					figure.setLineStyle(SWT.LINE_SOLID);
+				for (ShapeModel shape : selected) {
+					shape.setLineStyle(SWT.LINE_SOLID);
 				}
 			}
 		});
@@ -90,8 +90,8 @@ public aspect LineStyle{
 			public void handleEvent(Event event) {
 				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (ShapeModel figure : selected) {
-					figure.setLineStyle(SWT.LINE_DASH);
+				for (ShapeModel shape : selected) {
+					shape.setLineStyle(SWT.LINE_DASH);
 				}
 			}
 		});
@@ -101,8 +101,8 @@ public aspect LineStyle{
 			public void handleEvent(Event event) {
 				List<ShapeModel> selected = JHotSketch.getInstance().getCurrentView().getDiagram().getSelected();
 				if (selected.size() == 0) ((Button)event.widget).setSelection(false);
-				for (ShapeModel figure : selected) {
-					figure.setLineStyle(SWT.LINE_DOT);
+				for (ShapeModel shape : selected) {
+					shape.setLineStyle(SWT.LINE_DOT);
 				}
 			}
 		});		
@@ -119,9 +119,9 @@ public aspect LineStyle{
 		solidButton.setSelection(false);
 		dashedButton.setSelection(false);
 		dottedButton.setSelection(false);
-		for (ShapeModel figure : diagram.getSelected()) {
-			if (lineStyle == -1) lineStyle = figure.getLineStyle();
-			else if (lineStyle != figure.getLineStyle()) return;
+		for (ShapeModel shape : diagram.getSelected()) {
+			if (lineStyle == -1) lineStyle = shape.getLineStyle();
+			else if (lineStyle != shape.getLineStyle()) return;
 		}
 		if (lineStyle == SWT.LINE_SOLID) solidButton.setSelection(true);
 		if (lineStyle == SWT.LINE_DASH) dashedButton.setSelection(true);
@@ -130,12 +130,12 @@ public aspect LineStyle{
 
 	// Clone line style
 	
-	pointcut clone(ShapeModel figure) :
-		call (ShapeModel clone()) && target(figure);
+	pointcut clone(ShapeModel shape) :
+		call (ShapeModel clone()) && target(shape);
 
-	ShapeModel around(ShapeModel figure) : clone(figure) {
-		ShapeModel clone = proceed(figure);
-		clone.setLineStyle(figure.getLineStyle());
+	ShapeModel around(ShapeModel shape) : clone(shape) {
+		ShapeModel clone = proceed(shape);
+		clone.setLineStyle(shape.getLineStyle());
 		return clone;
 	}
 

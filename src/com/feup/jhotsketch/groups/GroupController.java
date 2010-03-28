@@ -21,8 +21,8 @@ public class GroupController {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		List<ShapeModel> selected = diagram.getSelected();
 		if (selected.size() <= 1) return;
-		for (ShapeModel figure : selected) {
-			figure.setSelected(false);
+		for (ShapeModel shape : selected) {
+			shape.setSelected(false);
 		}
 		GroupModel group = new GroupModel();
 		group.addFigures(selected);
@@ -36,11 +36,11 @@ public class GroupController {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		List<ShapeModel> selected = new LinkedList<ShapeModel>(); 
 		selected.addAll(diagram.getSelected());
-		for (ShapeModel figure : selected) {
-			if (figure instanceof GroupModel) {
-				diagram.removeFigure(figure);
-				diagram.addFigures(((GroupModel)figure).getFigures());
-				diagram.setSelect(((GroupModel)figure).getFigures());
+		for (ShapeModel shape : selected) {
+			if (shape instanceof GroupModel) {
+				diagram.removeFigure(shape);
+				diagram.addFigures(((GroupModel)shape).getFigures());
+				diagram.setSelect(((GroupModel)shape).getFigures());
 			}
 		}
 	}

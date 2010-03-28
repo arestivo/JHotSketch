@@ -67,11 +67,11 @@ public class SnapController {
 		if (best == null) return;
 		if (best.getKind() == KIND.EDGE) {
 			boolean top = Math.abs(best.getPosition() - y1) < SNAPDISTANCE;
-			for (ShapeModel figure : diagram.getSelected())
-				if (top) figure.move(0, best.getPosition() - y1);
-				else figure.move(0, best.getPosition() - y2);
-		} else for (ShapeModel figure : diagram.getSelected())
-			figure.move(0, best.getPosition() - (y1 + (y2 - y1) / 2));
+			for (ShapeModel shape : diagram.getSelected())
+				if (top) shape.move(0, best.getPosition() - y1);
+				else shape.move(0, best.getPosition() - y2);
+		} else for (ShapeModel shape : diagram.getSelected())
+			shape.move(0, best.getPosition() - (y1 + (y2 - y1) / 2));
 		diagram.setHorizontalSnapLine(null);
 	}
 
@@ -80,11 +80,11 @@ public class SnapController {
 		if (best == null) return;
 		if (best.getKind() == KIND.EDGE) {
 			boolean left = Math.abs(best.getPosition() - x1) < SNAPDISTANCE;
-			for (ShapeModel figure : diagram.getSelected())
-				if (left) figure.move(best.getPosition() - x1, 0);
-				else figure.move(best.getPosition() - x2, 0);
-		} else for (ShapeModel figure : diagram.getSelected())
-			figure.move(best.getPosition() - (x1 + (x2 - x1) / 2), 0);
+			for (ShapeModel shape : diagram.getSelected())
+				if (left) shape.move(best.getPosition() - x1, 0);
+				else shape.move(best.getPosition() - x2, 0);
+		} else for (ShapeModel shape : diagram.getSelected())
+			shape.move(best.getPosition() - (x1 + (x2 - x1) / 2), 0);
 		diagram.setVerticalSnapLine(null);
 	}
 
@@ -98,12 +98,12 @@ public class SnapController {
 		hosnaps.put(diagram, new TreeSet<SnapLine>());
 	}
 
-	public void addVerticalSnapLine(DiagramModel diagram, int x, KIND kind, ShapeModel figure) {
-		vosnaps.get(diagram).add(new SnapLine(x, kind, figure));		
+	public void addVerticalSnapLine(DiagramModel diagram, int x, KIND kind, ShapeModel shape) {
+		vosnaps.get(diagram).add(new SnapLine(x, kind, shape));		
 	}
 
-	public void addHorizontalSnapLine(DiagramModel diagram, int y, KIND kind, ShapeModel figure) {
-		hosnaps.get(diagram).add(new SnapLine(y, kind, figure));				
+	public void addHorizontalSnapLine(DiagramModel diagram, int y, KIND kind, ShapeModel shape) {
+		hosnaps.get(diagram).add(new SnapLine(y, kind, shape));				
 	}
 
 	public void toggleSnapToObject() {

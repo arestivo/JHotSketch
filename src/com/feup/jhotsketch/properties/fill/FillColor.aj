@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties.fill.color;
+package com.feup.jhotsketch.properties.fill;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
 
-@PackageName("Fill.Color")
+@PackageName("Fill.Properties")
 public aspect FillColor{
 
 	// Add fill color properties to Figure

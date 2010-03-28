@@ -8,9 +8,6 @@ import org.eclipse.swt.widgets.TabItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
-import com.feup.jhotsketch.properties.line.color.LineColor;
-import com.feup.jhotsketch.properties.line.style.LineStyle;
-import com.feup.jhotsketch.properties.line.width.LineWidth;
 
 @PackageName("Line.Properties")
 public aspect LineProperties {	

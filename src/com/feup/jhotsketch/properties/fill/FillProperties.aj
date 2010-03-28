@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.TabItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
-import com.feup.jhotsketch.properties.fill.color.FillColor;
 
 @PackageName("Fill.Properties")
 public aspect FillProperties {	

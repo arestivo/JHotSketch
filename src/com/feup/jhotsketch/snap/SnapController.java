@@ -23,16 +23,16 @@ public class SnapController {
 		SortedSet<SnapLine> candidates = hosnaps.get(diagram).subSet(new SnapLine(y1 - SNAPDISTANCE), new SnapLine(y2 + SNAPDISTANCE));
 		for (SnapLine snapLine : candidates) {
 			if (diagram.getSelected().contains(snapLine.getFigure())) continue;
+			if (snapLine.getKind() == SnapLine.KIND.CENTER && Math.abs(snapLine.getPosition() - (y1 + (y2 - y1) / 2)) < bestsnap) {
+				bestsnap = Math.abs(snapLine.getPosition() - (y1 + (y2 - y1) / 2));
+				best = snapLine;
+			} else
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - y1) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - y1);
 				best = snapLine;
-			}
+			} else
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - y2) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - y2);
-				best = snapLine;
-			}
-			if (snapLine.getKind() == SnapLine.KIND.CENTER && Math.abs(snapLine.getPosition() - (y1 + (y2 - y1) / 2)) < bestsnap) {
-				bestsnap = Math.abs(snapLine.getPosition() - (y1 + (y2 - y1) / 2));
 				best = snapLine;
 			}
 		}
@@ -45,16 +45,16 @@ public class SnapController {
 		SortedSet<SnapLine> candidates = vosnaps.get(diagram).subSet(new SnapLine(x1 - SNAPDISTANCE), new SnapLine(x2 + SNAPDISTANCE));
 		for (SnapLine snapLine : candidates) {
 			if (diagram.getSelected().contains(snapLine.getFigure())) continue;
+			if (snapLine.getKind() == SnapLine.KIND.CENTER && Math.abs(snapLine.getPosition() - (x1 + (x2 - x1) / 2)) < bestsnap) {
+				bestsnap = Math.abs(snapLine.getPosition() - (x1 + (x2 - x1) / 2));
+				best = snapLine;
+			} else
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - x1) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - x1);
 				best = snapLine;
-			}
+			} else
 			if (snapLine.getKind() == SnapLine.KIND.EDGE && Math.abs(snapLine.getPosition() - x2) < bestsnap) {
 				bestsnap = Math.abs(snapLine.getPosition() - x2);
-				best = snapLine;
-			}
-			if (snapLine.getKind() == SnapLine.KIND.CENTER && Math.abs(snapLine.getPosition() - (x1 + (x2 - x1) / 2)) < bestsnap) {
-				bestsnap = Math.abs(snapLine.getPosition() - (x1 + (x2 - x1) / 2));
 				best = snapLine;
 			}
 		}

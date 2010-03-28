@@ -97,12 +97,12 @@ public aspect Snap {
 	after(DiagramModel diagram) : diagramChanged(diagram){
 		SnapController.getInstance().createSnapLines(diagram);
 		for (ShapeModel shape : diagram.getFigures()) {
+			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x + shape.getBounds().width / 2, SnapLine.KIND.CENTER, shape);
+			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y + shape.getBounds().height / 2, SnapLine.KIND.CENTER, shape);
 			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x, SnapLine.KIND.EDGE, shape);
 			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y, SnapLine.KIND.EDGE, shape);
 			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x + shape.getBounds().width, SnapLine.KIND.EDGE, shape);
 			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y + shape.getBounds().height, SnapLine.KIND.EDGE, shape);
-			SnapController.getInstance().addVerticalSnapLine(diagram, shape.getBounds().x + shape.getBounds().width / 2, SnapLine.KIND.CENTER, shape);
-			SnapController.getInstance().addHorizontalSnapLine(diagram, shape.getBounds().y + shape.getBounds().height / 2, SnapLine.KIND.CENTER, shape);
 		}
 	}
 }

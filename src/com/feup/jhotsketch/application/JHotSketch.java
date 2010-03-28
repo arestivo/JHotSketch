@@ -23,6 +23,7 @@ import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.RectangleModel;
+import com.feup.jhotsketch.model.RoundedRectangleModel;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Application")
@@ -117,6 +118,7 @@ public class JHotSketch {
 				String type = (String) button.getData();
 				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new RectangleModel(10, 10, 50, 50));
 				if (type.equals("CIRCLE")) dc.getDiagram().addFigure(new OvalModel(10, 10, 50, 50));
+				if (type.equals("ROUNDED")) dc.getDiagram().addFigure(new RoundedRectangleModel(10, 10, 50, 50));
 			}
 		});
 	}
@@ -129,6 +131,7 @@ public class JHotSketch {
 		
 		createTool(composite, "square", "SQUARE");
 		createTool(composite, "circle", "CIRCLE");
+		createTool(composite, "rounded", "ROUNDED");
 				
 		ExpandItem item = new ExpandItem (bar, SWT.NONE, 0);
 		item.setText("Basic");

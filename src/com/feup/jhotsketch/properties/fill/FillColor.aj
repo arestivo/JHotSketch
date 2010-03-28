@@ -71,7 +71,20 @@ public aspect FillColor{
 		}
 		proceed(gc, x, y, w, h, shape);
 	}
-		
+
+	pointcut drawRoundedRectangle(GC gc, int x, int y, int w, int h, int r1, int r2, ShapeModel shape) : 
+		call (void GC.drawRoundRectangle(int, int, int, int, int , int)) && 
+		args(x, y, w, h, r1, r2) && target(gc) &&
+		cflow(drawFigure(DiagramView, shape, GC));
+
+	void around(GC gc, int x, int y, int w, int h, int r1, int r2, ShapeModel shape) : drawRoundedRectangle(gc, x, y, w, h, r1, r2, shape) {
+		if (shape.getFillColor() != null) {
+			gc.setBackground(shape.getFillColor());
+			gc.fillRoundRectangle(x, y, w, h, r1, r2);
+		}
+		proceed(gc, x, y, w, h, r1, r2, shape);
+	}
+	
 	// Create Fill Color Editor
 	
 	private Button colorButton = null;

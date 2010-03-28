@@ -3,8 +3,8 @@ package com.feup.jhotsketch.view;
 import org.eclipse.swt.graphics.GC;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.model.RectangleModel;
+import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("View")
 public class RectangleView extends ShapeView{

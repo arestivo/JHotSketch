@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.OvalModel;
+import com.feup.jhotsketch.model.RoundedRectangleModel;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.model.RectangleModel;
 
@@ -17,6 +18,7 @@ public abstract class ShapeView {
 
 	public static ShapeView createView(ShapeModel shape) {
 		if (shape instanceof RectangleModel) return new RectangleView();
+		if (shape instanceof RoundedRectangleModel) return new RoundedRectangleView();
 		if (shape instanceof OvalModel) return new OvalView();		
 		return null;
 	}

@@ -8,8 +8,10 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Decorations;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 
+@PackageName("CopyPaste")
 public aspect CopyPasteMenu {
 	pointcut menuCreated(Shell shell, int type) : 
 		call (Menu.new(Decorations, int)) && args(shell, type) && within(JHotSketch) && if(type==SWT.BAR);

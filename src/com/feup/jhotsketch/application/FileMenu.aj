@@ -8,6 +8,9 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import com.feup.contribution.aida.annotations.PackageName;
+
+@PackageName("Application")
 public aspect FileMenu {
 
 	pointcut menuCreated(Shell shell, int type) : 

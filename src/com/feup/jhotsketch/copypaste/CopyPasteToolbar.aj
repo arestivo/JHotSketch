@@ -11,8 +11,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 
+@PackageName("CopyPaste")
 public aspect CopyPasteToolbar {
 	pointcut createCoolbar(JHotSketch application) :
 		this(application) &&

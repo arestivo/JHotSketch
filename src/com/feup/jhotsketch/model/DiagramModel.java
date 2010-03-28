@@ -19,7 +19,7 @@ public class DiagramModel implements FigureObserver {
 	private Rectangle selectionRectangle; 
 
 	public DiagramModel(){
-		figures.add(new SquareModel(10, 10, 40, 40));
+		figures.add(new RectangleModel(10, 10, 40, 40));
 		figures.add(new CircleModel(150, 150, 40, 40));
 		figures.add(new CircleModel(50, 150, 40, 40));
 		figures.add(new CircleModel(150, 50, 40, 40));

@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.CircleModel;
 import com.feup.jhotsketch.model.FigureModel;
-import com.feup.jhotsketch.model.SquareModel;
+import com.feup.jhotsketch.model.RectangleModel;
 
 @PackageName("View")
 public abstract class FigureView {
@@ -16,7 +16,7 @@ public abstract class FigureView {
 	}
 
 	public static FigureView createView(FigureModel figure) {
-		if (figure instanceof SquareModel) return new SquareView();
+		if (figure instanceof RectangleModel) return new RectangleView();
 		if (figure instanceof CircleModel) return new CircleView();		
 		return null;
 	}

@@ -22,7 +22,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.model.CircleModel;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.SquareModel;
+import com.feup.jhotsketch.model.RectangleModel;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Application")
@@ -115,7 +115,7 @@ public class JHotSketch {
 		button.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				String type = (String) button.getData();
-				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new SquareModel(10, 10, 50, 50));
+				if (type.equals("SQUARE")) dc.getDiagram().addFigure(new RectangleModel(10, 10, 50, 50));
 				if (type.equals("CIRCLE")) dc.getDiagram().addFigure(new CircleModel(10, 10, 50, 50));
 			}
 		});

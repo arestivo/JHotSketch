@@ -20,7 +20,7 @@ public abstract class ShapeModel {
 		bounds = new Rectangle(x, y, width, height);
 	}
 
-	private void createHandles() {
+	protected void createHandles() {
 		handles = new HashSet<Handle>();
 		handles.add(new Handle(this, 0, 0, Handle.NW));
 		handles.add(new Handle(this, bounds.width, 0, Handle.NE));

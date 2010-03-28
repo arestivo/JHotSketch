@@ -60,6 +60,8 @@ public class DiagramView extends Composite implements DiagramObserver{
 	private void drawHandles(GC gc, ShapeModel shape) {
 		if (shape.getSelected()) {
 			for (Handle handle : shape.getHandles()) {
+				if (handle.getKind() == Handle.KIND.NORMAL) gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
+				if (handle.getKind() == Handle.KIND.EXTRA) gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN));
 				gc.fillRectangle(handle.getBounds());
 			}
 		}

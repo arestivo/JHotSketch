@@ -17,6 +17,9 @@ public class Handle {
 	public final static int SE = 3;
 	public final static int SW = 4;
 	
+	public enum KIND {NORMAL, EXTRA};
+	private KIND kind = KIND.NORMAL;
+	
 	public Handle(ShapeModel shape, int x, int y, int id) {
 		this.shape = shape;
 		this.x = x;
@@ -24,6 +27,11 @@ public class Handle {
 		this.setId(id);
 	}
 	
+	public Handle(RoundedRectangleModel roundedRectangleModel, int x, int y, int id, KIND kind) {
+		this(roundedRectangleModel, x, y, id);
+		this.kind = kind;
+	}
+
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -58,4 +66,9 @@ public class Handle {
 	public int getId() {
 		return id;
 	}
+
+	public KIND getKind() {
+		return kind;
+	}
+
 }

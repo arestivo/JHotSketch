@@ -5,6 +5,8 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
@@ -52,9 +54,30 @@ public aspect TextProperties {
 			int width = Math.max(shape.getBounds().width, 100);
 			editor.setSize(width, 40);
 			editor.setLocation(shape.getBounds().x + shape.getBounds().width / 2 - width / 2, shape.getBounds().y + shape.getBounds().height / 2 - 20);
-			editor.setCapture(true);
 			editor.setData(shape);
+			editor.setText(shape.getText());
 			editor.setFocus();
+			
+			final MouseListener mlistener = new MouseListener() {
+				@Override
+				public void mouseUp(MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseDown(MouseEvent e) {
+					ShapeModel shape = (ShapeModel) editor.getData();
+					shape.setText(editor.getText());
+					JHotSketch.getInstance().getCurrentView().removeMouseListener(this);
+					editor.dispose();
+				}
+				
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+				}
+			};
+			
+			JHotSketch.getInstance().getCurrentView().addMouseListener(mlistener);
+			
 			editor.addKeyListener(new KeyListener() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -65,6 +88,7 @@ public aspect TextProperties {
 					if (e.keyCode == 13) {
 						ShapeModel shape = (ShapeModel) editor.getData();
 						shape.setText(editor.getText());
+						JHotSketch.getInstance().getCurrentView().removeMouseListener(mlistener);
 						editor.dispose();
 					}
 				}

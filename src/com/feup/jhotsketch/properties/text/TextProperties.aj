@@ -2,12 +2,19 @@ package com.feup.jhotsketch.properties.text;
 
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.ShapeModel;
+import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
@@ -41,8 +48,29 @@ public aspect TextProperties {
 	
 	after(DiagramController controller, Event event) : mouseDoubleClick(controller, event) {
 		List<ShapeModel> selected = controller.getDiagram().getSelected();
+		if (selected.size() != 1) return;
 		for (ShapeModel shape : selected) {
-			shape.setText("Just Some Text");
+			final Text editor = new Text(JHotSketch.getInstance().getCurrentView(), SWT.SINGLE);
+			int width = Math.max(shape.getBounds().width, 100);
+			editor.setSize(width, 40);
+			editor.setLocation(shape.getBounds().x + shape.getBounds().width / 2 - width / 2, shape.getBounds().y + shape.getBounds().height / 2 - 20);
+			editor.setCapture(true);
+			editor.setData(shape);
+			editor.setFocus();
+			editor.addKeyListener(new KeyListener() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.keyCode == 13) {
+						ShapeModel shape = (ShapeModel) editor.getData();
+						shape.setText(editor.getText());
+						editor.dispose();
+					}
+				}
+			});
 		}
 	}
 }

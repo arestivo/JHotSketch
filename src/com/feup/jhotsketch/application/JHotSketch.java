@@ -66,21 +66,6 @@ public class JHotSketch {
 	private void createMenu(Shell shell) {
 		Menu menu = new Menu(shell, SWT.BAR);
 	    shell.setMenuBar(menu);
-		
-	    MenuItem fileItem = new MenuItem(menu, SWT.CASCADE);
-	    fileItem.setText("File");
-
-	    Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
-	    fileItem.setMenu(fileMenu);
-
-	    MenuItem exit = new MenuItem(fileMenu, SWT.PUSH);
-	    exit.setText("Exit");
-	    exit.setAccelerator(SWT.CONTROL | 'Q');
-	    exit.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				System.exit(0);
-			}
-		});
 	}
 
 	private void createPropertyFolder(Shell shell) {

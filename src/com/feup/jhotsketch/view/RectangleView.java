@@ -7,7 +7,7 @@ import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.model.RectangleModel;
 
 @PackageName("View")
-public class RectangleView extends FigureView{
+public class RectangleView extends ShapeView{
 	
 	@Override
 	public void draw(DiagramView canvas, FigureModel figure, GC gc) {

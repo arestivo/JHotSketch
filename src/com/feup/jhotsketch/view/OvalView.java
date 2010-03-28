@@ -7,7 +7,7 @@ import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("View")
-public class OvalView extends FigureView{
+public class OvalView extends ShapeView{
 
 	@Override
 	public void draw(DiagramView canvas, FigureModel figure, GC gc) {

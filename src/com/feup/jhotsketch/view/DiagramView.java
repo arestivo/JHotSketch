@@ -45,7 +45,7 @@ public class DiagramView extends Composite implements DiagramObserver{
 	private void paint(GC gc) {
 		gc.setAntialias(SWT.ON);
 		for (FigureModel figure : diagram.getFigures()) {
-			FigureView.createView(figure).draw(this, figure, gc);
+			ShapeView.createView(figure).draw(this, figure, gc);
 		}
 		for (FigureModel figure : diagram.getFigures()) {
 			drawHandles(gc, figure);

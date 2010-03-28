@@ -21,7 +21,7 @@ import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
-import com.feup.jhotsketch.view.FigureView;
+import com.feup.jhotsketch.view.ShapeView;
 
 @PackageName("Line.Color")
 public aspect LineColor{
@@ -42,7 +42,7 @@ public aspect LineColor{
 	// Apply line color when drawing
 	
 	pointcut drawFigure(DiagramView canvas, FigureModel figure, GC gc) :
-		target(FigureView+) &&
+		target(ShapeView+) &&
 		call(void draw(DiagramView, FigureModel, GC)) && 
 		args(canvas, figure, gc);
 

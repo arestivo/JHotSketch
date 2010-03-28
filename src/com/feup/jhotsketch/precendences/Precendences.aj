@@ -6,6 +6,7 @@ import com.feup.jhotsketch.groups.GroupToolbar;
 import com.feup.jhotsketch.file.FileMenu;
 import com.feup.jhotsketch.copypaste.CopyPasteMenu;
 import com.feup.jhotsketch.copypaste.CopyPasteToolbar;
+import com.feup.jhotsketch.ordering.OrderingToolbar;
 import com.feup.jhotsketch.snap.SnapToolbar;
 
 @PackageName("Precedences")

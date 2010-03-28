@@ -1,6 +1,5 @@
 package com.feup.jhotsketch.ordering;
 
-import java.util.LinkedList; 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -14,11 +13,9 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
-import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("Ordering")
-public aspect Ordering {
+public aspect OrderingToolbar {
 	pointcut createCoolbar(JHotSketch application) :
 		this(application) &&
 		call(CoolBar.new(..));
@@ -51,33 +48,15 @@ public aspect Ordering {
 		back.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				back();
+				OrderingController.getInstance().back();
 			}
 		});
 
 		front.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				front();
+				OrderingController.getInstance().front();
 			}
 		});
-	}
-
-	private void back() {
-		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-		LinkedList<FigureModel> selected = new LinkedList<FigureModel>(); selected.addAll(diagram.getSelected());
-		diagram.removeFigures(selected);
-		diagram.addFiguresAtStart(selected);
-		diagram.setSelect(selected);
-		diagram.diagramChanged();
-	}
-
-	private void front() {
-		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
-		LinkedList<FigureModel> selected = new LinkedList<FigureModel>(); selected.addAll(diagram.getSelected());
-		diagram.removeFigures(selected);
-		diagram.addFigures(selected);
-		diagram.setSelect(selected);
-		diagram.diagramChanged();
 	}
 }

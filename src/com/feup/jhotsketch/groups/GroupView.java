@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.grouping;
+package com.feup.jhotsketch.groups;
 
 import org.eclipse.swt.graphics.GC;
 
@@ -7,7 +7,7 @@ import com.feup.jhotsketch.model.FigureModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.FigureView;
 
-@PackageName("Grouping")
+@PackageName("Groups")
 public class GroupView extends FigureView {
 
 	@Override

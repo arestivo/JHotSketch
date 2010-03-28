@@ -1,9 +1,9 @@
 package com.feup.jhotsketch.properties.group;
 
-import org.eclipse.swt.graphics.Color;
+ import org.eclipse.swt.graphics.Color;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.grouping.GroupModel;
+import com.feup.jhotsketch.groups.GroupModel;
 import com.feup.jhotsketch.model.FigureModel;
 
 @PackageName("Properties.Group")

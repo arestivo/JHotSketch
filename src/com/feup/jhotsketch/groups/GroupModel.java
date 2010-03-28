@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.grouping;
+package com.feup.jhotsketch.groups;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.FigureModel;
 
-@PackageName("Grouping")
+@PackageName("Groups")
 public class GroupModel extends FigureModel{
 	private List<FigureModel> figures = new LinkedList<FigureModel>();
 	

@@ -10,12 +10,14 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.RectangleModel;
 import com.feup.jhotsketch.model.RoundedRectangleModel;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.ShapeView;
 
+@PackageName("Application")
 public class ShapeControl extends Composite{
 	public static int CONTROLWIDTH = 60;
 	public static int CONTROLHEIGHT = 40;

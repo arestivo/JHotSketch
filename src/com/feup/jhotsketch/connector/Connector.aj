@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.model.DiagramModel;
+import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.DiagramView;
 import com.feup.jhotsketch.view.ShapeView;
@@ -42,12 +43,20 @@ public aspect Connector {
 			ShapeModel sink = connector.getSink();
 			gc.drawLine(source.getBounds().x + source.getBounds().width / 2, 
 					    source.getBounds().y + source.getBounds().height / 2,
-					    sink.getBounds().x + source.getBounds().width / 2, 
-					    sink.getBounds().y + source.getBounds().height / 2);
+					    sink.getBounds().x + sink.getBounds().width / 2, 
+					    sink.getBounds().y + sink.getBounds().height / 2);
 		}
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		for (ShapeModel shape : view.getDiagram().getFigures()) {
 			ShapeView.createView(shape).delete(shape, gc);
 		}
 	}
+	
+	pointcut createHandles(ShapeModel shape) :
+		call (void ShapeModel.createHandles()) && target(shape);
+		
+	after(ShapeModel shape) : createHandles(shape) {
+		shape.addHandle(new Handle(shape, shape.getBounds().width / 2, shape.getBounds().height / 2, "CONNECTOR", "TRIANGLE", SWT.COLOR_DARK_RED));
+	}
+
 }

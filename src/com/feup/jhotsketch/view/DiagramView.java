@@ -60,9 +60,21 @@ public class DiagramView extends Composite implements DiagramObserver{
 	private void drawHandles(GC gc, ShapeModel shape) {
 		if (shape.getSelected()) {
 			for (Handle handle : shape.getHandles()) {
-				if (handle.getKind() == Handle.KIND.NORMAL) gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
-				if (handle.getKind() == Handle.KIND.EXTRA) gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN));
-				gc.fillRectangle(handle.getBounds());
+				gc.setBackground(handle.getColor());
+				if (handle.getKind().equals("SQUARE")) gc.fillRectangle(handle.getBounds());
+				if (handle.getKind().equals("TRIANGLE")) {
+					int pa[] = {handle.getBounds().x + Handle.getSize() / 2, handle.getBounds().y, 
+							    handle.getBounds().x, handle.getBounds().y + Handle.getSize(), 
+							    handle.getBounds().x + Handle.getSize(), handle.getBounds().y + Handle.getSize()};
+					gc.fillPolygon(pa);					
+				}
+				if (handle.getKind().equals("RHOMBUS")) {
+					int pa[] = {handle.getBounds().x + Handle.getSize() / 2, handle.getBounds().y, 
+							    handle.getBounds().x + Handle.getSize(), handle.getBounds().y + Handle.getSize() / 2, 
+							    handle.getBounds().x + Handle.getSize() / 2, handle.getBounds().y + Handle.getSize(),
+							    handle.getBounds().x, handle.getBounds().y + Handle.getSize() / 2};
+					gc.fillPolygon(pa);					
+				}
 			}
 		}
 	}

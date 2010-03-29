@@ -1,6 +1,9 @@
 package com.feup.jhotsketch.model;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 
@@ -10,26 +13,18 @@ public class Handle {
 	private int x;
 	private int y;
 	private static int size = 10;
-	private int id;
 
-	public final static int NW = 1;
-	public final static int NE = 2;
-	public final static int SE = 3;
-	public final static int SW = 4;
-	
-	public enum KIND {NORMAL, EXTRA};
-	private KIND kind = KIND.NORMAL;
-	
-	public Handle(ShapeModel shape, int x, int y, int id) {
+	private String id;
+	private String kind;
+	private int color = SWT.COLOR_BLACK;
+		
+	public Handle(ShapeModel shape, int x, int y, String id, String kind, int color) {
 		this.shape = shape;
 		this.x = x;
 		this.y = y;
-		this.setId(id);
-	}
-	
-	public Handle(RoundedRectangleModel roundedRectangleModel, int x, int y, int id, KIND kind) {
-		this(roundedRectangleModel, x, y, id);
+		this.id = id;
 		this.kind = kind;
+		this.color = color;
 	}
 
 	public void setX(int x) {
@@ -59,16 +54,20 @@ public class Handle {
 		return getBounds().contains(x, y);
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public KIND getKind() {
+	public String getKind() {
 		return kind;
 	}
 
+	public Color getColor() {
+		return Display.getCurrent().getSystemColor(color);
+	}
+	
 }

@@ -15,8 +15,6 @@ import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.OvalModel;
-import com.feup.jhotsketch.model.RectangleModel;
-import com.feup.jhotsketch.model.RoundedRectangleModel;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.util.Intersector;
 import com.feup.jhotsketch.view.DiagramView;
@@ -63,7 +61,12 @@ public aspect Connector {
 			if (source instanceof OvalModel) p1 = Intersector.intersectOval(p2, p1, source.getBounds());
 			else p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
 			gc.drawLine(p1.x, p1.y, p2.x, p2.y);
-			gc.fillOval(p2.x - 4, p2.y - 4, 8, 8);
+
+			if (connector.getSinkEnd().equals(ConnectorModel.END.FILLEDCIRCLE)) gc.fillOval(p2.x - 4, p2.y - 4, 8, 8);
+			if (connector.getSinkEnd().equals(ConnectorModel.END.HOLLOWCIRCLE)) gc.drawOval(p2.x - 4, p2.y - 4, 8, 8);
+
+			if (connector.getSourceEnd().equals(ConnectorModel.END.FILLEDCIRCLE)) gc.fillOval(p1.x - 4, p1.y - 4, 8, 8);
+			if (connector.getSourceEnd().equals(ConnectorModel.END.HOLLOWCIRCLE)) gc.drawOval(p1.x - 4, p1.y - 4, 8, 8);
 		}
 		for (ShapeModel shape : view.getDiagram().getFigures()) {
 			if (!shape.getConnectingPoint().equals(new Point(0,0)))

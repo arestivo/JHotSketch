@@ -121,7 +121,7 @@ public class DiagramModel implements FigureObserver {
 		}
 	}
 
-	public void moveHandle(ShapeModel shape, double rx, double ry,Handle grabbedHandle) {
+	public void moveHandle(ShapeModel shape, int rx, int ry,Handle grabbedHandle) {
 		shape.moveHandle(rx, ry, grabbedHandle);
 	}
 

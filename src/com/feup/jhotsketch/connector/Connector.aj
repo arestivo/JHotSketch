@@ -73,13 +73,13 @@ public aspect Connector {
 		shape.addHandle(new Handle(shape, shape.getBounds().width, shape.getBounds().height / 2, "CONNECTOR", "TRIANGLE", SWT.COLOR_DARK_RED));
 	}
 
-	pointcut moveHandle(ShapeModel shape, double rx, double ry, Handle handle) :
-		call (void ShapeModel.moveHandle(double, double, Handle)) && target(shape) && args(rx, ry, handle);
+	pointcut moveHandle(ShapeModel shape, int rx, int ry, Handle handle) :
+		call (void ShapeModel.moveHandle(int, int, Handle)) && target(shape) && args(rx, ry, handle);
 	
-	after(ShapeModel shape, double rx, double ry, Handle handle) : moveHandle(shape, rx, ry, handle) {
+	after(ShapeModel shape, int rx, int ry, Handle handle) : moveHandle(shape, rx, ry, handle) {
 		if (handle.getId().equals("CONNECTOR")) {
 			if (shape.getConnectingPoint().equals(new Point(0, 0))) shape.setConnectingPoint(shape.getBounds().width / 2, 0);
-			shape.setConnectingPoint(shape.getConnectingPoint().x + (int)rx, shape.getConnectingPoint().y + (int)ry);
+			shape.setConnectingPoint(shape.getConnectingPoint().x + rx, shape.getConnectingPoint().y + ry);
 		}
 	}
 

@@ -69,7 +69,7 @@ public abstract class ShapeModel {
 	@Override
 	public abstract ShapeModel clone();
 
-	public void moveHandle(double rx, double ry, Handle handle){
+	public void moveHandle(int rx, int ry, Handle handle){
 		if (handle.getId().equals("NW")) {
 			bounds.x += rx;
 			bounds.y += ry;

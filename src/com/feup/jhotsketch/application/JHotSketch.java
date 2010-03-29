@@ -46,7 +46,7 @@ public class JHotSketch {
 		coolbar.setLayoutData(gd);
 		
 		shell.pack();
-		shell.setBounds(0, 0, 1200, 600);
+		shell.setMaximized(true);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())

@@ -22,4 +22,6 @@ public abstract class ShapeView {
 		if (shape instanceof OvalModel) return new OvalView();		
 		return null;
 	}
+
+	public abstract void delete(ShapeModel shape, GC gc);
 }

@@ -78,7 +78,7 @@ public aspect Snap {
 	}
 	
 	pointcut drawDiagram(DiagramView view, GC gc) :
-		call(void DiagramView.paint(GC)) && target(view) && args(gc);
+		call(void DiagramView.paint(GC, ..)) && target(view) && args(gc, ..);
 	
 	after(DiagramView view, GC gc) : drawDiagram(view, gc) {
 		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_YELLOW));

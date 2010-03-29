@@ -14,9 +14,12 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.Handle;
+import com.feup.jhotsketch.model.OvalModel;
+import com.feup.jhotsketch.model.RectangleModel;
+import com.feup.jhotsketch.model.RoundedRectangleModel;
 import com.feup.jhotsketch.model.ShapeModel;
+import com.feup.jhotsketch.util.Intersector;
 import com.feup.jhotsketch.view.DiagramView;
-import com.feup.jhotsketch.view.ShapeView;
 
 @PackageName("Connector")
 public aspect Connector {
@@ -49,13 +52,20 @@ public aspect Connector {
 	
 	before(GC gc, DiagramView view) : diagramPaint(gc, view) {
 		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		for (ConnectorModel connector : view.getDiagram().getConnectors()) {
 			ShapeModel source = connector.getSource();
 			ShapeModel sink = connector.getSink();
-			gc.drawLine(source.getBounds().x + source.getBounds().width / 2, 
-					    source.getBounds().y + source.getBounds().height / 2,
-					    sink.getBounds().x + sink.getBounds().width / 2, 
-					    sink.getBounds().y + sink.getBounds().height / 2);
+			Point p1 = new Point(source.getBounds().x + source.getBounds().width / 2, source.getBounds().y + source.getBounds().height / 2);
+			Point p2 = new Point(sink.getBounds().x + sink.getBounds().width / 2, sink.getBounds().y + sink.getBounds().height / 2);
+			if (sink instanceof OvalModel) p2 = Intersector.intersectOval(p1, p2, sink.getBounds());
+			if (source instanceof OvalModel) p1 = Intersector.intersectOval(p2, p1, source.getBounds());
+			if (sink instanceof RectangleModel) p2 = Intersector.intersectRectangle(p1, p2, sink.getBounds());
+			if (source instanceof RectangleModel) p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
+			if (sink instanceof RoundedRectangleModel) p2 = Intersector.intersectRectangle(p1, p2, sink.getBounds());
+			if (source instanceof RoundedRectangleModel) p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
+			gc.drawLine(p1.x, p1.y, p2.x, p2.y);
+			gc.fillOval(p2.x - 3, p2.y - 3, 6, 6);
 		}
 		for (ShapeModel shape : view.getDiagram().getFigures()) {
 			if (!shape.getConnectingPoint().equals(new Point(0,0)))
@@ -67,9 +77,6 @@ public aspect Connector {
 				);
 		}
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		for (ShapeModel shape : view.getDiagram().getFigures()) {
-			ShapeView.createView(shape).delete(shape, gc);
-		}
 	}
 	
 	pointcut createHandles(ShapeModel shape) :

@@ -17,14 +17,5 @@ public class GroupView extends ShapeView {
 		}
 		super.draw(shape, gc);
 	}
-	
-	@Override
-	public void delete(ShapeModel shape, GC gc) {
-		GroupModel group = (GroupModel) shape;
-		for (ShapeModel f : group.getFigures()) {
-			ShapeView.createView(f).delete(f, gc);
-		}
-		super.draw(shape, gc);
-	}
 
 }

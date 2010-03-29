@@ -23,6 +23,5 @@ public class RoundedRectangleView extends ShapeView{
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		RoundedRectangleModel rectangle = (RoundedRectangleModel) shape;
 		gc.fillRoundRectangle(rectangle.getBounds().x, rectangle.getBounds().y, rectangle.getBounds().width, rectangle.getBounds().height, rectangle.getRadiusX(), rectangle.getRadiusY());
-	}
-	
+	}	
 }

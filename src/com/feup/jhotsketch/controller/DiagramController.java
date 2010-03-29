@@ -14,7 +14,7 @@ import com.feup.jhotsketch.model.Handle;
 
 @PackageName("Controller")
 public class DiagramController{
-	public enum OPERATION {NONE, SELECT, MOVE, RESIZE} 
+	public enum OPERATION {NONE, SELECT, MOVE, HANDLE} 
 	private OPERATION operation = OPERATION.NONE;
 	
 	private List<ShapeModel> grabbed;
@@ -41,7 +41,7 @@ public class DiagramController{
 		for (ShapeModel shape : getDiagram().getSelected()) {
 			for (Handle handle : shape.getHandles()) {
 				if (handle.contains(event.x, event.y)) {
-					operation = OPERATION.RESIZE;
+					operation = OPERATION.HANDLE;
 					grabbed = getDiagram().getSelected();
 					grabbedHandle = handle;
 					return;
@@ -77,8 +77,8 @@ public class DiagramController{
 		moved = true;
 		Point newPoint = new Point(event.x, event.y);
 
-		if (operation == OPERATION.RESIZE) {
-			resizeFigures(grabbed, lastPoint, newPoint);
+		if (operation == OPERATION.HANDLE) {
+			moveHandles(grabbed, lastPoint, newPoint);
 			lastPoint = newPoint;
 		}
 		if (operation == OPERATION.MOVE) {
@@ -90,11 +90,11 @@ public class DiagramController{
 		}
 	}
 
-	private void resizeFigures(List<ShapeModel> shapes, Point lastPoint, Point newPoint) {
+	private void moveHandles(List<ShapeModel> shapes, Point lastPoint, Point newPoint) {
 		int dx = newPoint.x - lastPoint.x;
 		int dy = newPoint.y - lastPoint.y;
 		for (ShapeModel shape : shapes) {
-			getDiagram().resizeFigure(shape, dx, dy, grabbedHandle);
+			getDiagram().moveHandle(shape, dx, dy, grabbedHandle);
 		}
 		getDiagram().diagramChanged();
 	}
@@ -129,7 +129,21 @@ public class DiagramController{
 					getDiagram().setSelect(shape);
 			}
 		}
+		
+		if (operation == OPERATION.HANDLE) {
+			Point newPoint = new Point(event.x, event.y);
+			dropHandles(grabbed, lastPoint, newPoint);			
+		}
 		operation = OPERATION.NONE;
+	}
+
+	private void dropHandles(List<ShapeModel> shapes, Point lastPoint, Point newPoint) {
+		int dx = newPoint.x - lastPoint.x;
+		int dy = newPoint.y - lastPoint.y;
+		for (ShapeModel shape : shapes) {
+			getDiagram().dropHandle(shape, dx, dy, grabbedHandle);
+		}
+		getDiagram().diagramChanged();
 	}
 
 	public void setDiagram(DiagramModel diagram) {

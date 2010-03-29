@@ -19,14 +19,6 @@ public class DiagramModel implements FigureObserver {
 	private Rectangle selectionRectangle; 
 
 	public DiagramModel(){
-		shapes.add(new RectangleModel(10, 10, 40, 40));
-		shapes.add(new OvalModel(150, 150, 40, 40));
-		shapes.add(new OvalModel(50, 150, 40, 40));
-		shapes.add(new OvalModel(150, 50, 40, 40));
-		shapes.add(new OvalModel(100, 100, 40, 40));
-				
-		for (ShapeModel shape : shapes)
-			shape.addObserver(this);
 	}
 	
 	public Collection<ShapeModel> getFigures() {
@@ -129,8 +121,8 @@ public class DiagramModel implements FigureObserver {
 		}
 	}
 
-	public void resizeFigure(ShapeModel shape, double rx, double ry,Handle grabbedHandle) {
-		shape.resize(rx, ry, grabbedHandle);
+	public void moveHandle(ShapeModel shape, double rx, double ry,Handle grabbedHandle) {
+		shape.moveHandle(rx, ry, grabbedHandle);
 	}
 
 	public void addFiguresAtStart(LinkedList<ShapeModel> shapes) {
@@ -143,6 +135,10 @@ public class DiagramModel implements FigureObserver {
 			if (shape.contains(x,y)) found.add(shape);
 		}
 		return found;
+	}
+
+	public void dropHandle(ShapeModel shape, int dx, int dy, Handle grabbedHandle) {
+		shape.dropHandle(dx, dy, grabbedHandle);
 	}
 
 }

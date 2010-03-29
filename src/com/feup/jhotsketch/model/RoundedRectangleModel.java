@@ -43,8 +43,8 @@ public class RoundedRectangleModel extends ShapeModel{
 		handles.add(new Handle(this, 0, radiusy, "ROUNDRADIUSY", "RHOMBUS", SWT.COLOR_DARK_GREEN));
 	}
 	
-	public void resize(double rx, double ry, Handle handle){
-		super.resize(rx, ry, handle);
+	public void moveHandle(double rx, double ry, Handle handle){
+		super.moveHandle(rx, ry, handle);
 		if (handle.getId().equals("ROUNDRADIUSX")) radiusx += rx;
 		if (handle.getId().equals("ROUNDRADIUSY")) radiusy += ry;
 		if (radiusx < 0) radiusx = 0;

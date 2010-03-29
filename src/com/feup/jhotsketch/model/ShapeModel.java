@@ -21,7 +21,7 @@ public abstract class ShapeModel {
 		bounds = new Rectangle(x, y, width, height);
 	}
 
-	protected void createHandles() {
+	public void createHandles() {
 		handles = new HashSet<Handle>();
 		handles.add(new Handle(this, 0, 0, "NW", "SQUARE", SWT.COLOR_DARK_GRAY));
 		handles.add(new Handle(this, bounds.width, 0, "NE", "SQUARE", SWT.COLOR_DARK_GRAY));
@@ -69,7 +69,7 @@ public abstract class ShapeModel {
 	@Override
 	public abstract ShapeModel clone();
 
-	public void resize(double rx, double ry, Handle handle){
+	public void moveHandle(double rx, double ry, Handle handle){
 		if (handle.getId().equals("NW")) {
 			bounds.x += rx;
 			bounds.y += ry;
@@ -100,5 +100,8 @@ public abstract class ShapeModel {
 
 	public void addHandle(Handle handle) {
 		handles.add(handle);
+	}
+
+	public void dropHandle(int dx, int dy, Handle grabbedHandle) {
 	}
 }

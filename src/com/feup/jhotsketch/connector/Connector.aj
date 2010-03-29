@@ -1,7 +1,9 @@
 package com.feup.jhotsketch.connector;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -22,6 +24,10 @@ public aspect Connector {
 	
 	public void DiagramModel.addConnector(ConnectorModel connector) {
 		connectors.add(connector);
+	}
+
+	public void DiagramModel.removeConnectors(Set<ConnectorModel> toRemove) {
+		connectors.removeAll(toRemove);
 	}
 
 	public List<ConnectorModel> DiagramModel.getConnectors() {
@@ -102,4 +108,15 @@ public aspect Connector {
 		}
 	}
 
+	pointcut removeFigure(DiagramModel diagram):
+		call (void DiagramModel.removeFigure*(..)) && target(diagram);
+		
+	after(DiagramModel diagram) : removeFigure(diagram) {
+		Set<ConnectorModel> toRemove = new HashSet<ConnectorModel>();
+		for (ConnectorModel	connector : diagram.getConnectors()) {
+			if (!diagram.getFigures().contains(connector.getSink())) toRemove.add(connector);
+			if (!diagram.getFigures().contains(connector.getSource())) toRemove.add(connector);
+		}
+		diagram.removeConnectors(toRemove);
+	}
 }

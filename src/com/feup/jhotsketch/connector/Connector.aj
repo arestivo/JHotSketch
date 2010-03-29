@@ -59,13 +59,11 @@ public aspect Connector {
 			Point p1 = new Point(source.getBounds().x + source.getBounds().width / 2, source.getBounds().y + source.getBounds().height / 2);
 			Point p2 = new Point(sink.getBounds().x + sink.getBounds().width / 2, sink.getBounds().y + sink.getBounds().height / 2);
 			if (sink instanceof OvalModel) p2 = Intersector.intersectOval(p1, p2, sink.getBounds());
+			else p2 = Intersector.intersectRectangle(p1, p2, sink.getBounds());
 			if (source instanceof OvalModel) p1 = Intersector.intersectOval(p2, p1, source.getBounds());
-			if (sink instanceof RectangleModel) p2 = Intersector.intersectRectangle(p1, p2, sink.getBounds());
-			if (source instanceof RectangleModel) p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
-			if (sink instanceof RoundedRectangleModel) p2 = Intersector.intersectRectangle(p1, p2, sink.getBounds());
-			if (source instanceof RoundedRectangleModel) p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
+			else p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
 			gc.drawLine(p1.x, p1.y, p2.x, p2.y);
-			gc.fillOval(p2.x - 3, p2.y - 3, 6, 6);
+			gc.fillOval(p2.x - 4, p2.y - 4, 8, 8);
 		}
 		for (ShapeModel shape : view.getDiagram().getFigures()) {
 			if (!shape.getConnectingPoint().equals(new Point(0,0)))

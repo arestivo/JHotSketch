@@ -36,7 +36,7 @@ public aspect FileMenu {
 	    	@Override
 			public void handleEvent(Event event) {
 	    		FileDialog fileDialog = new FileDialog(shell);
-	    		fileDialog.setFilterExtensions(new String[] {"png"});
+	    		fileDialog.setFilterExtensions(new String[] {"*.png"});
 	    		fileDialog.setOverwrite(true);
 	    		String filename = fileDialog.open();
 	    		if (filename == null) return;

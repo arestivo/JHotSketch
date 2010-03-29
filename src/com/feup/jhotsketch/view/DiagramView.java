@@ -33,7 +33,7 @@ public class DiagramView extends Composite implements DiagramObserver{
 		
 		addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent event) {
-				paint(event.gc);
+				paint(event.gc, false);
 			}
 		});
 		
@@ -43,11 +43,12 @@ public class DiagramView extends Composite implements DiagramObserver{
 		addListener(SWT.MouseDoubleClick, listener);
 	}
 	
-	private void paint(GC gc) {
+	public void paint(GC gc, boolean toPrint) {
 		gc.setAntialias(SWT.ON);
 		for (ShapeModel shape : diagram.getFigures()) {
 			ShapeView.createView(shape).draw(shape, gc);
 		}
+		if (toPrint) return;
 		for (ShapeModel shape : diagram.getFigures()) {
 			drawHandles(gc, shape);
 		}

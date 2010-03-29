@@ -45,7 +45,7 @@ public aspect Connector {
 	}
 		
 	pointcut diagramPaint(GC gc, DiagramView view) :
-		call (void DiagramView.paint(GC)) && args(gc) && target(view);
+		call (void DiagramView.paint(GC,..)) && args(gc,..) && target(view);
 	
 	before(GC gc, DiagramView view) : diagramPaint(gc, view) {
 		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));

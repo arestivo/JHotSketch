@@ -141,4 +141,18 @@ public class DiagramModel implements FigureObserver {
 		shape.dropHandle(dx, dy, grabbedHandle);
 	}
 
+	public Rectangle getSize() {
+		if (shapes.size() == 0) return new Rectangle(0, 0, 0, 0);
+		Rectangle size = new Rectangle(shapes.get(0).getBounds().x, shapes.get(0).getBounds().y, shapes.get(0).getBounds().width, shapes.get(0).getBounds().height);
+		for (ShapeModel shape : getFigures()) {
+			if (shape.getBounds().x < size.x) size.x = shape.getBounds().x;
+			if (shape.getBounds().y < size.y) size.y = shape.getBounds().y;
+		}
+		for (ShapeModel shape : getFigures()) {
+			if (shape.getBounds().x + shape.getBounds().width > size.x + size.width) size.width = shape.getBounds().x + shape.getBounds().width - size.x;
+			if (shape.getBounds().y + shape.getBounds().height > size.y + size.height) size.height = shape.getBounds().y + shape.getBounds().height - size.y;
+		}
+		System.out.println(size);
+		return size;
+	}
 }

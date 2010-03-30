@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.util;
+package com.feup.jhotsketch.geometry;
 
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -9,7 +9,7 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import com.feup.contribution.aida.annotations.PackageName;
 
-@PackageName("Util")
+@PackageName("Geometry")
 public class Intersector {
 	private static Point2D intersectOval(Point2D p1, Point2D p2, Ellipse2D ellipse) {
 		Point2D p3 = new Point2D.Double((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2);

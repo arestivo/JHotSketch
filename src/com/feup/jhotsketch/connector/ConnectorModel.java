@@ -11,12 +11,13 @@ public class ConnectorModel {
 	public enum END {NONE, HOLLOWARROW, FILLEDARROW, SIMPLEARROW, HOLLOWSQUARE, FILLEDSQUARE, HOLLOWCIRCLE, FILLEDCIRCLE};
 	private END sourceEnd;
 	private END sinkEnd;
+	private int endSize = 10;
 	
 	public ConnectorModel(ShapeModel source, ShapeModel sink) {
 		this.source = source;
 		this.sink = sink;
-		this.sourceEnd = END.FILLEDCIRCLE;
-		this.sinkEnd = END.HOLLOWCIRCLE;
+		this.sourceEnd = END.FILLEDSQUARE;
+		this.sinkEnd = END.FILLEDARROW;
 	}
 	
 	public void setSource(ShapeModel source) {
@@ -49,6 +50,14 @@ public class ConnectorModel {
 
 	public END getSinkEnd() {
 		return sinkEnd;
+	}
+
+	public void setEndSize(int endSize) {
+		this.endSize = endSize;
+	}
+
+	public int getEndSize() {
+		return endSize;
 	}
 
 }

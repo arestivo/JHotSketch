@@ -1,5 +1,6 @@
 package com.feup.jhotsketch.connector;
 
+import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,11 +13,13 @@ import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.connector.ConnectorModel.END;
+import com.feup.jhotsketch.geometry.Intersector;
+import com.feup.jhotsketch.geometry.Vectors;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.ShapeModel;
-import com.feup.jhotsketch.util.Intersector;
 import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Connector")
@@ -62,11 +65,8 @@ public aspect Connector {
 			else p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
 			gc.drawLine(p1.x, p1.y, p2.x, p2.y);
 
-			if (connector.getSinkEnd().equals(ConnectorModel.END.FILLEDCIRCLE)) gc.fillOval(p2.x - 4, p2.y - 4, 8, 8);
-			if (connector.getSinkEnd().equals(ConnectorModel.END.HOLLOWCIRCLE)) gc.drawOval(p2.x - 4, p2.y - 4, 8, 8);
-
-			if (connector.getSourceEnd().equals(ConnectorModel.END.FILLEDCIRCLE)) gc.fillOval(p1.x - 4, p1.y - 4, 8, 8);
-			if (connector.getSourceEnd().equals(ConnectorModel.END.HOLLOWCIRCLE)) gc.drawOval(p1.x - 4, p1.y - 4, 8, 8);
+			ConnectorEndPainter.paintConnectorEnd(p1, p2, connector.getSinkEnd(), connector.getEndSize(), gc);
+			ConnectorEndPainter.paintConnectorEnd(p2, p1, connector.getSourceEnd(), connector.getEndSize(), gc);
 		}
 		for (ShapeModel shape : view.getDiagram().getFigures()) {
 			if (!shape.getConnectingPoint().equals(new Point(0,0)))
@@ -80,6 +80,7 @@ public aspect Connector {
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 	}
 	
+
 	pointcut createHandles(ShapeModel shape) :
 		call (void ShapeModel.createHandles()) && target(shape);
 		

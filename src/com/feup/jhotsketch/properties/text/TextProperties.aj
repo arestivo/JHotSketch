@@ -94,4 +94,16 @@ public aspect TextProperties {
 			});
 		}
 	}
+	
+	// Clone text
+	
+	pointcut clone(ShapeModel shape) :
+		call (ShapeModel clone()) && target(shape);
+
+	ShapeModel around(ShapeModel shape) : clone(shape) {
+		ShapeModel clone = proceed(shape);
+		clone.setText(shape.getText());
+		return clone;
+	}
+
 }

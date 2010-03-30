@@ -1,6 +1,5 @@
 package com.feup.jhotsketch.connector;
 
-import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,9 +12,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
-import com.feup.jhotsketch.connector.ConnectorModel.END;
 import com.feup.jhotsketch.geometry.Intersector;
-import com.feup.jhotsketch.geometry.Vectors;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.OvalModel;

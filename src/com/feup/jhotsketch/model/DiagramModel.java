@@ -152,7 +152,6 @@ public class DiagramModel implements FigureObserver {
 			if (shape.getBounds().x + shape.getBounds().width > size.x + size.width) size.width = shape.getBounds().x + shape.getBounds().width - size.x;
 			if (shape.getBounds().y + shape.getBounds().height > size.y + size.height) size.height = shape.getBounds().y + shape.getBounds().height - size.y;
 		}
-		System.out.println(size);
 		return size;
 	}
 }

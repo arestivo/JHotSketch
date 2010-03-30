@@ -100,10 +100,8 @@ public aspect TextProperties {
 	pointcut clone(ShapeModel shape) :
 		call (ShapeModel clone()) && target(shape);
 
-	ShapeModel around(ShapeModel shape) : clone(shape) {
-		ShapeModel clone = proceed(shape);
+	after(ShapeModel shape) returning (ShapeModel clone): clone(shape) {
 		clone.setText(shape.getText());
-		return clone;
 	}
 
 }

@@ -4,6 +4,9 @@ import java.awt.geom.Point2D;
 
 import org.eclipse.swt.graphics.Point;
 
+import com.feup.contribution.aida.annotations.PackageName;
+
+@PackageName("Geometry")
 public class Vectors {
 	public static Point2D getVersor(Point a, Point b) {
 		if (a.equals(b)) return new Point2D.Double(1,0);

@@ -7,9 +7,11 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.connector.ConnectorModel.END;
 import com.feup.jhotsketch.geometry.Vectors;
 
+@PackageName("Connector")
 public class ConnectorEndPainter {
 	public static void paintConnectorEnd(Point p1, Point p2, END end, int size, GC gc) {
 		Point2D versor = Vectors.getVersor(p1, p2);

@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Listener;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.groups.GroupModel;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.ShapeView;
@@ -158,9 +159,8 @@ public aspect FillColor{
 	pointcut clone(ShapeModel shape) :
 		call (ShapeModel clone()) && target(shape);
 
-	ShapeModel around(ShapeModel shape) : clone(shape) {
-		ShapeModel clone = proceed(shape);
+	after(ShapeModel shape) returning (ShapeModel clone): clone(shape) {
+		if (!(clone instanceof GroupModel))
 		clone.setFillColor(shape.getFillColor());
-		return clone;
 	}
 }

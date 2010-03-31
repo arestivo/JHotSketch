@@ -29,8 +29,8 @@ public class ConnectorModel{
 	public ConnectorModel(ShapeModel source, ShapeModel sink) {
 		this.source = source;
 		this.sink = sink;
-		this.sourceEnd = END.FILLEDSQUARE;
-		this.sinkEnd = END.SIMPLEARROW;
+		this.sourceEnd = END.NONE;
+		this.sinkEnd = END.NONE;
 	}
 	
 	public void setSource(ShapeModel source) {
@@ -63,11 +63,6 @@ public class ConnectorModel{
 
 	public END getSinkEnd() {
 		return sinkEnd;
-	}
-
-	@Override
-	public ShapeModel clone() {
-		return null;
 	}
 
 	public void toggleSelected() {
@@ -123,5 +118,14 @@ public class ConnectorModel{
 
 	public int getSinkEndSize() {
 		return sinkEndSize;
+	}
+	
+	public ConnectorModel clone() {
+		ConnectorModel clone = new ConnectorModel(source, sink);
+		clone.setSourceEnd(getSourceEnd());
+		clone.setSinkEnd(getSinkEnd());
+		clone.setSourceEndSize(getSourceEndSize());
+		clone.setSinkEndSize(getSinkEndSize());
+		return clone;
 	}
 }

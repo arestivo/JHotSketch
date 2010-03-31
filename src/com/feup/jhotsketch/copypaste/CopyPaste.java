@@ -1,10 +1,12 @@
 package com.feup.jhotsketch.copypaste;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.HashSet; 
 import java.util.Set;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.connector.ConnectorModel;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.ShapeModel;
 
@@ -13,6 +15,7 @@ public class CopyPaste {
 	private static CopyPaste instance;
 	
 	private Set<ShapeModel> clipboard = null;
+	private Set<ConnectorModel> connectorClipboard = null;
 	
 	public static CopyPaste getInstance() {
 		if (instance == null) instance = new CopyPaste();
@@ -22,9 +25,12 @@ public class CopyPaste {
 	public void cut() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		clipboard = new HashSet<ShapeModel>();
-		for (ShapeModel shape : diagram.getSelected()) {
+		connectorClipboard = new HashSet<ConnectorModel>();
+		for (ShapeModel shape : diagram.getSelected())
 			clipboard.add(shape);
-		}
+		for (ConnectorModel connector : diagram.getConnectors())
+			if (clipboard.contains(connector.getSource()) || clipboard.contains(connector.getSink()))
+					connectorClipboard.add(connector);
 		diagram.removeFigures(diagram.getSelected());
 		diagram.diagramChanged();
 	}
@@ -32,8 +38,22 @@ public class CopyPaste {
 	public void copy() {
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		clipboard = new HashSet<ShapeModel>();
+		connectorClipboard = new HashSet<ConnectorModel>();
+		HashMap<ShapeModel, ShapeModel> clones = new HashMap<ShapeModel, ShapeModel>();
 		for (ShapeModel shape : diagram.getSelected()) {
-			clipboard.add(shape.clone());
+			ShapeModel clone = shape.clone();
+			clipboard.add(clone);
+			clones.put(shape, clone);
+		}
+		for (ConnectorModel connector : diagram.getConnectors()) {
+			if (diagram.getSelected().contains(connector.getSource()) || diagram.getSelected().contains(connector.getSink())) {
+				ConnectorModel clone = connector.clone();
+				connectorClipboard.add(clone);
+				if (clones.containsKey(connector.getSource()))
+					clone.setSource(clones.get(connector.getSource()));
+				if (clones.containsKey(connector.getSink()))
+					clone.setSink(clones.get(connector.getSink()));
+			}
 		}
 	}
 
@@ -41,14 +61,15 @@ public class CopyPaste {
 		if (clipboard == null) return;
 		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 		diagram.unselectAll();
-		for (ShapeModel shape : clipboard) {
-			ShapeModel clone = (ShapeModel) shape.clone();
-			diagram.setSelect(clone);
-			diagram.addFigure(clone);
-			diagram.moveFigure(clone, 10, 10);
-			copy();
+		for (ConnectorModel connector : connectorClipboard) {
+			diagram.addConnector(connector);
 		}
+		for (ShapeModel shape : clipboard) {
+			diagram.setSelect(shape);
+			diagram.addFigure(shape);
+			diagram.moveFigure(shape, 10, 10);
+		}
+		copy();
 		diagram.diagramChanged();
-	}
-	
+	}	
 }

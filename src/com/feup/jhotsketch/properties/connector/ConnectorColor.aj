@@ -103,4 +103,14 @@ public aspect ConnectorColor{
 			colorButton.setImage(new Image(Display.getCurrent(), "icons/solid.gif"));
 		}
 	}	
+	
+	// Clone line color
+	
+	pointcut clone(ConnectorModel connector) :
+		call (ConnectorModel clone()) && target(connector);
+
+	after(ConnectorModel connector) returning (ConnectorModel clone): clone(connector) {
+		clone.setLineColor(connector.getLineColor());
+	}
+
 }

@@ -28,7 +28,6 @@ public aspect ConnectorProperties {
 		GridLayout layout = new GridLayout(1, true);
 		lineComposite.setLayout(layout);
 
-//		ConnectorWidth.aspectOf().createLineWidthControls(lineComposite);
 		ConnectorLineStyle.aspectOf().createLineStyleControls(lineComposite);
 		ConnectorColor.aspectOf().createLineColorControls(lineComposite);
 		ConnectorArrowSize.aspectOf().createArrowControls(lineComposite);

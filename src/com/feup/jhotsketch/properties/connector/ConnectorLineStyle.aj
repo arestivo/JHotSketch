@@ -124,5 +124,14 @@ public aspect ConnectorLineStyle{
 		if (lineStyle == SWT.LINE_DOT) dottedButton.setSelection(true);
 	}	
 
+	// Clone line style
+	
+	pointcut clone(ConnectorModel connector) :
+		call (ConnectorModel clone()) && target(connector);
+
+	after(ConnectorModel connector) returning (ConnectorModel clone): clone(connector) {
+		clone.setLineStyle(connector.getLineStyle());
+	}
+
 	
 }

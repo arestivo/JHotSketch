@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties.line;
+package com.feup.jhotsketch.properties.shape;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.ShapeView;
 
-@PackageName("Line.Properties")
-public aspect LineWidth {
+@PackageName("Properties.Shape")
+public aspect ShapeLineWidth {
 
 	// Add line width properties to Figure
 	

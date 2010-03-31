@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties.line;
+package com.feup.jhotsketch.properties.shape;
 
 import org.eclipse.swt.SWT; 
 import org.eclipse.swt.layout.GridLayout;
@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.TabItem;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 
-@PackageName("Line.Properties")
-public aspect LineProperties {	
+@PackageName("Properties.Shape")
+public aspect ShapeProperties {	
 		
 	pointcut createPropertyFolder() : 
 		call(TabFolder.new(..)) &&
@@ -26,10 +26,10 @@ public aspect LineProperties {
 		GridLayout layout = new GridLayout(1, true);
 		lineComposite.setLayout(layout);
 
-		LineWidth.aspectOf().createLineWidthControls(lineComposite);
-		LineStyle.aspectOf().createLineStyleControls(lineComposite);
-		LineColor.aspectOf().createLineColorControls(lineComposite);
-		FillColor.aspectOf().createFillColorControls(lineComposite);
+		ShapeLineWidth.aspectOf().createLineWidthControls(lineComposite);
+		ShapeLineStyle.aspectOf().createLineStyleControls(lineComposite);
+		ShapeLineColor.aspectOf().createLineColorControls(lineComposite);
+		ShapeFillColor.aspectOf().createFillColorControls(lineComposite);
 		
 		line.setControl(lineComposite);	
 		lineComposite.pack();

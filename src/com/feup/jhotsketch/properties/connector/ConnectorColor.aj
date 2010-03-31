@@ -21,7 +21,7 @@ import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.connector.ConnectorModel;
 import com.feup.jhotsketch.connector.ConnectorView;
 
-@PackageName("Connector.Properties")
+@PackageName("Properties.Connector")
 public aspect ConnectorColor{
 
 	// Add line color properties to Figure

@@ -6,7 +6,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.groups.GroupModel;
 import com.feup.jhotsketch.model.ShapeModel;
 
-@PackageName("Group.Properties")
+@PackageName("Properties.Groups")
 public aspect GroupProperties {
 
 	// Set Line Style

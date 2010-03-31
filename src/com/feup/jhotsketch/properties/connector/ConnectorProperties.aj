@@ -8,10 +8,12 @@ import org.eclipse.swt.widgets.TabItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.model.DiagramModel;
 
-@PackageName("Connector.Properties")
+@PackageName("Properties.Connector")
 public aspect ConnectorProperties {	
-		
+	private TabItem shapeTI = null;
+	
 	pointcut createPropertyFolder() : 
 		call(TabFolder.new(..)) &&
 		within(JHotSketch);
@@ -19,8 +21,8 @@ public aspect ConnectorProperties {
 	TabFolder around() : createPropertyFolder() {
 		TabFolder folder = proceed();
 		
-		TabItem line = new TabItem(folder, SWT.NONE);
-		line.setText("Connector");
+		shapeTI = new TabItem(folder, SWT.NONE);
+		shapeTI.setText("Connector");
 		
 		Composite lineComposite = new Composite(folder, SWT.NONE);
 		GridLayout layout = new GridLayout(1, true);
@@ -30,10 +32,17 @@ public aspect ConnectorProperties {
 //		ConnectorStyle.aspectOf().createLineStyleControls(lineComposite);
 		ConnectorColor.aspectOf().createLineColorControls(lineComposite);
 		
-		line.setControl(lineComposite);	
+		shapeTI.setControl(lineComposite);	
 		lineComposite.pack();
 		
 		return folder;
 	}
 	
+	pointcut diagramChanged(DiagramModel diagram) :
+		call (void DiagramModel.diagramChanged()) &&
+		target(diagram);
+	
+	after(DiagramModel diagram) : diagramChanged(diagram){
+		if (diagram.getSelectedConnectors().size() != 0) shapeTI.getParent().setSelection(shapeTI);
+	}
 }

@@ -104,4 +104,12 @@ public abstract class ShapeModel {
 
 	public void dropHandle(int dx, int dy, Handle grabbedHandle) {
 	}
+	
+	public void setBounds(int x, int y, int width, int height) {
+		bounds = new Rectangle(x, y, width, height);
+	}
+
+	public Point getCenter() {
+		return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+	}
 }

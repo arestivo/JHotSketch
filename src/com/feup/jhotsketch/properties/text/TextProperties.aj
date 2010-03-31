@@ -51,8 +51,8 @@ public aspect TextProperties {
 		for (ShapeModel shape : selected) {
 			final Text editor = new Text(JHotSketch.getInstance().getCurrentView(), SWT.SINGLE);
 			int width = Math.max(shape.getBounds().width, 100);
-			editor.setSize(width, 40);
-			editor.setLocation(shape.getBounds().x + shape.getBounds().width / 2 - width / 2, shape.getBounds().y + shape.getBounds().height / 2 - 20);
+			editor.setSize(width, 20);
+			editor.setLocation(shape.getBounds().x + shape.getBounds().width / 2 - width / 2, shape.getBounds().y + shape.getBounds().height / 2 - 10);
 			editor.setData(shape);
 			editor.setText(shape.getText());
 			editor.setFocus();

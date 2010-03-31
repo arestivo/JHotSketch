@@ -1,5 +1,6 @@
 package com.feup.jhotsketch.connector;
 
+import java.awt.Rectangle;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,9 +10,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.controller.DiagramController;
 import com.feup.jhotsketch.geometry.Intersector;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.Handle;
@@ -21,7 +24,8 @@ import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Connector")
 public aspect Connector {
-	private LinkedList<ConnectorModel>	DiagramModel.connectors = new LinkedList<ConnectorModel>();
+	private List<ConnectorModel>	DiagramModel.connectors = new LinkedList<ConnectorModel>();
+	private Set<ConnectorModel>	DiagramModel.selectedConnectors = new HashSet<ConnectorModel>();
 	
 	public void DiagramModel.addConnector(ConnectorModel connector) {
 		connectors.add(connector);
@@ -33,6 +37,25 @@ public aspect Connector {
 
 	public List<ConnectorModel> DiagramModel.getConnectors() {
 		return connectors;
+	}
+
+	public void DiagramModel.toggleConnectorSelected(ConnectorModel connector) {
+		if (selectedConnectors.contains(connector))
+			selectedConnectors.remove(connector);
+		else 
+			selectedConnectors.add(connector);
+		connector.toggleSelected();
+	}
+
+	public void DiagramModel.unselectAllConnectors() {
+		for (ConnectorModel connector : selectedConnectors) {
+			connector.toggleSelected();
+		}
+		selectedConnectors.clear();
+	}
+
+	public Set<ConnectorModel> DiagramModel.getSelectedConnectors() {
+		return selectedConnectors;
 	}
 
 	private Point ShapeModel.connectingPoint = new Point(0, 0);
@@ -61,9 +84,16 @@ public aspect Connector {
 			if (source instanceof OvalModel) p1 = Intersector.intersectOval(p2, p1, source.getBounds());
 			else p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
 			gc.drawLine(p1.x, p1.y, p2.x, p2.y);
-
+			
 			ConnectorEndPainter.paintConnectorEnd(p1, p2, connector.getSinkEnd(), connector.getEndSize(), gc);
 			ConnectorEndPainter.paintConnectorEnd(p2, p1, connector.getSourceEnd(), connector.getEndSize(), gc);
+			
+			connector.setBounds(new Rectangle(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y), Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)));
+			
+			if (connector.isSelected()) {
+				gc.setBackground(Display.getCurrent().getSystemColor((SWT.COLOR_DARK_GRAY)));
+				gc.fillRectangle((p1.x + p2.x) / 2 - Handle.getSize() / 2, (p1.y + p2.y) / 2 - Handle.getSize() / 2, Handle.getSize(), Handle.getSize());
+			}
 		}
 		for (ShapeModel shape : view.getDiagram().getFigures()) {
 			if (!shape.getConnectingPoint().equals(new Point(0,0)))
@@ -124,5 +154,20 @@ public aspect Connector {
 			if (!diagram.getFigures().contains(connector.getSource())) toRemove.add(connector);
 		}
 		diagram.removeConnectors(toRemove);
+	}
+
+	pointcut mouseDown(Event event) : 
+		call (void DiagramController.mouseDown(Event)) && args(event);
+
+	after(Event event) : mouseDown(event){
+		DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
+		if (diagram.getSelected().size()!=0) diagram.unselectAllConnectors();
+		if ((event.stateMask & SWT.CTRL) == 0) diagram.unselectAllConnectors();
+		for (ConnectorModel connector : diagram.getConnectors()) {
+			if (connector.contains(event.x, event.y)) {
+				diagram.toggleConnectorSelected(connector);
+				diagram.unselectAll();
+			}
+		}
 	}
 }

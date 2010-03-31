@@ -107,24 +107,4 @@ public aspect ConnectorLineStyle{
 		});
 	}
 
-	// Update Line Editor
-	
-	pointcut diagramChanged(DiagramModel diagram) :
-		call (void DiagramModel.diagramChanged()) &&
-		target(diagram);
-	
-	after(DiagramModel diagram) : diagramChanged(diagram){
-		int lineStyle = -1;
-		solidButton.setSelection(false);
-		dashedButton.setSelection(false);
-		dottedButton.setSelection(false);
-		for (ShapeModel shape : diagram.getSelected()) {
-			if (lineStyle == -1) lineStyle = shape.getLineStyle();
-			else if (lineStyle != shape.getLineStyle()) return;
-		}
-		if (lineStyle == SWT.LINE_SOLID) solidButton.setSelection(true);
-		if (lineStyle == SWT.LINE_DASH) dashedButton.setSelection(true);
-		if (lineStyle == SWT.LINE_DOT) dottedButton.setSelection(true);
-	}	
-
 }

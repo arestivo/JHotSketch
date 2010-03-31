@@ -19,7 +19,8 @@ public class ConnectorModel{
 	public enum END {NONE, HOLLOWARROW, FILLEDARROW, SIMPLEARROW, HOLLOWSQUARE, FILLEDSQUARE, HOLLOWCIRCLE, FILLEDCIRCLE};
 	private END sourceEnd;
 	private END sinkEnd;
-	private int endSize = 10;
+	private int sourceEndSize = 10;
+	private int sinkEndSize = 10;
 	private boolean selected = false;
 	private Rectangle bounds;
 	
@@ -29,7 +30,7 @@ public class ConnectorModel{
 		this.source = source;
 		this.sink = sink;
 		this.sourceEnd = END.FILLEDSQUARE;
-		this.sinkEnd = END.FILLEDARROW;
+		this.sinkEnd = END.SIMPLEARROW;
 	}
 	
 	public void setSource(ShapeModel source) {
@@ -62,14 +63,6 @@ public class ConnectorModel{
 
 	public END getSinkEnd() {
 		return sinkEnd;
-	}
-
-	public void setEndSize(int endSize) {
-		this.endSize = endSize;
-	}
-
-	public int getEndSize() {
-		return endSize;
 	}
 
 	@Override
@@ -114,5 +107,21 @@ public class ConnectorModel{
 
 	public void removeObserver(ConnectorObserver observer) {
 		observers.remove(observer);
+	}
+
+	public void setSourceEndSize(int sourceEndSize) {
+		this.sourceEndSize = sourceEndSize;
+	}
+
+	public int getSourceEndSize() {
+		return sourceEndSize;
+	}
+
+	public void setSinkEndSize(int sinkEndSize) {
+		this.sinkEndSize = sinkEndSize;
+	}
+
+	public int getSinkEndSize() {
+		return sinkEndSize;
 	}
 }

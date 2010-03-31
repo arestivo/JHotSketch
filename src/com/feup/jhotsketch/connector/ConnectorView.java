@@ -31,8 +31,8 @@ public class ConnectorView {
 		else p1 = Intersector.intersectRectangle(p2, p1, source.getBounds());
 		gc.drawLine(p1.x, p1.y, p2.x, p2.y);
 		
-		paintConnectorEnd(p1, p2, connector.getSinkEnd(), connector.getEndSize(), gc);
-		paintConnectorEnd(p2, p1, connector.getSourceEnd(), connector.getEndSize(), gc);
+		paintConnectorEnd(p1, p2, connector.getSinkEnd(), connector.getSinkEndSize(), gc);
+		paintConnectorEnd(p2, p1, connector.getSourceEnd(), connector.getSourceEndSize(), gc);
 		
 		connector.setBounds(new Rectangle(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y), Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)));
 		
@@ -51,11 +51,13 @@ public class ConnectorView {
 		if (end.equals(ConnectorModel.END.FILLEDCIRCLE)) {
 			gc.fillOval(halfbase.x - size / 2, halfbase.y - size / 2, size, size);
 		}
+		
 		if (end.equals(ConnectorModel.END.HOLLOWCIRCLE)) {
 			gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 			gc.fillOval(halfbase.x - size / 2, halfbase.y - size / 2, size, size);
 			gc.drawOval(halfbase.x - size / 2, halfbase.y - size / 2, size, size);
 		}
+		
 		if (end.equals(ConnectorModel.END.FILLEDSQUARE)) {
 			gc.fillPolygon(
 					new int[] {
@@ -64,6 +66,7 @@ public class ConnectorView {
 							(int)(p2.x - normal.getX() * size / 2),(int)(p2.y - normal.getY() * size / 2), 
 							(int)(base.x - normal.getX() * size / 2),(int)(base.y - normal.getY() * size / 2)});
 		}
+		
 		if (end.equals(ConnectorModel.END.HOLLOWSQUARE)) {
 			gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 			gc.fillPolygon(
@@ -79,11 +82,13 @@ public class ConnectorView {
 							(int)(p2.x - normal.getX() * size / 2),(int)(p2.y - normal.getY() * size / 2), 
 							(int)(base.x - normal.getX() * size / 2),(int)(base.y - normal.getY() * size / 2)});
 		}
+	
 		if (end.equals(ConnectorModel.END.FILLEDARROW)) {
 			gc.fillPolygon(new int[] {(int)(base.x + normal.getX() * size / 2),(int)(base.y + normal.getY() * size / 2), 
 					p2.x, p2.y, 
 					(int)(base.x - normal.getX() * size / 2),(int)(base.y - normal.getY() * size / 2)});
 		}
+
 		if (end.equals(ConnectorModel.END.HOLLOWARROW)) {
 			gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 			gc.fillPolygon(new int[] {(int)(base.x + normal.getX() * size / 2),(int)(base.y + normal.getY() * size / 2), 
@@ -93,6 +98,11 @@ public class ConnectorView {
 					p2.x, p2.y, 
 					(int)(base.x - normal.getX() * size / 2),(int)(base.y - normal.getY() * size / 2)});
 		}
-	}
+
+		if (end.equals(ConnectorModel.END.SIMPLEARROW)) {
+			gc.drawLine(p2.x, p2.y, (int)(base.x + normal.getX() * size / 2),(int)(base.y + normal.getY() * size / 2));
+			gc.drawLine(p2.x, p2.y, (int)(base.x - normal.getX() * size / 2),(int)(base.y - normal.getY() * size / 2));
+		}
+}
 	
 }

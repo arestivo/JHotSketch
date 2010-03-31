@@ -7,11 +7,13 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
+import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.geometry.Intersector;
 import com.feup.jhotsketch.model.Handle;
 import com.feup.jhotsketch.model.OvalModel;
 import com.feup.jhotsketch.model.ShapeModel;
 
+@PackageName("Connector")
 public class ConnectorView {
 	public static void drawConnector(GC gc, ConnectorModel connector) {
 		ShapeModel source = connector.getSource();

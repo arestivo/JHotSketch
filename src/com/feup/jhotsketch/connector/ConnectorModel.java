@@ -85,6 +85,10 @@ public class ConnectorModel{
 		Point p2 = sink.getCenter();
 		Line2D line = new Line2D.Double(p1.x, p1.y, p2.x, p2.y);
 		double dist = line.ptLineDist(new Point2D.Double(x, y));
+		
+		if (bounds.width < 5) {bounds.x -= 5; bounds.width += 10;}
+		if (bounds.height < 5) {bounds.y -= 5; bounds.height += 10;}
+		
 		if (dist < 5 && bounds.contains(x, y)) return true;
 		return false;
 	}

@@ -32,6 +32,7 @@ public aspect ConnectorProperties {
 		ConnectorLineStyle.aspectOf().createLineStyleControls(lineComposite);
 		ConnectorColor.aspectOf().createLineColorControls(lineComposite);
 		ConnectorArrowSize.aspectOf().createArrowControls(lineComposite);
+		ConnectorEndStyle.aspectOf().createEndControls(lineComposite);
 		
 		shapeTI.setControl(lineComposite);	
 		lineComposite.pack();

@@ -16,7 +16,7 @@ public class ConnectorModel{
 	private ShapeModel source;
 	private ShapeModel sink;
 	
-	public enum END {NONE, HOLLOWARROW, FILLEDARROW, SIMPLEARROW, HOLLOWSQUARE, FILLEDSQUARE, HOLLOWCIRCLE, FILLEDCIRCLE};
+	public enum END {UNMATCHED, UNKNOWN, NONE, HOLLOWARROW, FILLEDARROW, SIMPLEARROW, HOLLOWSQUARE, FILLEDSQUARE, HOLLOWCIRCLE, FILLEDCIRCLE};
 	private END sourceEnd;
 	private END sinkEnd;
 	private int sourceEndSize = 10;

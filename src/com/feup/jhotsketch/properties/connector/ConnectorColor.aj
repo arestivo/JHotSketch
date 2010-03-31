@@ -20,6 +20,7 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.connector.ConnectorModel;
 import com.feup.jhotsketch.connector.ConnectorView;
+import com.feup.jhotsketch.model.DiagramModel;
 
 @PackageName("Properties.Connector")
 public aspect ConnectorColor{
@@ -85,7 +86,7 @@ public aspect ConnectorColor{
 
 	// Update Line Editor
 	
-/*	pointcut diagramChanged(DiagramModel diagram) :
+	pointcut diagramChanged(DiagramModel diagram) :
 		call (void DiagramModel.diagramChanged()) &&
 		target(diagram);
 	
@@ -93,14 +94,13 @@ public aspect ConnectorColor{
 		Color lineColor = null;
 		colorButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		colorButton.setImage(new Image(Display.getCurrent(), "icons/null.gif"));
-		for (ShapeModel shape : diagram.getSelected()) {
-			if (lineColor == null) lineColor = shape.getLineColor();
-			else if (!lineColor.equals(shape.getLineColor())) return;
+		for (ConnectorModel connector : diagram.getSelectedConnectors()) {
+			if (lineColor == null) lineColor = connector.getLineColor();
+			else if (!lineColor.equals(connector.getLineColor())) return;
 		}
 		if (lineColor != null) {
 			colorButton.setBackground(lineColor);
 			colorButton.setImage(new Image(Display.getCurrent(), "icons/solid.gif"));
 		}
 	}	
-	*/
 }

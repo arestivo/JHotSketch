@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
@@ -43,6 +44,8 @@ public class ConnectorView {
 	}
 
 	public static void paintConnectorEnd(Point p1, Point p2, END end, int size, GC gc) {
+		gc.setLineStyle(SWT.LINE_SOLID);
+		Color originalBackColor = gc.getBackground();
 		Point2D versor = Vectors.getVersor(p1, p2);
 		Point2D normal = new Point2D.Double(-versor.getY(), versor.getX());
 		Point base = new Point((int)(p2.x - versor.getX() * size), (int)(p2.y - versor.getY() * size));
@@ -103,6 +106,8 @@ public class ConnectorView {
 			gc.drawLine(p2.x, p2.y, (int)(base.x + normal.getX() * size / 2),(int)(base.y + normal.getY() * size / 2));
 			gc.drawLine(p2.x, p2.y, (int)(base.x - normal.getX() * size / 2),(int)(base.y - normal.getY() * size / 2));
 		}
+		
+		gc.setBackground(originalBackColor);
 }
 	
 }

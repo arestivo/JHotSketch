@@ -65,7 +65,7 @@ public class JHotSketch {
 		
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.grabExcessHorizontalSpace = false;
-		gd.widthHint = 200;
+		gd.widthHint = 280;
 		folder.setLayoutData(gd);
 	}
 

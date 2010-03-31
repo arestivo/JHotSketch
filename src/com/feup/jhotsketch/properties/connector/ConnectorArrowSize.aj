@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Scale;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.connector.ConnectorModel;
+import com.feup.jhotsketch.model.DiagramModel;
 
 @PackageName("Properties.Connector")
 public aspect ConnectorArrowSize {
@@ -48,10 +49,9 @@ public aspect ConnectorArrowSize {
 			@Override
 			public void handleEvent(Event event) {
 				Set<ConnectorModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelectedConnectors();
-				for (ConnectorModel connector : selected) {
+				for (ConnectorModel connector : selected)
 					connector.setSourceEndSize(scaleSource.getSelection());
-					connector.connectorChanged();
-				}
+				JHotSketch.getInstance().getCurrentDiagram().diagramChanged();
 			}
 		});
 
@@ -68,13 +68,30 @@ public aspect ConnectorArrowSize {
 			@Override
 			public void handleEvent(Event event) {
 				Set<ConnectorModel> selected = JHotSketch.getInstance().getCurrentDiagram().getSelectedConnectors();
-				for (ConnectorModel connector : selected) {
+				for (ConnectorModel connector : selected) 
 					connector.setSinkEndSize(scaleSink.getSelection());
-					connector.connectorChanged();
-				}
+				JHotSketch.getInstance().getCurrentDiagram().diagramChanged();
 			}
 		});
 
 	}
+
+	pointcut diagramChanged(DiagramModel diagram) :
+		call (void DiagramModel.diagramChanged()) &&
+		target(diagram);
+	
+	after(DiagramModel diagram) : diagramChanged(diagram){
+		int sinkSize = -1, sourceSize = -1;
+		scaleSink.setSelection(10);
+		scaleSource.setSelection(10);
+		for (ConnectorModel connector : diagram.getSelectedConnectors()) {
+			if (sinkSize == -1) sinkSize = connector.getSinkEndSize();
+			else if (sinkSize != connector.getSinkEndSize()) sinkSize = -2;
+			if (sourceSize == -1) sourceSize = connector.getSourceEndSize();
+			else if (sourceSize != connector.getSourceEndSize()) sourceSize = -2;
+		}
+		if (sinkSize >= 10) scaleSink.setSelection(sinkSize);
+		if (sourceSize >= 10) scaleSource.setSelection(sourceSize);
+	}	
 
 }

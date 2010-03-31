@@ -19,7 +19,6 @@ import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.connector.ConnectorModel;
 import com.feup.jhotsketch.connector.ConnectorView;
 import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("Properties.Connector")
 public aspect ConnectorLineStyle{
@@ -107,4 +106,23 @@ public aspect ConnectorLineStyle{
 		});
 	}
 
+	pointcut diagramChanged(DiagramModel diagram) :
+		call (void DiagramModel.diagramChanged()) &&
+		target(diagram);
+	
+	after(DiagramModel diagram) : diagramChanged(diagram){
+		int lineStyle = -1;
+		solidButton.setSelection(false);
+		dashedButton.setSelection(false);
+		dottedButton.setSelection(false);
+		for (ConnectorModel connector : diagram.getSelectedConnectors()) {
+			if (lineStyle == -1) lineStyle = connector.getLineStyle();
+			else if (lineStyle != connector.getLineStyle()) return;
+		}
+		if (lineStyle == SWT.LINE_SOLID) solidButton.setSelection(true);
+		if (lineStyle == SWT.LINE_DASH) dashedButton.setSelection(true);
+		if (lineStyle == SWT.LINE_DOT) dottedButton.setSelection(true);
+	}	
+
+	
 }

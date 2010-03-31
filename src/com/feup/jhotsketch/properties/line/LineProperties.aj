@@ -20,7 +20,7 @@ public aspect LineProperties {
 		TabFolder folder = proceed();
 		
 		TabItem line = new TabItem(folder, SWT.NONE);
-		line.setText("Line");
+		line.setText("Shape");
 		
 		Composite lineComposite = new Composite(folder, SWT.NONE);
 		GridLayout layout = new GridLayout(1, true);
@@ -29,6 +29,7 @@ public aspect LineProperties {
 		LineWidth.aspectOf().createLineWidthControls(lineComposite);
 		LineStyle.aspectOf().createLineStyleControls(lineComposite);
 		LineColor.aspectOf().createLineColorControls(lineComposite);
+		FillColor.aspectOf().createFillColorControls(lineComposite);
 		
 		line.setControl(lineComposite);	
 		lineComposite.pack();

@@ -59,10 +59,10 @@ public aspect LineColor{
 		lineColorComposite.setLayout(new GridLayout(2, false));
 
 		GridData gd_label = new GridData(); 
-		gd_label.widthHint = 30;
+		gd_label.widthHint = 60;
 		
 		Label label = new Label(lineColorComposite, SWT.NONE);
-		label.setText("Color");
+		label.setText("Line Color");
 		label.setLayoutData(gd_label);
 
 		colorButton = new Button(lineColorComposite, SWT.PUSH);

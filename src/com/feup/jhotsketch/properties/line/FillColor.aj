@@ -1,4 +1,4 @@
-package com.feup.jhotsketch.properties.fill;
+package com.feup.jhotsketch.properties.line;
 
 import java.util.List; 
 
@@ -95,10 +95,10 @@ public aspect FillColor{
 		fillColorComposite.setLayout(new GridLayout(3, false));
 
 		GridData gd_label = new GridData(); 
-		gd_label.widthHint = 30;
+		gd_label.widthHint = 60;
 		
 		Label label = new Label(fillColorComposite, SWT.NONE);
-		label.setText("Color");
+		label.setText("Fill Color");
 		label.setLayoutData(gd_label);
 
 		colorButton = new Button(fillColorComposite, SWT.PUSH);

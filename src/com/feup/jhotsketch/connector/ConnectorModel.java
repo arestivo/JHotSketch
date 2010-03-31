@@ -3,6 +3,9 @@ package com.feup.jhotsketch.connector;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.swt.graphics.Point;
 
 import com.feup.contribution.aida.annotations.PackageName;
@@ -19,6 +22,8 @@ public class ConnectorModel{
 	private int endSize = 10;
 	private boolean selected = false;
 	private Rectangle bounds;
+	
+	private Set<ConnectorObserver> observers = new HashSet<ConnectorObserver>();
 	
 	public ConnectorModel(ShapeModel source, ShapeModel sink) {
 		this.source = source;
@@ -95,5 +100,19 @@ public class ConnectorModel{
 
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
+	}
+	
+	public void connectorChanged() {
+		for (ConnectorObserver observer : observers) {
+			observer.connectorChanged();
+		}
+	}
+
+	public void addObserver(ConnectorObserver observer) {
+		observers.add(observer);
+	}
+
+	public void removeObserver(ConnectorObserver observer) {
+		observers.remove(observer);
 	}
 }

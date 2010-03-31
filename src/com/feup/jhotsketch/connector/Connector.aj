@@ -21,13 +21,20 @@ import com.feup.jhotsketch.view.DiagramView;
 
 @PackageName("Connector")
 public aspect Connector {
-	private List<ConnectorModel>	DiagramModel.connectors = new LinkedList<ConnectorModel>();
+	private List<ConnectorModel> DiagramModel.connectors = new LinkedList<ConnectorModel>();
 	private Set<ConnectorModel>	DiagramModel.selectedConnectors = new HashSet<ConnectorModel>();
+
+	declare parents: DiagramModel implements ConnectorObserver;
 	
 	public void DiagramModel.addConnector(ConnectorModel connector) {
 		connectors.add(connector);
+		connector.addObserver(this);
 	}
 
+	public void DiagramModel.connectorChanged() {
+		diagramChanged();
+	}
+	
 	public void DiagramModel.removeConnectors(Set<ConnectorModel> toRemove) {
 		connectors.removeAll(toRemove);
 	}

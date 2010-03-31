@@ -34,7 +34,7 @@ public aspect ConnectorColor{
 
 	public void ConnectorModel.setLineColor(Color lineColor){
 		this.lineColor = lineColor;
-//		connectorChanged();
+		connectorChanged();
 	}
 
 	// Apply line color when drawing
@@ -44,6 +44,7 @@ public aspect ConnectorColor{
 	
 	before(GC gc, ConnectorModel connector) : drawConnector(gc, connector) {
 		gc.setForeground(connector.getLineColor());
+		gc.setBackground(connector.getLineColor());
 	}
 	
 	// Create Line Width Editor

@@ -57,13 +57,13 @@ public aspect LineWidth {
 		GridData gd_fill = new GridData(); 
 		gd_fill.grabExcessHorizontalSpace = true;
 		gd_fill.horizontalAlignment = SWT.FILL;
-		gd_fill.widthHint = 200;
+		gd_fill.widthHint = 100;
 
 		GridData gd_label = new GridData(); 
-		gd_label.widthHint = 30;
+		gd_label.widthHint = 60;
 		
 		Label label = new Label(lineWidthComposite, SWT.NONE);
-		label.setText("Width");
+		label.setText("Line Width");
 		label.setLayoutData(gd_label);
 
 		scale = new Scale(lineWidthComposite, SWT.HORIZONTAL);

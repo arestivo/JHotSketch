@@ -59,10 +59,10 @@ public aspect LineStyle{
 		lineStyleComposite.setLayout(new GridLayout(4, false));
 
 		GridData gd_label = new GridData(); 
-		gd_label.widthHint = 30;
+		gd_label.widthHint = 60;
 		
 		Label label = new Label(lineStyleComposite, SWT.NONE);
-		label.setText("Style");
+		label.setText("Line Style");
 		label.setLayoutData(gd_label);
 
 		solidButton = new Button(lineStyleComposite, SWT.TOGGLE);

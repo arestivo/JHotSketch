@@ -15,9 +15,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.w3c.dom.Element;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
+import com.feup.jhotsketch.file.OpenSaveDiagram;
 import com.feup.jhotsketch.groups.GroupModel;
 import com.feup.jhotsketch.model.DiagramModel;
 import com.feup.jhotsketch.model.ShapeModel;
@@ -163,4 +165,23 @@ public aspect ShapeFillColor{
 		if (!(clone instanceof GroupModel))
 		clone.setFillColor(shape.getFillColor());
 	}
+
+	// Save fill color
+	
+	pointcut getXMLNode(ShapeModel shape) :
+		call(Element OpenSaveDiagram.getXMLNode(.., ShapeModel)) && args(.., shape);
+	
+	Element around(ShapeModel shape) : getXMLNode(shape) {
+		Element e = proceed(shape);
+		if (shape.getFillColor() == null) return e;
+		String color = Integer.toHexString(shape.getFillColor().getRGB().red);
+		if (color.length() < 2) color = "0" + color;
+		color += Integer.toHexString(shape.getFillColor().getRGB().green);
+		if (color.length() < 4) color = "0" + color;
+		color += Integer.toHexString(shape.getFillColor().getRGB().blue);
+		if (color.length() < 6) color = "0" + color;
+		e.setAttribute("fillcolor", color);
+		return e;
+	}
+
 }

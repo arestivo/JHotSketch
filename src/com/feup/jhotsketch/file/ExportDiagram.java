@@ -34,5 +34,4 @@ public class ExportDiagram {
 		il.data = new ImageData[] {image.getImageData()};
 		il.save(filename, SWT.IMAGE_PNG);
 	}
-
 }

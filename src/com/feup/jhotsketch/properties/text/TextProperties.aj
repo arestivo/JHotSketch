@@ -11,10 +11,13 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
 import com.feup.jhotsketch.controller.DiagramController;
+import com.feup.jhotsketch.file.OpenSaveDiagram;
 import com.feup.jhotsketch.model.ShapeModel;
 import com.feup.jhotsketch.view.ShapeView;
 
@@ -104,4 +107,28 @@ public aspect TextProperties {
 		clone.setText(shape.getText());
 	}
 
+	// Save shape text
+	
+	pointcut getXMLNode(ShapeModel shape) :
+		call(Element OpenSaveDiagram.getXMLNode(.., ShapeModel)) && args(.., shape);
+	
+	Element around(ShapeModel shape) : getXMLNode(shape) {
+		Element e = proceed(shape);
+		e.setAttribute("text", "" + shape.getText());
+		return e;
+	}	
+
+	// Load shape text
+	
+	pointcut createShapeFromNode(Node node) :
+		call (ShapeModel OpenSaveDiagram.createShapeFromNode(.., Node)) && args(.., node);
+	
+	after(Node node) returning (ShapeModel shape) : createShapeFromNode(node) {
+		if (node.getAttributes().getNamedItem("text")!=null) {
+			String text = node.getAttributes().getNamedItem("text").getNodeValue();
+			shape.setText(text);
+		}
+	}
+
+	
 }

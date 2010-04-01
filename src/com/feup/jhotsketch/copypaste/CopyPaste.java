@@ -31,6 +31,7 @@ public class CopyPaste {
 		for (ConnectorModel connector : diagram.getConnectors())
 			if (clipboard.contains(connector.getSource()) || clipboard.contains(connector.getSink()))
 					connectorClipboard.add(connector);
+		diagram.removeConnectors(connectorClipboard);
 		diagram.removeFigures(diagram.getSelected());
 		diagram.diagramChanged();
 	}

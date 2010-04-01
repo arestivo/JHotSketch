@@ -129,7 +129,7 @@ public aspect Connector {
 		}
 	}
 
-	pointcut removeFigure(DiagramModel diagram):
+/*	pointcut removeFigure(DiagramModel diagram):
 		call (void DiagramModel.removeFigure*(..)) && target(diagram);
 		
 	after(DiagramModel diagram) : removeFigure(diagram) {
@@ -139,7 +139,7 @@ public aspect Connector {
 			if (!diagram.getFigures().contains(connector.getSource())) toRemove.add(connector);
 		}
 		diagram.removeConnectors(toRemove);
-	}
+	}*/
 
 	pointcut mouseDown(Event event) : 
 		call (void DiagramController.mouseDown(Event)) && args(event);

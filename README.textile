@@ -7,22 +7,28 @@ h2. Features
 Currently the following features have been implemented:
 
 * Object selection: single and multiple
-* Moving objects
+* Moving and resizing objects
 * Line properties: width, style and color
-* Fill properties
-* Circle and square basic shapes: no creation still
-* Snap to grid (needs some refactoring)
-* Grouping
-* Ungrouping
+* Fill properties: color
+* Oval, rectangle and rounded rectangle shapes
+* Grouping and ungrouping
 * Cut, Copy and Paste
 * Snap to objects features
+* Connectors
+* Connector properties: ends, line style, line color
+* Text on shapes
 
 The next planned features are:
 
-* Object creation (partial)
+* Better object creation
 * Snap to object distances
 * Intelligent paste
-* Object resizing (partial)
+* Group and Multiselection resizing
 * More shapes
-* Connectors
-* Shortcuts (partial)
+* More Shortcuts
+* Connector line width
+* Solve some bugs when grouping and sending to back/front
+* Saving / Loading (partially done)
+* Better export
+* Undo
+* Text properties: color, font, size

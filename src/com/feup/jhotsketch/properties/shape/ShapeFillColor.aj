@@ -1,11 +1,12 @@
 package com.feup.jhotsketch.properties.shape;
 
-import java.util.List; 
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
@@ -182,6 +184,22 @@ public aspect ShapeFillColor{
 		if (color.length() < 6) color = "0" + color;
 		e.setAttribute("fillcolor", color);
 		return e;
+	}
+	
+	// Load fill color
+	
+	pointcut createShapeFromNode(Node node) :
+		call (ShapeModel OpenSaveDiagram.createShapeFromNode(.., Node)) && args(.., node);
+	
+	after(Node node) returning (ShapeModel shape) : createShapeFromNode(node) {
+		if (node.getAttributes().getNamedItem("fillcolor")!=null) {
+			String hex = node.getAttributes().getNamedItem("fillcolor").getNodeValue();
+			int r = Integer.parseInt(hex.substring(0, 2), 16);
+			int g = Integer.parseInt(hex.substring(2, 4), 16);
+			int b = Integer.parseInt(hex.substring(4, 6), 16);
+			Color color = new Color(Display.getCurrent(), new RGB(r, g, b));
+			shape.setFillColor(color);
+		}
 	}
 
 }

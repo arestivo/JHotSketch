@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
@@ -150,4 +151,17 @@ public aspect ShapeLineStyle{
 		e.setAttribute("linestyle", "" + shape.getLineStyle());
 		return e;
 	}	
+	
+	// Load line style
+	
+	pointcut createShapeFromNode(Node node) :
+		call (ShapeModel OpenSaveDiagram.createShapeFromNode(.., Node)) && args(.., node);
+	
+	after(Node node) returning (ShapeModel shape) : createShapeFromNode(node) {
+		if (node.getAttributes().getNamedItem("linestyle")!=null) {
+			int style = new Integer(node.getAttributes().getNamedItem("linestyle").getNodeValue()).intValue();
+			shape.setLineStyle(style);
+		}
+	}
+
 }

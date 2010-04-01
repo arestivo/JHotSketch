@@ -50,7 +50,12 @@ public class OpenSaveDiagram {
 		e.setAttribute("width", ""+shape.getBounds().width);
 		e.setAttribute("height", ""+shape.getBounds().height);
 		if (shape instanceof RectangleModel) e.setAttribute("type", "rectangle");
-		if (shape instanceof RoundedRectangleModel) e.setAttribute("type", "roundedrectangle");
+		if (shape instanceof RoundedRectangleModel) {
+			RoundedRectangleModel rrect = (RoundedRectangleModel) shape;
+			e.setAttribute("type", "roundedrectangle");
+			e.setAttribute("radiusx", "" + rrect.getRadiusX());
+			e.setAttribute("radiusy", "" + rrect.getRadiusY());
+		}
 		if (shape instanceof OvalModel) e.setAttribute("type", "oval");
 		return e;
 	}
@@ -62,17 +67,29 @@ public class OpenSaveDiagram {
 			DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 			for (int i = 0; i < shapes.getLength(); i++) {
 				Node shape = shapes.item(i);
-				String type = shape.getAttributes().getNamedItem("type").getNodeValue();
-				int x = new Integer(shape.getAttributes().getNamedItem("x").getNodeValue()).intValue();
-				int y = new Integer(shape.getAttributes().getNamedItem("y").getNodeValue()).intValue();
-				int width = new Integer(shape.getAttributes().getNamedItem("width").getNodeValue()).intValue();
-				int height = new Integer(shape.getAttributes().getNamedItem("height").getNodeValue()).intValue();
-				if (type.equals("rectangle")) diagram.addFigure(new RectangleModel(x, y, width, height));
-				if (type.equals("oval")) diagram.addFigure(new OvalModel(x, y, width, height));
-				if (type.equals("roundedrectangle")) diagram.addFigure(new RoundedRectangleModel(x, y, width, height));
+				diagram.addFigure(createShapeFromNode(diagram, shape));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
+	}
+
+	private static ShapeModel createShapeFromNode(DiagramModel diagram, Node shape) {
+		String type = shape.getAttributes().getNamedItem("type").getNodeValue();
+		int x = new Integer(shape.getAttributes().getNamedItem("x").getNodeValue()).intValue();
+		int y = new Integer(shape.getAttributes().getNamedItem("y").getNodeValue()).intValue();
+		int width = new Integer(shape.getAttributes().getNamedItem("width").getNodeValue()).intValue();
+		int height = new Integer(shape.getAttributes().getNamedItem("height").getNodeValue()).intValue();
+		if (type.equals("rectangle")) return new RectangleModel(x, y, width, height);
+		if (type.equals("oval")) return new OvalModel(x, y, width, height);
+		if (type.equals("roundedrectangle")) {
+			RoundedRectangleModel rrect = new RoundedRectangleModel(x, y, width, height);
+			int radiusx = new Integer(shape.getAttributes().getNamedItem("radiusx").getNodeValue());
+			int radiusy = new Integer(shape.getAttributes().getNamedItem("radiusy").getNodeValue());
+			rrect.setRadiusX(radiusx);
+			rrect.setRadiusY(radiusy);
+			return rrect;
+		}
+		return null;
 	}
 }

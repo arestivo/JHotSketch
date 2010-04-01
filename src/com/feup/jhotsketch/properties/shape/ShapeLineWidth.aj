@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.application.JHotSketch;
@@ -124,5 +125,18 @@ public aspect ShapeLineWidth {
 		e.setAttribute("linewidth", "" + shape.getLineWidth());
 		return e;
 	}	
+	
+	// Load line width
+	
+	pointcut createShapeFromNode(Node node) :
+		call (ShapeModel OpenSaveDiagram.createShapeFromNode(.., Node)) && args(.., node);
+	
+	after(Node node) returning (ShapeModel shape) : createShapeFromNode(node) {
+		if (node.getAttributes().getNamedItem("linewidth")!=null) {
+			int width = new Integer(node.getAttributes().getNamedItem("linewidth").getNodeValue()).intValue();
+			shape.setLineWidth(width);
+		}
+	}
+
 
 }

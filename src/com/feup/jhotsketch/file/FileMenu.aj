@@ -29,7 +29,7 @@ public aspect FileMenu {
 	    open.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				OpenSaveDiagram.open();
+				OpenSaveDiagram.open(shell);
 			}
 		});
 
@@ -39,7 +39,7 @@ public aspect FileMenu {
 	    save.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				OpenSaveDiagram.save();
+				OpenSaveDiagram.save(shell);
 			}
 		});
 

@@ -8,6 +8,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,7 +26,13 @@ import com.feup.jhotsketch.model.ShapeModel;
 
 @PackageName("File")
 public class OpenSaveDiagram {
-	public static void save() {
+	public static void save(Shell shell) {
+		FileDialog fileDialog = new FileDialog(shell);
+		fileDialog.setFilterExtensions(new String[] {"*.jhs"});
+		fileDialog.setOverwrite(true);
+		String filename = fileDialog.open();
+		if (filename == null) return;
+		if (!filename.endsWith(".jhs")) filename += ".jhs";
 		try {
 			DOMImplementation impl = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
 			Document document = impl.createDocument(null, "diagram", null);
@@ -36,7 +44,7 @@ public class OpenSaveDiagram {
 				sroot.appendChild(e);
 			}
 			Transformer tr = TransformerFactory.newInstance().newTransformer();
-			StreamResult result = new StreamResult(new File("diagram.xml"));
+			StreamResult result = new StreamResult(new File(filename));
 			tr.transform(new DOMSource(document), result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,9 +68,14 @@ public class OpenSaveDiagram {
 		return e;
 	}
 
-	public static void open() {
+	public static void open(Shell shell) {
+		FileDialog fileDialog = new FileDialog(shell);
+		fileDialog.setFilterExtensions(new String[] {"*.jhs"});
+		fileDialog.setOverwrite(true);
+		String filename = fileDialog.open();
+		if (filename == null) return;
 		try {
-			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File("diagram.xml"));
+			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File(filename));
 			NodeList shapes = document.getChildNodes().item(0).getChildNodes().item(0).getChildNodes();
 			DiagramModel diagram = JHotSketch.getInstance().getCurrentDiagram();
 			for (int i = 0; i < shapes.getLength(); i++) {

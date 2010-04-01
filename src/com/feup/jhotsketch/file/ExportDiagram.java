@@ -23,6 +23,7 @@ public class ExportDiagram {
 		fileDialog.setOverwrite(true);
 		String filename = fileDialog.open();
 		if (filename == null) return;
+		if (!filename.endsWith(".png")) filename += ".png";
 		Rectangle bounds = JHotSketch.getInstance().getCurrentDiagram().getSize();
 		Image image = new Image(Display.getCurrent(), bounds.width + 10, bounds.height + 10);
 		GC gc = new GC(image);

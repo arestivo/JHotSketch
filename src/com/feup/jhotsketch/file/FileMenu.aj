@@ -1,16 +1,8 @@
 package com.feup.jhotsketch.file;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Decorations;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -32,28 +24,33 @@ public aspect FileMenu {
 	    Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
 	    fileItem.setMenu(fileMenu);
 
+	    MenuItem open = new MenuItem(fileMenu, SWT.PUSH);
+	    open.setText("Open...");
+	    open.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				OpenSaveDiagram.open();
+			}
+		});
+
+	    MenuItem save = new MenuItem(fileMenu, SWT.PUSH);
+	    save.setText("Save...");
+	    save.setAccelerator(SWT.CONTROL | 'S');
+	    save.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				OpenSaveDiagram.save();
+			}
+		});
+
+	    
 	    MenuItem export = new MenuItem(fileMenu, SWT.PUSH);
 	    export.setText("Export...");
 	    export.addListener(SWT.Selection, new Listener() {
 	    	@Override
 			public void handleEvent(Event event) {
-	    		FileDialog fileDialog = new FileDialog(shell);
-	    		fileDialog.setFilterExtensions(new String[] {"*.png"});
-	    		fileDialog.setOverwrite(true);
-	    		String filename = fileDialog.open();
-	    		if (filename == null) return;
-	    		Rectangle bounds = JHotSketch.getInstance().getCurrentDiagram().getSize();
-	    		Image image = new Image(Display.getCurrent(), bounds.width + 10, bounds.height + 10);
-	    		GC gc = new GC(image);
-	    		Transform tr = new Transform(Display.getCurrent());
-	    		tr.translate(-bounds.x + 5, -bounds.y + 5);
-	    		gc.setTransform(tr);
-	    		JHotSketch.getInstance().getCurrentView().paint(gc,true);
-	    		ImageLoader il = new ImageLoader();
-	    		il.data = new ImageData[] {image.getImageData()};
-	    		il.save(filename, SWT.IMAGE_PNG);
+	    		ExportDiagram.export(shell);
 	    	}
-
 		});
 
 	    MenuItem exit = new MenuItem(fileMenu, SWT.PUSH);

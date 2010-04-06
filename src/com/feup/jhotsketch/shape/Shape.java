@@ -20,6 +20,7 @@ public abstract class Shape {
 	private Color fillColor = null;
 	private int lineWidth = 1;
 	private int lineStyle = SWT.LINE_SOLID;
+	private String text = "";
 	
 	public List<ShapeObserver> observers = new LinkedList<ShapeObserver>();
 	
@@ -125,6 +126,14 @@ public abstract class Shape {
 		setLineColor(other.getLineColor());
 		setLineStyle(other.getLineStyle());
 		setLineWidth(other.getLineWidth());
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getText() {
+		return text;
 	}
 
 }

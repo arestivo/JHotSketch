@@ -126,6 +126,7 @@ public class SnapController {
 				int disth = besth.getPosition() - rectangle.y - rectangle.height / 2;
 				controller.moveSelected(0, disth);
 			}
+			diagramChanged(controller.getDiagram());
 		}
 		bestv = null;
 		besth = null;

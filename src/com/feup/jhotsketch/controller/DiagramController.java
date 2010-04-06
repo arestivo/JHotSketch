@@ -70,6 +70,16 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		}
 	}
 
+	public void forceMoveSelected(int x, int y) {
+		for (Shape shape : selectedShapes) {
+			if (selectedShapes.contains(shape)) {
+				controller = new MoveController(selectedShapes);
+				controller.mouseDown(x, y);
+				return;
+			}
+		}
+	}
+	
 	@Override
 	public void mouseDown(MouseEvent e) {
 		for (Shape shape : selectedShapes) {
@@ -126,29 +136,37 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 
 	@Override
 	public void mouseMove(MouseEvent e) {
+		mouseMove(e.x, e.y);
+	}
+
+	public void mouseMove(int x, int y) {
 		if (controller != null) {
-			controller.mouseMove(e.x, e.y);
+			controller.mouseMove(x, y);
 			controllerChanged();
 		}
 	}
-	
+
 	@Override
 	public void mouseUp(MouseEvent e) {
+		mouseUp(e.x, e.y, e.stateMask);
+	}
+	
+	public void mouseUp(int x, int y, int stateMask) {
 		if (controller instanceof SelectionController) {
-			if ((e.stateMask & SWT.SHIFT) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+			if ((stateMask & SWT.SHIFT) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
 			selectedShapes.addAll(diagram.getShapesIn(((SelectionController)controller).getSelectionRectangle()));
 			selectedConnectors.addAll(diagram.getConnectorsIn(((SelectionController)controller).getSelectionRectangle()));
 		}
 		if (controller instanceof MoveController) {
 			if (!((MoveController)controller).moved()) {
-				List<Shape> found = diagram.getShapesAt(e.x, e.y);
+				List<Shape> found = diagram.getShapesAt(x, y);
 				Shape next = getNextSelection(found);
-				if ((e.stateMask & SWT.CONTROL) == 0) selectedShapes.clear();
+				if ((stateMask & SWT.CONTROL) == 0) selectedShapes.clear();
 				selectedShapes.add(next);
 			}
 		}
 		if (controller instanceof HandleController) {
-			controller.mouseUp(e.x, e.y);
+			controller.mouseUp(x, y);
 		}
 		controllerChanged();
 		controller = null;

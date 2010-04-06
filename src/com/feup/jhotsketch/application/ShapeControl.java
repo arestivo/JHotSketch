@@ -35,10 +35,20 @@ public class ShapeControl extends Canvas{
 		addMouseMoveListener(new MouseMoveListener() {
 			@Override
 			public void mouseMove(MouseEvent e) {
+				Canvas canvas = (Canvas) e.widget;
+				Point d = canvas.toDisplay(e.x, e.y);
+				Point c = Application.getInstance().getActiveEditor().toControl(d.x, d.y);
 				if (clone != null) {
-					Canvas canvas = (Canvas) e.widget;
 					clone.setLocation(Application.getInstance().getShapeCreatorPanel().getLocation().x + getLocation().x + e.x - canvas.getSize().x / 2, Application.getInstance().getShapeCreatorPanel().getLocation().y + canvas.getLocation().y + e.y - canvas.getSize().y / 2);
-				}
+					if (c.x >= 0 && c.y >= 0) {
+						Shape s = shape.clone();
+						s.move(c.x - s.getBounds().width / 2 - 10, c.y - s.getBounds().height / 2 - 10);
+						Application.getInstance().getActiveController().addShape(s);
+						clone.dispose();
+						clone = null;
+						Application.getInstance().getActiveController().forceMoveSelected(c.x, c.y);
+					}
+				} else if (c.x >= 0 && c.y >= 0) Application.getInstance().getActiveController().mouseMove(c.x, c.y);
 			}
 		});
 		
@@ -48,13 +58,15 @@ public class ShapeControl extends Canvas{
 				Canvas canvas = (Canvas) e.widget;
 				Point d = canvas.toDisplay(e.x, e.y);
 				Point c = Application.getInstance().getActiveEditor().toControl(d.x, d.y);
-				if (c.x >= 0 && c.y >= 0) {
-					Shape s = shape.clone();
-					s.move(c.x - s.getBounds().width / 2 - 10, c.y - s.getBounds().height / 2 - 10);
-					Application.getInstance().getActiveController().addShape(s);
-				}
-				clone.dispose();
-				clone = null;
+				if (clone != null) {
+					if (c.x >= 0 && c.y >= 0) {
+						Shape s = shape.clone();
+						s.move(c.x - s.getBounds().width / 2 - 10, c.y - s.getBounds().height / 2 - 10);
+						Application.getInstance().getActiveController().addShape(s);
+					}
+					clone.dispose();
+					clone = null;
+				} else if (c.x >= 0 && c.y >= 0) Application.getInstance().getActiveController().mouseUp(c.x, c.y, 0);
 			}
 			
 			@Override

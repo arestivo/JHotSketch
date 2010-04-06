@@ -3,63 +3,86 @@ package com.feup.jhotsketch.application;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.model.OvalModel;
-import com.feup.jhotsketch.model.RectangleModel;
-import com.feup.jhotsketch.model.RoundedRectangleModel;
-import com.feup.jhotsketch.model.ShapeModel;
-import com.feup.jhotsketch.view.ShapeView;
+import com.feup.jhotsketch.shape.Shape;
 
 @PackageName("Application")
-public class ShapeControl extends Composite{
-	public static int CONTROLWIDTH = 60;
-	public static int CONTROLHEIGHT = 40;
-	public static int PADDING = 5;
-		
-	private ShapeModel model;
+public class ShapeControl extends Canvas{
+	private Shape shape;
+	private ShapeControl clone;
 	
-	public ShapeControl(Composite parent, int style, String type) {
+	public ShapeControl(Composite parent, int style) {
 		super(parent, style);
-		setLayoutData(new RowData(CONTROLWIDTH, CONTROLHEIGHT));
+
 		addPaintListener(new PaintListener() {
-			public void paintControl(PaintEvent event) {
-				paint(event.gc);
+			@Override
+			public void paintControl(PaintEvent e) {
+				paint(e.gc);
 			}
 		});
 
-		if (type.equals("OVAL")) model = new OvalModel(PADDING, PADDING, CONTROLWIDTH - PADDING * 2, CONTROLHEIGHT - PADDING * 2);
-		if (type.equals("RECTANGLE")) model = new RectangleModel(PADDING, PADDING, CONTROLWIDTH - PADDING * 2, CONTROLHEIGHT - PADDING * 2);
-		if (type.equals("ROUNDED")) model = new RoundedRectangleModel(PADDING, PADDING, CONTROLWIDTH - PADDING * 2, CONTROLHEIGHT - PADDING * 2);
+		addMouseMoveListener(new MouseMoveListener() {
+			@Override
+			public void mouseMove(MouseEvent e) {
+				if (clone != null) {
+					Canvas canvas = (Canvas) e.widget;
+					clone.setLocation(Application.getInstance().getShapeCreatorPanel().getLocation().x + getLocation().x + e.x - canvas.getSize().x / 2, Application.getInstance().getShapeCreatorPanel().getLocation().y + canvas.getLocation().y + e.y - canvas.getSize().y / 2);
+				}
+			}
+		});
 		
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
+				Canvas canvas = (Canvas) e.widget;
+				Point d = canvas.toDisplay(e.x, e.y);
+				Point c = Application.getInstance().getActiveEditor().toControl(d.x, d.y);
+				if (c.x >= 0 && c.y >= 0) {
+					Shape s = shape.clone();
+					s.move(c.x - s.getBounds().width / 2 - 10, c.y - s.getBounds().height / 2 - 10);
+					Application.getInstance().getActiveController().addShape(s);
+				}
+				clone.dispose();
+				clone = null;
 			}
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				JHotSketch.getInstance().getCurrentDiagram().addFigure(model.clone());
+				clone = new ShapeControl(Display.getCurrent().getActiveShell(), SWT.NONE);
+				clone.setShape(shape);
+				clone.setBounds(e.x, e.y, 60, 50);
+				Canvas canvas = (Canvas) e.widget;
+				clone.setLocation(Application.getInstance().getShapeCreatorPanel().getLocation().x + getLocation().x + e.x - canvas.getSize().x / 2, Application.getInstance().getShapeCreatorPanel().getLocation().y + canvas.getLocation().y + e.y - canvas.getSize().y / 2);
+				clone.moveAbove(Application.getInstance().getShapeCreatorPanel());
 			}
 			
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {				
+			public void mouseDoubleClick(MouseEvent e) {
 			}
 		});
 	}
-	
+
 	private void paint(GC gc) {
 		gc.setAntialias(SWT.ON);
-		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		gc.fillRectangle(0, 0, CONTROLWIDTH, CONTROLHEIGHT);
-		gc.drawRectangle(0, 0, CONTROLWIDTH, CONTROLHEIGHT);
-		ShapeView.createView(model).draw(model, gc);
+		setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		gc.fillRectangle(0, 0, getSize().x, getSize().y);
+		shape.paint(gc);
 	}
 
+	public void setShape(Shape shape) {
+		this.shape = shape;
+		shape.setLineColor(new Color(Display.getCurrent(), new RGB(30, 144, 255)));
+		shape.setFillColor(new Color(Display.getCurrent(), new RGB(230, 230, 250)));
+	}
 }

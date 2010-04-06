@@ -1,163 +1,296 @@
 package com.feup.jhotsketch.controller;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.model.DiagramModel;
-import com.feup.jhotsketch.model.ShapeModel;
-import com.feup.jhotsketch.model.Handle;
+import com.feup.jhotsketch.connector.Connector;
+import com.feup.jhotsketch.connector.Connector.ENDTYPE;
+import com.feup.jhotsketch.diagram.Diagram;
+import com.feup.jhotsketch.diagram.DiagramObserver;
+import com.feup.jhotsketch.handle.Handle;
+import com.feup.jhotsketch.handle.HandlerFactory;
+import com.feup.jhotsketch.shape.Shape;
 
 @PackageName("Controller")
-public class DiagramController{
-	public enum OPERATION {NONE, SELECT, MOVE, HANDLE} 
-	private OPERATION operation = OPERATION.NONE;
-	
-	private List<ShapeModel> grabbed;
-	private Handle grabbedHandle;
-	
-	private Point lastPoint;
+public class DiagramController implements MouseListener, MouseMoveListener, DiagramObserver {
+	private final Diagram diagram;
+	private List<ControllerObserver> observers = new LinkedList<ControllerObserver>();
 
-	private DiagramModel diagram;
-
-	private boolean moved = false;
-
-	private boolean reselect;
+	private Set<Shape> selectedShapes = new HashSet<Shape>();
+	private Set<Connector> selectedConnectors = new HashSet<Connector>();
 	
-	public DiagramController(DiagramModel diagram) {
-		this.setDiagram(diagram);
+	private ShapeController controller;
+	
+	public DiagramController(Diagram diagram) {
+		this.diagram = diagram;
+		diagram.addDiagramObserver(this);
 	}
 
-	public void mouseDown(Event event) {
-		lastPoint = new Point(event.x, event.y);
-		moved  = false;
-		reselect = false;
-		
-		// Test if event on selected shape handle
-		for (ShapeModel shape : getDiagram().getSelected()) {
-			for (Handle handle : shape.getHandles()) {
-				if (handle.contains(event.x, event.y)) {
-					operation = OPERATION.HANDLE;
-					grabbed = getDiagram().getSelected();
-					grabbedHandle = handle;
+	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		for (Shape shape : selectedShapes) {
+			List<Handle> handles = HandlerFactory.getHandlesFor(shape);
+			for (Handle handle : handles) {
+				if (handle.contains(e.x, e.y)) {
+					controller = new HandleController(handle, this);
+					controller.mouseDown(e.x, e.y);
 					return;
 				}
 			}
 		}
-
-		// Test if event on selected shape
-		for (ShapeModel shape : getDiagram().getSelected()) {
-			if (shape.contains(event.x, event.y)) {
-				operation = OPERATION.MOVE;
-				grabbed = getDiagram().getSelected();
-				reselect  = true;
-				return;
-			}
-		}
 		
-		// Test if event on unselected shape
-		ShapeModel shape = getDiagram().getFigureAt(event.x, event.y);
-		if (shape != null) {
-			if ((event.stateMask & SWT.CTRL) == 0) getDiagram().unselectAll();
-			getDiagram().setSelect(shape);
-			mouseDown(event);
-			return;
-		}
+		List<Shape> foundShapes = diagram.getShapesAt(e.x, e.y);
+		if (foundShapes.size() == 0) {
+			List<Connector> foundConnectors = diagram.getConnectorsAt(e.x, e.y);
+			if (foundConnectors.size() == 0) {
+				controller = new SelectionController();
+				controller.mouseDown(e.x, e.y);
+			} else {
+				if ((e.stateMask & SWT.CONTROL) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+				selectedConnectors.add(foundConnectors.get(0));
+			}
+		} else {
+			
+			// MOVE SELECTED
+			for (Shape shape : foundShapes) {
+				if (selectedShapes.contains(shape)) {
+					controller = new MoveController(selectedShapes);
+					controller.mouseDown(e.x, e.y);
+					return;
+				}
+			}
 
-		// Event on nothing
-		if ((event.stateMask & SWT.SHIFT) == 0) getDiagram().unselectAll();
-		operation = OPERATION.SELECT;
+			// SELECT
+			Shape next = getNextSelection(foundShapes);
+			if ((e.stateMask & SWT.CONTROL) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+			selectedShapes.add(next);
+			controller = new MoveController(selectedShapes);
+			controller.mouseDown(e.x, e.y);
+		}
+		controllerChanged();
 	}
 
-	public void mouseMove(Event event) {
-		moved = true;
-		Point newPoint = new Point(event.x, event.y);
-
-		if (operation == OPERATION.HANDLE) {
-			moveHandles(grabbed, lastPoint, newPoint);
-			lastPoint = newPoint;
+	private Shape getNextSelection(List<Shape> shapes) {
+		Shape found = null;
+		for (Shape shape : shapes) {
+			if (selectedShapes.contains(shape)) found = null;
+			else found = shape;
 		}
-		if (operation == OPERATION.MOVE) {
-			moveFigures(grabbed, lastPoint, newPoint);
-			lastPoint = newPoint;
-		}
-		if (operation == OPERATION.SELECT) {
-			getDiagram().setSelectionRectangle(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
-		}
+		if (found == null) found = shapes.get(0);
+		return found;
 	}
 
-	private void moveHandles(List<ShapeModel> shapes, Point lastPoint, Point newPoint) {
-		int dx = newPoint.x - lastPoint.x;
-		int dy = newPoint.y - lastPoint.y;
-		for (ShapeModel shape : shapes) {
-			getDiagram().moveHandle(shape, dx, dy, grabbedHandle);
+	@Override
+	public void mouseMove(MouseEvent e) {
+		if (controller != null) {
+			controller.mouseMove(e.x, e.y);
+			controllerChanged();
 		}
-		getDiagram().diagramChanged();
 	}
-
-	private void moveFigures(List<ShapeModel> shapes, Point lastPoint, Point newPoint) {
-		int dx = newPoint.x - lastPoint.x;
-		int dy = newPoint.y - lastPoint.y;
-		for (ShapeModel shape : shapes) {
-			getDiagram().moveFigure(shape, dx, dy);
+	
+	@Override
+	public void mouseUp(MouseEvent e) {
+		if (controller instanceof SelectionController) {
+			if ((e.stateMask & SWT.SHIFT) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+			selectedShapes.addAll(diagram.getShapesIn(((SelectionController)controller).getSelectionRectangle()));
+			selectedConnectors.addAll(diagram.getConnectorsIn(((SelectionController)controller).getSelectionRectangle()));
 		}
-		getDiagram().diagramChanged();
-	}
-
-	public void mouseUp(Event event) {
-		if (operation == OPERATION.MOVE) {
-			grabbed = null;
-			if (!moved && reselect && diagram.getSelected().size() == 1) {
-				LinkedList<ShapeModel> shapes = getDiagram().getFiguresAt(event.x, event.y);
-				ShapeModel selected = diagram.getSelected().get(0);
-				int index = shapes.indexOf(selected);
-				if (index == shapes.size() - 1) index = 0; else index++;
-				diagram.unselectAll();
-				diagram.setSelect(shapes.get(index));
+		if (controller instanceof MoveController) {
+			if (!((MoveController)controller).moved()) {
+				List<Shape> found = diagram.getShapesAt(e.x, e.y);
+				Shape next = getNextSelection(found);
+				if ((e.stateMask & SWT.CONTROL) == 0) selectedShapes.clear();
+				selectedShapes.add(next);
 			}
 		}
+		if (controller instanceof HandleController) {
+			controller.mouseUp(e.x, e.y);
+		}
+		controllerChanged();
+		controller = null;
+	}
+	
+	private void controllerChanged() {
+		for (ControllerObserver observer : observers ) {
+			observer.controllerChanged(this);
+		}
+	}
 
-		if (operation == OPERATION.SELECT) {
-			Point newPoint = new Point(event.x, event.y);
-			getDiagram().removeSelectionRectangle();
-			for (ShapeModel shape : getDiagram().getFigures()) {
-				if (shape.inside(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y))
-					getDiagram().setSelect(shape);
+	public void addControllerObserver(ControllerObserver observer) {
+		observers.add(observer);
+	}
+
+	public void removeControllerObserver(ControllerObserver observer) {
+		observers.remove(observer);
+	}
+
+	public void paint(GC gc) {
+		for (Shape shape : selectedShapes) {
+			List<Handle> handles = HandlerFactory.getHandlesFor(shape);
+			for (Handle handle : handles) {
+				handle.paint(gc);
 			}
 		}
-		
-		if (operation == OPERATION.HANDLE) {
-			Point newPoint = new Point(event.x, event.y);
-			dropHandles(grabbed, lastPoint, newPoint);			
+		for (Connector connector : selectedConnectors) {
+			List<Handle> handles = HandlerFactory.getHandlesFor(connector);
+			for (Handle handle : handles) {
+				handle.paint(gc);
+			}
 		}
-		operation = OPERATION.NONE;
+		if (controller != null)	controller.paint(gc);
 	}
 
-	private void dropHandles(List<ShapeModel> shapes, Point lastPoint, Point newPoint) {
-		int dx = newPoint.x - lastPoint.x;
-		int dy = newPoint.y - lastPoint.y;
-		for (ShapeModel shape : shapes) {
-			getDiagram().dropHandle(shape, dx, dy, grabbedHandle);
+	public Set<Shape> getSelectedShapes() {
+		return selectedShapes;
+	}
+
+	public void setSelectedLineStyle(int style) {
+		for (Shape shape : selectedShapes) shape.setLineStyle(style);
+		for (Connector connector : selectedConnectors) connector.setLineStyle(style);
+	}
+
+	public void setSelectedLineWidth(int width) {
+		for (Shape shape : selectedShapes) shape.setLineWidth(width);
+		for (Connector connector : selectedConnectors) connector.setLineWidth(width);
+	}
+
+	public void setSelectedLineColor(Color color) {
+		for (Shape shape : selectedShapes) shape.setLineColor(color);
+		for (Connector connector : selectedConnectors) connector.setLineColor(color);
+	}
+
+	public void setSelectedFillColor(Color color) {
+		for (Shape shape : selectedShapes) shape.setFillColor(color);
+	}
+
+	public Set<Connector> getSelectedConnectors() {
+		return selectedConnectors;
+	}
+
+	public Set<Color> getSelectedLineColors() {
+		Set<Color> lineColors = new HashSet<Color>();
+		for (Shape shape : selectedShapes) lineColors.add(shape.getLineColor());
+		for (Connector connector : selectedConnectors) lineColors.add(connector.getLineColor());
+		return lineColors;
+	}
+
+	public Set<Color> getSelectedFillColors() {
+		Set<Color> fillColors = new HashSet<Color>();
+		for (Shape shape : selectedShapes) fillColors.add(shape.getFillColor());
+		return fillColors;
+	}
+
+	public Set<Integer> getSelectedLineWidths() {
+		Set<Integer> lineWidths = new HashSet<Integer>();
+		for (Shape shape : selectedShapes) lineWidths.add(new Integer(shape.getLineWidth()));
+		for (Connector connector : selectedConnectors) lineWidths.add(new Integer(connector.getLineWidth()));
+		return lineWidths;
+	}
+
+	public Set<Integer> getSelectedLineStyles() {
+		Set<Integer> lineStyles = new HashSet<Integer>();
+		for (Shape shape : selectedShapes) lineStyles.add(new Integer(shape.getLineStyle()));
+		for (Connector connector : selectedConnectors) lineStyles.add(new Integer(connector.getLineStyle()));
+		return lineStyles;
+	}
+
+	@Override
+	public void diagramChanged(Diagram diagram) {
+		controllerChanged();
+	}
+
+	public void selectAll() {
+		selectedConnectors.addAll(diagram.getConnectors());
+		selectedShapes.addAll(diagram.getShapes());
+		controllerChanged();
+	}
+
+	public void removeSelected() {
+		diagram.removeShapes(selectedShapes);
+		diagram.removeConnectors(selectedConnectors);
+		selectedConnectors.clear();
+		selectedShapes.clear();
+		removeOrphanConnectors();
+	}
+	
+	private void removeOrphanConnectors() {
+		Set<Connector> toRemove = new HashSet<Connector>();
+		for (Connector connector : diagram.getConnectors()) {
+			if (diagram.getShapes().contains(connector.getSource()) && diagram.getShapes().contains(connector.getTarget())) continue;
+			toRemove.add(connector);
 		}
-		getDiagram().diagramChanged();
+		diagram.removeConnectors(toRemove);
 	}
 
-	public void setDiagram(DiagramModel diagram) {
-		this.diagram = diagram;
+	public void setSelectedTargetEndSize(int size) {
+		for (Connector connector : selectedConnectors) connector.setTargetEndSize(size);
 	}
 
-	public DiagramModel getDiagram() {
+	public void setSelectedSourceEndSize(int size) {
+		for (Connector connector : selectedConnectors) connector.setSourceEndSize(size);
+	}
+
+	public Set<Integer> getSelectedTargetEndSizes() {
+		Set<Integer> sizes = new HashSet<Integer>();
+		for (Connector connector : selectedConnectors) sizes.add(new Integer(connector.getTargetEndSize()));
+		return sizes;
+	}
+
+	public Set<Integer> getSelectedSourceEndSizes() {
+		Set<Integer> sizes = new HashSet<Integer>();
+		for (Connector connector : selectedConnectors) sizes.add(new Integer(connector.getSourceEndSize()));
+		return sizes;
+	}
+
+	public void setSelectedTargetEndType(ENDTYPE endType) {
+		for (Connector connector : selectedConnectors) connector.setTargetEndType(endType);		
+	}
+
+	public void setSelectedSourceEndType(ENDTYPE endType) {
+		for (Connector connector : selectedConnectors) connector.setSourceEndType(endType);		
+	}
+
+	public Set<ENDTYPE> getSelectedSourceEndTypes() {
+		Set<ENDTYPE> types = new HashSet<ENDTYPE>();
+		for (Connector connector : selectedConnectors) types.add(connector.getSourceEndType());
+		return types;
+	}
+
+	public Set<ENDTYPE> getSelectedTargetEndTypes() {
+		Set<ENDTYPE> types = new HashSet<ENDTYPE>();
+		for (Connector connector : selectedConnectors) types.add(connector.getTargetEndType());
+		return types;
+	}
+
+	public void addShape(Shape shape) {
+		diagram.addShape(shape);
+		selectedShapes.clear();
+		selectedConnectors.clear();
+		selectedShapes.add(shape);
+	}
+
+	public Diagram getDiagram() {
 		return diagram;
 	}
 
-	public OPERATION getOperation() {
-		return operation;
-	}
-
-	public void mouseDoubleClick(Event event) {
+	public void addConnector(Connector connector) {
+		diagram.addConnector(connector);
+		selectedShapes.clear();
+		selectedConnectors.clear();
+		selectedConnectors.add(connector);		
 	}
 }

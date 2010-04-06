@@ -4,5 +4,5 @@ import com.feup.contribution.aida.annotations.PackageName;
 
 @PackageName("Connector")
 public interface ConnectorObserver {
-	void connectorChanged();
+	public void connectorChanged(Connector connector);
 }

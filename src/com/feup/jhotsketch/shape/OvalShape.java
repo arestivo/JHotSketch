@@ -18,6 +18,7 @@ public class OvalShape extends Shape{
 		super.paint(gc);
 		if (getFillColor() != null) gc.fillOval(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
 		gc.drawOval(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+		drawText(gc);
 	}
 
 	@Override

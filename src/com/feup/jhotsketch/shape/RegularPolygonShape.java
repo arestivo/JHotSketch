@@ -42,6 +42,7 @@ public class RegularPolygonShape extends Shape{
 		
 		if (getFillColor() != null) gc.fillPolygon(points);
 		gc.drawPolygon(points);	
+		drawText(gc);
 	}
 
 	@Override

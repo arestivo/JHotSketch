@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
@@ -20,6 +21,8 @@ public abstract class Shape {
 	private Color fillColor = null;
 	private int lineWidth = 1;
 	private int lineStyle = SWT.LINE_SOLID;
+
+	private Color textColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private String text = "";
 	
 	public List<ShapeObserver> observers = new LinkedList<ShapeObserver>();
@@ -79,6 +82,12 @@ public abstract class Shape {
 		gc.setForeground(lineColor);
 		gc.setLineStyle(lineStyle);
 		if (fillColor != null) gc.setBackground(fillColor);
+	}
+	
+	protected void drawText(GC gc) {
+		gc.setForeground(textColor);
+		Point size = gc.textExtent(text);
+		gc.drawText(text, getBounds().x + getBounds().width / 2 - size.x / 2, getBounds().y + getBounds().height / 2 - size.y / 2);
 	}
 	
 	public Rectangle getBounds() {

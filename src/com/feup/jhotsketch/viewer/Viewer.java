@@ -42,6 +42,7 @@ public class Viewer extends Composite implements DiagramObserver, ControllerObse
 
 	private void paint(GC gc) {
 		gc.setAntialias(SWT.ON);
+		gc.setTextAntialias(SWT.ON);
 		getDiagram().paint(gc);
 		getController().paint(gc);
 	}

@@ -15,6 +15,7 @@ public class RectangleShape extends Shape{
 		super.paint(gc);
 		if (getFillColor() != null) gc.fillRectangle(getBounds());
 		gc.drawRectangle(getBounds());
+		drawText(gc);
 	}
 
 	@Override

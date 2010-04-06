@@ -18,6 +18,7 @@ public class RoundedRectangleShape extends Shape{
 		super.paint(gc);
 		if (getFillColor() != null) gc.fillRoundRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height, radiusx, radiusy);
 		gc.drawRoundRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height, radiusx, radiusy);
+		drawText(gc);
 	}
 
 	@Override

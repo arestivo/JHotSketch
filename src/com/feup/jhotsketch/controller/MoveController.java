@@ -45,4 +45,7 @@ public class MoveController implements ShapeController{
 	public void paint(GC gc) {		
 	}
 
+	public Set<Shape> getShapes() {
+		return shapes;
+	}
 }

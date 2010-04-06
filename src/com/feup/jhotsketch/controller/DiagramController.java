@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.connector.Connector;
@@ -38,6 +42,32 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
+		Set<Shape> selected = getSelectedShapes();
+		if (selected.size() != 1) return;
+		for (Shape shape : selected) {
+			final Text editor = new Text((Composite)e.getSource(), SWT.SINGLE);
+			int width = Math.max(shape.getBounds().width, 100);
+			editor.setSize(width, 20);
+			editor.setLocation(shape.getBounds().x + shape.getBounds().width / 2 - width / 2, shape.getBounds().y + shape.getBounds().height / 2 - 10);
+			editor.setData(shape);
+			editor.setText(shape.getText());
+			editor.setFocus();
+						
+			editor.addKeyListener(new KeyListener() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.keyCode == 13) {
+						Shape shape = (Shape) editor.getData();
+						shape.setText(editor.getText());
+						editor.dispose();
+					}
+				}
+			});
+		}
 	}
 
 	@Override
@@ -124,7 +154,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		controller = null;
 	}
 	
-	private void controllerChanged() {
+	public void controllerChanged() {
 		for (ControllerObserver observer : observers ) {
 			observer.controllerChanged(this);
 		}
@@ -292,5 +322,14 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		selectedShapes.clear();
 		selectedConnectors.clear();
 		selectedConnectors.add(connector);		
+	}
+
+	public void moveSelected(int dx, int dy) {
+		for (Shape shape : selectedShapes)
+			shape.move(dx, dy);
+	}
+
+	public ShapeController getCurrentController() {
+		return controller;
 	}
 }

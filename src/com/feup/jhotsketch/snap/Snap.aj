@@ -36,21 +36,23 @@ public aspect Snap {
 		call (Diagram.new(..));
 	
 	after() returning (Diagram diagram) : newDiagram() {
-		SnapController.getInstance().createSnapLines(diagram);
+		if (snapToObject) 
+			SnapController.getInstance().createSnapLines(diagram);
 	}
 
 	pointcut diagramChanged(Diagram diagram) :
 		execution(void Diagram.diagramChanged(..)) && this(diagram) && !cflow(mouseMove(DiagramController));
 	
 	after(Diagram diagram) : diagramChanged(diagram) {
-		SnapController.getInstance().diagramChanged(diagram);
+		if (snapToObject) 
+			SnapController.getInstance().diagramChanged(diagram);
 	}
 		
 	pointcut mouseMove(DiagramController controller) :
 		execution(void DiagramController.mouseMove(..)) && this(controller);
 		
 	after(DiagramController controller) : mouseMove(controller) {
-		if (controller.getCurrentController() instanceof MoveController)
+		if (snapToObject && controller.getCurrentController() instanceof MoveController)
 			SnapController.getInstance().mouseMove(controller);
 	}
 
@@ -58,13 +60,15 @@ public aspect Snap {
 		execution(void DiagramController.mouseUp(..)) && this(controller);
 		
 	after(DiagramController controller) : mouseUp(controller) {
-		SnapController.getInstance().mouseUp(controller);
+		if (snapToObject) 
+			SnapController.getInstance().mouseUp(controller);
 	}
 	
 	pointcut diagramPaint(Diagram diagram, GC gc) :
 		call (void Diagram.paint(GC)) && args(gc) && target(diagram);
 
 	after(Diagram diagram, GC gc) : diagramPaint(diagram, gc) {
-		SnapController.getInstance().paint(diagram, gc);
+		if (snapToObject) 
+			SnapController.getInstance().paint(diagram, gc);
 	}
 }

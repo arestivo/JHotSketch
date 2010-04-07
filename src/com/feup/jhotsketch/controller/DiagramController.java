@@ -70,14 +70,15 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		}
 	}
 
-	public void startMoveSelected(int x, int y) {
+	public boolean startMoveSelected(int x, int y) {
 		for (Shape shape : selectedShapes) {
 			if (selectedShapes.contains(shape)) {
 				controller = new MoveController(selectedShapes);
 				controller.mouseDown(x, y);
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	@Override
@@ -106,7 +107,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		} else {
 			
 			// MOVE SELECTED
-			startMoveSelected(e.x, e.y);
+			if (startMoveSelected(e.x, e.y)) return;
 			
 			// SELECT
 			Shape next = getNextSelection(foundShapes);

@@ -25,6 +25,7 @@ public aspect FileMenu {
 
 	    MenuItem newd = new MenuItem(fileMenu, SWT.PUSH);
 	    newd.setText("New");
+	    newd.setAccelerator(SWT.CONTROL | 'N');
 	    newd.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {

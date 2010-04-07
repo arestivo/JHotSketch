@@ -70,7 +70,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		}
 	}
 
-	public void forceMoveSelected(int x, int y) {
+	public void startMoveSelected(int x, int y) {
 		for (Shape shape : selectedShapes) {
 			if (selectedShapes.contains(shape)) {
 				controller = new MoveController(selectedShapes);
@@ -106,14 +106,8 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		} else {
 			
 			// MOVE SELECTED
-			for (Shape shape : foundShapes) {
-				if (selectedShapes.contains(shape)) {
-					controller = new MoveController(selectedShapes);
-					controller.mouseDown(e.x, e.y);
-					return;
-				}
-			}
-
+			startMoveSelected(e.x, e.y);
+			
 			// SELECT
 			Shape next = getNextSelection(foundShapes);
 			if ((e.stateMask & SWT.CONTROL) == 0) {selectedConnectors.clear(); selectedShapes.clear();}

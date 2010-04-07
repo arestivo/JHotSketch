@@ -111,8 +111,8 @@ public class Connector {
 	}
 
 	private Point2D getIntersectionPoint(Shape shape1, Shape shape2) {
-		Point2D p1 = new Point2D.Double(shape1.getBounds().x + shape1.getBounds().width / 2, shape1.getBounds().y + shape1.getBounds().height / 2);
-		Point2D p2 = new Point2D.Double(shape2.getBounds().x + shape2.getBounds().width / 2, shape2.getBounds().y + shape2.getBounds().height / 2);
+		Point2D p1 = new Point2D.Double(shape1.getBounds2D().getX() + shape1.getBounds2D().getWidth() / 2, shape1.getBounds2D().getY() + shape1.getBounds2D().getHeight() / 2);
+		Point2D p2 = new Point2D.Double(shape2.getBounds2D().getX() + shape2.getBounds2D().getWidth() / 2, shape2.getBounds2D().getY() + shape2.getBounds2D().getHeight() / 2);
 		return getIntersectionPoint(p1, p2, shape2);
 	}
 

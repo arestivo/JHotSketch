@@ -91,7 +91,7 @@ public abstract class Shape {
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle((int)bounds.getX(), (int)bounds.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+		return new Rectangle((int)getBounds2D().getX(), (int)getBounds2D().getY(), (int)getBounds2D().getWidth(), (int)getBounds2D().getHeight());
 	}
 
 	public boolean contains(int x, int y) {
@@ -100,7 +100,7 @@ public abstract class Shape {
 	}
 
 	public boolean contains(double x, double y) {
-		Rectangle2D rectangle = new Rectangle2D.Double(bounds.getX() - getLineWidth() / 2, bounds.getY() - getLineWidth() / 2, bounds.getWidth() + getLineWidth(), bounds.getHeight() + getLineWidth());
+		Rectangle2D rectangle = new Rectangle2D.Double(getBounds2D().getX() - getLineWidth() / 2, getBounds2D().getY() - getLineWidth() / 2, getBounds2D().getWidth() + getLineWidth(), getBounds2D().getHeight() + getLineWidth());
 		return (rectangle.contains(x, y));
 	}
 

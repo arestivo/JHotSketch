@@ -46,7 +46,7 @@ public class ShapeControl extends Canvas{
 						Application.getInstance().getActiveController().addShape(s);
 						clone.dispose();
 						clone = null;
-						Application.getInstance().getActiveController().forceMoveSelected(c.x, c.y);
+						Application.getInstance().getActiveController().startMoveSelected(c.x, c.y);
 					}
 				} else if (c.x >= 0 && c.y >= 0) Application.getInstance().getActiveController().mouseMove(c.x, c.y);
 			}

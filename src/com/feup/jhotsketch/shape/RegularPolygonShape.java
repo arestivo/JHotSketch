@@ -2,6 +2,8 @@ package com.feup.jhotsketch.shape;
 
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,17 +26,19 @@ public class RegularPolygonShape extends Shape{
 		this.sides = sides;
 		this.startAngle = startAngle;
 	}
-
+	
 	@Override
 	public void paint(GC gc) {
 		super.paint(gc);
 
+		int size = Math.min(getBounds().width, getBounds().height);
+		
 		Point center = new Point(getBounds().x + getBounds().width / 2, getBounds().y + getBounds().height / 2);
 
 		double angle = startAngle;
 		int[] points = new int[sides * 2];
 		for (int i = 0; i < sides; i++) {
-			Point p = new Point((int)(center.x + Math.cos(angle) * getBounds().width / 2), (int)(center.y + Math.sin(angle) * getBounds().width / 2));
+			Point p = new Point((int)(center.x + Math.cos(angle) * getBounds().width / 2), (int)(center.y + Math.sin(angle) * getBounds().height / 2));
 			points[i*2] = p.x;
 			points[i*2 + 1] = p.y;
 			angle += 2 * Math.PI / sides;

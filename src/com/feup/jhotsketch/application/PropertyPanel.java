@@ -41,7 +41,9 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 
 	private Scale targetEndSize;
 	private Scale sourceEndSize;
-	
+
+	private Scale alpha;
+
 	public PropertyPanel(Composite parent, int style) {
 		super(parent, style);	
 		
@@ -58,6 +60,7 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 		
 		createLineColorControl(group);
 		createFillColorControl(group);
+		createAlphaControl(group);
 		createLineWidthControl(group);
 		createLineStyleControl(group);
 		createEndSizeControl(group);
@@ -69,6 +72,22 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 		
 		group.pack();
 		group.setSize(200, group.getSize().y);
+	}
+
+	private void createAlphaControl(Group group) {
+		Label label = new Label(group, SWT.NONE);
+		label.setText("Alpha");
+
+		alpha = new Scale(group, SWT.NONE);
+		alpha.setMinimum(0);
+		alpha.setMaximum(255);
+		alpha.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				int a = alpha.getSelection();
+				currentController.setSelectedAlpha(a);
+			}
+		});
 	}
 
 	private void createEndTypeControl(Composite panel) {
@@ -210,7 +229,6 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 				currentController.setSelectedLineWidth(width);
 			}
 		});
-
 	}
 
 	private void createFillColorControl(final Composite panel) {
@@ -271,6 +289,7 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 		Set<Color> lineColors = currentController.getSelectedLineColors();
 		Set<Color> fillColors = currentController.getSelectedFillColors();
 		Set<Integer> lineWidths = currentController.getSelectedLineWidths();
+		Set<Integer> alphas = currentController.getSelectedAlphas();
 		Set<Integer> lineStyles = currentController.getSelectedLineStyles();
 		Set<Integer> targetEndSizes = currentController.getSelectedTargetEndSizes();
 		Set<Integer> sourceEndSizes = currentController.getSelectedSourceEndSizes();
@@ -297,6 +316,12 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 			lineWidth.setSelection(((Integer)lineWidths.toArray()[0]).intValue());
 		} else {
 			lineWidth.setSelection(1);
+		}
+
+		if (alphas.size() == 1) {
+			alpha.setSelection(((Integer)alphas.toArray()[0]).intValue());
+		} else {
+			alpha.setSelection(1);
 		}
 
 		for (Button button : lineStyle) {

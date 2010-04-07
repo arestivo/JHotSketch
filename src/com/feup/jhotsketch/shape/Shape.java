@@ -21,6 +21,7 @@ public abstract class Shape {
 	private Color fillColor = null;
 	private int lineWidth = 1;
 	private int lineStyle = SWT.LINE_SOLID;
+	private int alpha = 255;
 
 	private Color textColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private String text = "";
@@ -78,6 +79,7 @@ public abstract class Shape {
 	}
 
 	public void paint(GC gc) {
+		gc.setAlpha(alpha);
 		gc.setLineWidth(lineWidth);
 		gc.setForeground(lineColor);
 		gc.setLineStyle(lineStyle);
@@ -143,6 +145,15 @@ public abstract class Shape {
 
 	public String getText() {
 		return text;
+	}
+
+	public void setAlpha(int alpha) {
+		this.alpha = alpha;
+		shapeChanged();
+	}
+
+	public int getAlpha() {
+		return alpha;
 	}
 
 }

@@ -293,6 +293,12 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		return sizes;
 	}
 
+	public Set<Integer> getSelectedAlphas() {
+		Set<Integer> alphas = new HashSet<Integer>();
+		for (Shape shape : selectedShapes) alphas.add(new Integer(shape.getAlpha()));
+		return alphas;
+	}
+	
 	public Set<Integer> getSelectedSourceEndSizes() {
 		Set<Integer> sizes = new HashSet<Integer>();
 		for (Connector connector : selectedConnectors) sizes.add(new Integer(connector.getSourceEndSize()));
@@ -344,5 +350,9 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 
 	public ShapeController getCurrentController() {
 		return controller;
+	}
+
+	public void setSelectedAlpha(int alpha) {
+		for (Shape shape : selectedShapes) shape.setAlpha(alpha);		
 	}
 }

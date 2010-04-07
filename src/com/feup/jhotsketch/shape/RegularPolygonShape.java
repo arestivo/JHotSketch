@@ -28,8 +28,6 @@ public class RegularPolygonShape extends Shape{
 	@Override
 	public void paint(GC gc) {
 		super.paint(gc);
-
-		int size = Math.min(getBounds().width, getBounds().height);
 		
 		Point center = new Point(getBounds().x + getBounds().width / 2, getBounds().y + getBounds().height / 2);
 

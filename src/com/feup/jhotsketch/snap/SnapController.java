@@ -34,11 +34,13 @@ public class SnapController {
 	public void mouseMove(DiagramController controller) {
 		Set<Shape> selected = controller.getSelectedShapes();
 		if (selected.size() == 0) return;
+
 		Rectangle rectangle = null;
 		for (Shape shape : selected) {
 			if (rectangle == null) rectangle = shape.getBounds();
 			else rectangle = rectangle.union(shape.getBounds());
 		}
+		
 		bestv = getBestVerticalSnapline(controller, rectangle, selected);
 		besth = getBestHorizontalSnapline(controller, rectangle, selected);
 	}
@@ -46,6 +48,7 @@ public class SnapController {
 	private SnapLine getBestHorizontalSnapline(DiagramController controller, Rectangle rectangle, Set<Shape> selected) {
 		TreeSet<SnapLine> snaps = hosnaps.get(controller.getDiagram());
 		snaps.subSet(new SnapLine(rectangle.y - SNAPDISTANCE), new SnapLine(rectangle.y + rectangle.height + SNAPDISTANCE));
+
 		int bestDistance = SNAPDISTANCE + 1;
 		SnapLine bestSnap = null;
 		for (SnapLine snap : snaps) {
@@ -55,12 +58,14 @@ public class SnapController {
 				if (distance <= SNAPDISTANCE && distance < bestDistance) {bestDistance = distance; bestSnap = snap;}
 			}
 		}
+		
 		return bestSnap;
 	}
 
 	private SnapLine getBestVerticalSnapline(DiagramController controller, Rectangle rectangle, Set<Shape> selected) {
 		TreeSet<SnapLine> snaps = vosnaps.get(controller.getDiagram());
 		snaps.subSet(new SnapLine(rectangle.x - SNAPDISTANCE), new SnapLine(rectangle.x + rectangle.width + SNAPDISTANCE));
+		
 		int bestDistance = SNAPDISTANCE + 1;
 		SnapLine bestSnap = null;
 		for (SnapLine snap : snaps) {
@@ -70,6 +75,7 @@ public class SnapController {
 				if (distance <= SNAPDISTANCE && distance < bestDistance) {bestDistance = distance; bestSnap = snap;}
 			}
 		}
+		
 		return bestSnap;
 	}
 
@@ -112,6 +118,7 @@ public class SnapController {
 	
 	public void mouseUp(DiagramController controller) {
 		Set<Shape> selected = controller.getSelectedShapes();
+
 		if (selected.size() > 0) {
 			Rectangle rectangle = null;
 			for (Shape shape : selected) {
@@ -128,6 +135,7 @@ public class SnapController {
 			}
 			diagramChanged(controller.getDiagram());
 		}
+
 		bestv = null;
 		besth = null;
 	}

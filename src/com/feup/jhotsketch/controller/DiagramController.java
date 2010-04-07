@@ -71,8 +71,9 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 	}
 
 	public boolean startMoveSelected(int x, int y) {
+		List<Shape> foundShapes = diagram.getShapesAt(x, y);
 		for (Shape shape : selectedShapes) {
-			if (selectedShapes.contains(shape)) {
+			if (foundShapes.contains(shape)) {
 				controller = new MoveController(selectedShapes);
 				controller.mouseDown(x, y);
 				return true;

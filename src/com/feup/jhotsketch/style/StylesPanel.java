@@ -5,10 +5,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 
 import com.feup.contribution.aida.annotations.PackageName;
+import com.feup.jhotsketch.shape.RectangleShape;
+import com.feup.jhotsketch.shape.Shape;
 
 @PackageName("Style")
 public class StylesPanel extends Composite{
@@ -29,8 +31,13 @@ public class StylesPanel extends Composite{
 		gd.verticalAlignment = SWT.FILL;
 		group.setLayoutData(gd);
 		
-		Label teste = new Label(group, SWT.NONE);
-		teste.setText("TESTE");
+		Shape shape = new RectangleShape(6, 6, 14, 34);
+		shape.setFillColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_YELLOW));
+		
+		new StyleControl(group, SWT.NONE).setShape(shape);
+		new StyleControl(group, SWT.NONE).setShape(shape);
+		new StyleControl(group, SWT.NONE).setShape(shape);
+		new StyleControl(group, SWT.NONE).setShape(shape);
 		
 		group.pack();
 	}

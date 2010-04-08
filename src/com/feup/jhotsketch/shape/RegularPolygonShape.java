@@ -69,7 +69,7 @@ public class RegularPolygonShape extends Shape{
 		double angle = startAngle;
 		List<Point2D> points = new LinkedList<Point2D>();
 		for (int i = 0; i < sides; i++) {
-			Point2D p = new Point2D.Double(center.x + Math.cos(angle) * getBounds().width / 2, center.y + Math.sin(angle) * getBounds().width / 2);
+			Point2D p = new Point2D.Double(center.x + Math.cos(angle) * getBounds().width / 2, center.y + Math.sin(angle) * getBounds().height / 2);
 			points.add(p);
 			angle += 2 * Math.PI / sides;
 		}

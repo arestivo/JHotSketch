@@ -10,6 +10,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
@@ -69,17 +70,20 @@ public class Application {
 	}
 
 	private void createRightPanel(Shell shell) {
-		PropertyPanel propertyPanel = new PropertyPanel(shell, SWT.NONE);
+		Composite rightPanel = new Composite(shell, SWT.NONE);
+		rightPanel.setLayout(new GridLayout(1, true));
+		
+		PropertyPanel propertyPanel = new PropertyPanel(rightPanel, SWT.NONE);
 		addApplicationObserver(propertyPanel);
 		propertyPanel.pack();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.grabExcessHorizontalSpace = false;
 		gd.widthHint = 250;
-		propertyPanel.setLayoutData(gd);
+		rightPanel.setLayoutData(gd);
 	}
 
-	private void addApplicationObserver(PropertyPanel observer) {
+	private void addApplicationObserver(ApplicationObserver observer) {
 		observers.add(observer);
 	}
 

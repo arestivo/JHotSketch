@@ -68,10 +68,10 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 
 		GridData gd = new GridData();
 		gd.verticalIndent = 10;
+		gd.horizontalAlignment = SWT.FILL;
 		group.setLayoutData(gd);
 		
 		group.pack();
-		group.setSize(200, group.getSize().y);
 	}
 
 	private void createAlphaControl(Group group) {

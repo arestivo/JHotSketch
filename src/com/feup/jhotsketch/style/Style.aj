@@ -1,6 +1,8 @@
 package com.feup.jhotsketch.style;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.widgets.Composite;
 
 import com.feup.contribution.aida.annotations.PackageName;
@@ -33,5 +35,13 @@ public aspect Style {
 	
 	after(Shape shape) : shapeChanged(shape) {
 		panel.update(Application.getInstance().getActiveEditor().getDiagram());
+	}
+
+	pointcut addShape(Shape shape) :
+		call(void DiagramController.addShape(Shape)) && args(shape) && (this(MouseMoveListener) || this(MouseListener));
+	
+	after(Shape shape) : addShape(shape){
+		if (StylesPanel.getInstance().getSelectedStyle() != null)
+		shape.copyProperties(StylesPanel.getInstance().getSelectedStyle());
 	}
 }

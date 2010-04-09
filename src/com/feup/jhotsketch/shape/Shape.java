@@ -138,6 +138,7 @@ public abstract class Shape {
 	public abstract Shape clone();
 	
 	public void copyProperties(Shape other) {
+		setAlpha(other.getAlpha());
 		setFillColor(other.getFillColor());
 		setLineColor(other.getLineColor());
 		setLineStyle(other.getLineStyle());

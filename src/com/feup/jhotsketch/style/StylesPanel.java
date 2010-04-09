@@ -27,9 +27,15 @@ import com.feup.jhotsketch.viewer.Viewer;
 @PackageName("Style")
 public class StylesPanel extends Composite{
 
-	List<Shape> shapes = new LinkedList<Shape>();
-	Shape selectedStyle = null;
-	Group shapeGroup;
+	private List<Shape> shapes = new LinkedList<Shape>();
+	private Shape selectedStyle = null;
+	private Group shapeGroup;
+	
+	private static StylesPanel instance = null;
+
+	public static StylesPanel getInstance() {
+		return instance;
+	}
 	
 	public StylesPanel(Composite composite, int style) {
 		super(composite, SWT.NONE);
@@ -76,7 +82,7 @@ public class StylesPanel extends Composite{
 						if (!pendingClick) return;
 						pendingClick = false;
 						Shape style = getShape(x, y);
-						selectedStyle = style;
+						setSelectedStyle(style);
 						if (style == null) return;
 						DiagramController controller = Application.getInstance().getActiveController();
 						Diagram diagram = controller.getDiagram();
@@ -107,6 +113,7 @@ public class StylesPanel extends Composite{
 		});
 		
 		pack();
+		instance = this;
 	}
 
 	private Shape getShape(int x, int y) {
@@ -118,8 +125,8 @@ public class StylesPanel extends Composite{
 		for (Shape shape : shapes)
 			shape.paint(gc);
 		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-		if (selectedStyle != null)
-			gc.fillRectangle(selectedStyle.getBounds().x, selectedStyle.getBounds().y + selectedStyle.getBounds().height + 3, selectedStyle.getBounds().width, 3);
+		if (getSelectedStyle() != null)
+			gc.fillRectangle(getSelectedStyle().getBounds().x, getSelectedStyle().getBounds().y + getSelectedStyle().getBounds().height + 3, getSelectedStyle().getBounds().width, 3);
 	}
 
 	public void update(Diagram diagram) {
@@ -141,12 +148,20 @@ public class StylesPanel extends Composite{
 				c++; if (c == 4) {c = 0; l++;}
 			}
 		}
-		if (selectedStyle == null && shapes.size() > 0) selectedStyle = shapes.get(0);
+		if (getSelectedStyle() == null && shapes.size() > 0) setSelectedStyle(shapes.get(0));
 		boolean found = false;
 		for (Shape style : shapes) {
-			if (style.compareStyles(selectedStyle)) found = true;
+			if (style.compareStyles(getSelectedStyle())) found = true;
 		}
-		if (!found && shapes.size() > 0) selectedStyle = shapes.get(0);
+		if (!found && shapes.size() > 0) setSelectedStyle(shapes.get(0));
 		shapeGroup.redraw();
+	}
+
+	private void setSelectedStyle(Shape selectedStyle) {
+		this.selectedStyle = selectedStyle;
+	}
+
+	public Shape getSelectedStyle() {
+		return selectedStyle;
 	}	
 }

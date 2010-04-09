@@ -1,6 +1,5 @@
 package com.feup.jhotsketch.style;
 
-import java.awt.geom.Ellipse2D;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,10 +61,31 @@ public class StylesPanel extends Composite{
 				update(viewer.getDiagram());
 			}
 		});
-		
+
 		shapeGroup.addMouseListener(new MouseListener() {
+			private boolean pendingClick = false;
+
 			@Override
 			public void mouseUp(MouseEvent e) {
+				pendingClick  = true;
+				final int x = e.x; final int y = e.y;
+				Display.getCurrent().timerExec(Display.getCurrent().getDoubleClickTime() + 3, 
+				new Runnable() {
+					@Override
+					public void run() {
+						if (!pendingClick) return;
+						pendingClick = false;
+						Shape style = getShape(x, y);
+						selectedStyle = style;
+						if (style == null) return;
+						DiagramController controller = Application.getInstance().getActiveController();
+						Diagram diagram = controller.getDiagram();
+						controller.clearSelection();
+						for (Shape shape : diagram.getShapes()) 
+							if (shape.compareStyles(style)) controller.selectShape(shape);
+						update(diagram);
+					}
+				});
 			}
 			
 			@Override
@@ -74,20 +94,15 @@ public class StylesPanel extends Composite{
 			
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
+				pendingClick = false;
 				Shape style = getShape(e.x, e.y);
 				if (style == null) return;
 				DiagramController controller = Application.getInstance().getActiveController();
 				Diagram diagram = controller.getDiagram();
 
-				if (new Ellipse2D.Double(style.getBounds().x + style.getBounds().width - 12, style.getBounds().y + 4, 8, 8).contains(e.x, e.y)) {
-					for (Shape shape : controller.getSelectedShapes()) 
-						shape.copyProperties(style);
-					update(diagram);
-				} else { 
-					controller.clearSelection();
-					for (Shape shape : diagram.getShapes()) 
-						if (shape.compareStyles(style)) controller.selectShape(shape);
-				}
+				for (Shape shape : controller.getSelectedShapes()) 
+					shape.copyProperties(style);
+				update(diagram);
 			}
 		});
 		
@@ -100,15 +115,11 @@ public class StylesPanel extends Composite{
 	}
 	
 	protected void paintShapes(GC gc) {
-		for (Shape shape : shapes) {
+		for (Shape shape : shapes)
 			shape.paint(gc);
-			gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));
-			gc.setLineStyle(SWT.LINE_SOLID);
-			gc.setLineWidth(1);
-			gc.fillOval(shape.getBounds().x + shape.getBounds().width - 12, shape.getBounds().y + 4, 8, 8);
-			gc.drawOval(shape.getBounds().x + shape.getBounds().width - 12, shape.getBounds().y + 4, 8, 8);
-		}
+		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		if (selectedStyle != null)
+			gc.fillRectangle(selectedStyle.getBounds().x, selectedStyle.getBounds().y + selectedStyle.getBounds().height + 3, selectedStyle.getBounds().width, 3);
 	}
 
 	public void update(Diagram diagram) {

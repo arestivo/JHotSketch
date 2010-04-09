@@ -1,5 +1,7 @@
 package com.feup.jhotsketch.clipboard;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,15 +50,7 @@ public aspect EditMenu {
 	    cut.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				DiagramController controller = Application.getInstance().getActiveController();				
-				shapeClipboard.clear(); connectorClipboard.clear();
-				for (Shape shape : controller.getSelectedShapes()) {
-					shapeClipboard.add(shape);
-				}
-				for (Connector connector : controller.getSelectedConnectors()) {
-					connectorClipboard.add(connector);
-				}
-				controller.removeSelected();
+				cut();
 			}
 		});
 
@@ -66,9 +60,10 @@ public aspect EditMenu {
 	    copy.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
+				copy();
 			}
-		});
 
+		});
 	    
 	    MenuItem paste = new MenuItem(fileMenu, SWT.PUSH);
 	    paste.setText("Paste");
@@ -76,8 +71,62 @@ public aspect EditMenu {
 	    paste.addListener(SWT.Selection, new Listener() {
 	    	@Override
 			public void handleEvent(Event event) {
+	    		paste();
 	    	}
 		});
 
 	}
+
+	private void cut() {
+		DiagramController controller = Application.getInstance().getActiveController();				
+		copy();
+		controller.removeSelected();
+	}
+	
+	private void copy() {
+		DiagramController controller = Application.getInstance().getActiveController();				
+		shapeClipboard.clear(); connectorClipboard.clear();
+		HashMap<Shape, Shape> clones = new HashMap<Shape, Shape>();
+		for (Shape shape : controller.getSelectedShapes()) {
+			Shape clone = shape.clone();
+			clones.put(shape, clone);
+			shapeClipboard.add(clone);
+		}
+		for (Connector connector : controller.getSelectedConnectors()) {
+			Shape source = clones.get(connector.getSource());
+			Shape target = clones.get(connector.getTarget());
+			if (source == null || target == null) continue;
+
+			Connector clone = connector.clone();
+			clone.setSource(source);
+			clone.setTarget(target);
+			
+			connectorClipboard.add(clone);
+		}
+	}
+	
+	private void paste() {
+		DiagramController controller = Application.getInstance().getActiveController();
+		HashMap<Shape, Shape> clones = new HashMap<Shape, Shape>();
+		Set<Connector> ncontrollers = new HashSet<Connector>();
+		for (Shape shape : shapeClipboard) {
+			shape.move(20, 20);
+			Shape clone = shape.clone();
+			clones.put(shape, clone);
+			controller.addShape(clone);
+		}
+		for (Connector connector : connectorClipboard) {
+			Shape source = clones.get(connector.getSource());
+			Shape target = clones.get(connector.getTarget());
+			if (source == null || target == null) continue;
+
+			Connector clone = connector.clone();
+			clone.setSource(source);
+			clone.setTarget(target);
+			controller.addConnector(clone);
+			ncontrollers.add(clone);
+		}
+		controller.selectMany(clones.values(), ncontrollers);
+	}
+
 }

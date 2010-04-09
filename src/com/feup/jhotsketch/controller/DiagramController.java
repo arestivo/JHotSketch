@@ -1,5 +1,6 @@
 package com.feup.jhotsketch.controller;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -366,5 +367,11 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 
 	public void setSelectedAlpha(int alpha) {
 		for (Shape shape : selectedShapes) shape.setAlpha(alpha);		
+	}
+
+	public void selectMany(Collection<Shape> shapes, Collection<Connector> controllers) {
+		selectedConnectors.addAll(controllers);
+		selectedShapes.addAll(shapes);
+		controllerChanged();
 	}
 }

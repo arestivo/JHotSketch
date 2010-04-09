@@ -225,4 +225,28 @@ public class Connector {
 	public ENDTYPE getSourceEndType() {
 		return sourceEndType;
 	}
+	
+	public Connector clone() {
+		Connector clone = new Connector(source, target);
+		clone.copyProperties(this);
+		return clone;
+	}
+
+	private void copyProperties(Connector other) {
+		setLineColor(other.getLineColor());
+		setLineStyle(other.getLineStyle());
+		setLineWidth(other.getLineWidth());
+		setSourceEndType(other.getSourceEndType());
+		setTargetEndType(other.getTargetEndType());
+		setSourceEndSize(other.getSourceEndSize());
+		setTargetEndSize(other.getTargetEndSize());
+	}
+
+	public void setSource(Shape source) {
+		this.source = source;
+	}
+
+	public void setTarget(Shape target) {
+		this.target = target;
+	}
 }

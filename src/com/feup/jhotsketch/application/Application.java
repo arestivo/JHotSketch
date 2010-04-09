@@ -79,11 +79,10 @@ public class Application {
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.grabExcessHorizontalSpace = false;
-		gd.widthHint = 250;
 		rightPanel.setLayoutData(gd);
 	}
 
-	private void addApplicationObserver(ApplicationObserver observer) {
+	public void addApplicationObserver(ApplicationObserver observer) {
 		observers.add(observer);
 	}
 

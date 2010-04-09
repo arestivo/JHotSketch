@@ -121,6 +121,11 @@ public abstract class Shape {
 		shapeChanged();
 	}
 
+	public void setSize(int w, int h) {
+		bounds.setRect(bounds.getX(), bounds.getY(), w, h);
+		shapeChanged();
+	}
+	
 	public void correctBounds() {
 		if (bounds.getWidth() < 0) bounds.setRect(bounds.getX() + bounds.getWidth(), bounds.getY(), -bounds.getWidth(), bounds.getHeight());
 		if (bounds.getHeight() < 0) bounds.setRect(bounds.getX(), bounds.getY() + bounds.getHeight(), bounds.getWidth(), -bounds.getHeight());
@@ -132,7 +137,7 @@ public abstract class Shape {
 	
 	public abstract Shape clone();
 	
-	protected void copyProperties(Shape other) {
+	public void copyProperties(Shape other) {
 		setFillColor(other.getFillColor());
 		setLineColor(other.getLineColor());
 		setLineStyle(other.getLineStyle());
@@ -155,5 +160,16 @@ public abstract class Shape {
 	public int getAlpha() {
 		return alpha;
 	}
-
+	
+	public boolean compareStyles(Shape shape) {
+		if (getAlpha() != shape.getAlpha()) return false;
+		if (getFillColor() == null) {
+			if (shape.getFillColor() != null) return false;
+		}
+		else if (!getFillColor().equals(shape.getFillColor())) return false;
+		if (!getLineColor().equals(shape.getLineColor())) return false;
+		if (getLineStyle() != shape.getLineStyle()) return false;
+		if (getLineWidth() != shape.getLineWidth()) return false;
+		return true;
+	}
 }

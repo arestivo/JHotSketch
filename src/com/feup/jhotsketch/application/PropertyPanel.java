@@ -47,9 +47,14 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 	public PropertyPanel(Composite parent, int style) {
 		super(parent, style);	
 		
+		GridData gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		gd.horizontalAlignment = SWT.FILL;
+		setLayoutData(gd);
+		
 		setLayout(new GridLayout(1, true));
 		createControls(this);
-		
+				
 		pack();
 	}
 
@@ -67,8 +72,8 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 		createEndTypeControl(group);
 
 		GridData gd = new GridData();
-		gd.verticalIndent = 10;
 		gd.horizontalAlignment = SWT.FILL;
+		gd.grabExcessHorizontalSpace = true;
 		group.setLayoutData(gd);
 		
 		group.pack();

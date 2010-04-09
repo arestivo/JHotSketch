@@ -102,7 +102,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 				controller = new SelectionController();
 				controller.mouseDown(e.x, e.y);
 			} else {
-				if ((e.stateMask & SWT.CONTROL) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+				if ((e.stateMask & SWT.CONTROL) == 0) clearSelection();
 				selectedConnectors.add(foundConnectors.get(0));
 			}
 		} else {
@@ -112,7 +112,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 			
 			// SELECT
 			Shape next = getNextSelection(foundShapes);
-			if ((e.stateMask & SWT.CONTROL) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+			if ((e.stateMask & SWT.CONTROL) == 0) clearSelection();
 			selectedShapes.add(next);
 			controller = new MoveController(selectedShapes);
 			controller.mouseDown(e.x, e.y);
@@ -130,6 +130,11 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		return found;
 	}
 
+	public void selectShape(Shape shape) {
+		selectedShapes.add(shape);
+		controllerChanged();
+	}
+	
 	@Override
 	public void mouseMove(MouseEvent e) {
 		mouseMove(e.x, e.y);
@@ -146,10 +151,16 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 	public void mouseUp(MouseEvent e) {
 		mouseUp(e.x, e.y, e.stateMask);
 	}
+
+	public void clearSelection() {
+		selectedConnectors.clear(); 
+		selectedShapes.clear();
+		controllerChanged();
+	}
 	
 	public void mouseUp(int x, int y, int stateMask) {
 		if (controller instanceof SelectionController) {
-			if ((stateMask & SWT.SHIFT) == 0) {selectedConnectors.clear(); selectedShapes.clear();}
+			if ((stateMask & SWT.SHIFT) == 0) clearSelection();
 			selectedShapes.addAll(diagram.getShapesIn(((SelectionController)controller).getSelectionRectangle()));
 			selectedConnectors.addAll(diagram.getConnectorsIn(((SelectionController)controller).getSelectionRectangle()));
 		}
@@ -157,7 +168,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 			if (!((MoveController)controller).moved()) {
 				List<Shape> found = diagram.getShapesAt(x, y);
 				Shape next = getNextSelection(found);
-				if ((stateMask & SWT.CONTROL) == 0) selectedShapes.clear();
+				if ((stateMask & SWT.CONTROL) == 0) clearSelection();
 				selectedShapes.add(next);
 			}
 		}

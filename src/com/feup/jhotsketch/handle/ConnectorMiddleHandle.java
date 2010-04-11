@@ -9,11 +9,11 @@ import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.connector.Connector;
 
 @PackageName("Handle")
-public class ConnectorHandle extends Handle{
+public class ConnectorMiddleHandle extends Handle{
 
 	private Connector connector;
 	
-	public ConnectorHandle(Connector connector) {
+	public ConnectorMiddleHandle(Connector connector) {
 		this.connector = connector;
 	}
 

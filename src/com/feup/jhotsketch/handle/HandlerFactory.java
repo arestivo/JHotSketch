@@ -29,7 +29,7 @@ public class HandlerFactory {
 
 	public static List<Handle> getHandlesFor(Connector connector) {
 		List<Handle> handles = new LinkedList<Handle>();
-		handles.add(new ConnectorHandle(connector));
+		handles.add(new ConnectorMiddleHandle(connector));
 		return handles;
 	}
 

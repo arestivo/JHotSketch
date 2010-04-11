@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="/home/arestivo/workspace/JHotSketch/release/jhotsketch.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/JHotSketch/jarfile.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" mainClassHandleIdentifier="=JHotSketch/src&lt;com.feup.jhotsketch.application{Application.java[Application" manifestLocation="/JHotSketch/MANIFEST.MF" manifestVersion="1.0" reuseManifest="false" saveManifest="true" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <folder path="/JHotSketch/icons"/>
+        <folder path="/JHotSketch/lib"/>
+        <javaElement handleIdentifier="=JHotSketch/src"/>
+    </selectedElements>
+</jardesc>

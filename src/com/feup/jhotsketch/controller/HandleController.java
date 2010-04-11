@@ -8,6 +8,8 @@ import org.eclipse.swt.graphics.Point;
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.connector.Connector;
 import com.feup.jhotsketch.handle.CenterHandle;
+import com.feup.jhotsketch.handle.ConnectorMiddleHandle;
+import com.feup.jhotsketch.handle.ConnectorPointHandle;
 import com.feup.jhotsketch.handle.Handle;
 import com.feup.jhotsketch.handle.ResizeHandle;
 import com.feup.jhotsketch.shape.Shape;
@@ -33,6 +35,9 @@ public class HandleController implements ShapeController{
 	public void mouseMove(int x, int y) {
 		if (handle instanceof ResizeHandle) resize(x, y);
 		if (handle instanceof CenterHandle) ((CenterHandle)handle).setConnectorLine(x, y);
+		if (handle instanceof ConnectorPointHandle) {
+			((ConnectorPointHandle) handle).getConnector().movePoint(((ConnectorPointHandle) handle).getPosition(),x,y);
+		}
 		lastPoint = new Point(x, y);
 	}
 
@@ -78,5 +83,16 @@ public class HandleController implements ShapeController{
 
 	@Override
 	public void paint(GC gc) {
+	}
+
+	public void doubleClick(int x, int y) {
+		if (handle instanceof ConnectorMiddleHandle) {
+			ConnectorMiddleHandle cmh = (ConnectorMiddleHandle) handle;
+			cmh.getConnector().addPoint(cmh.getPoint(), cmh.getPosition());
+		}
+		if (handle instanceof ConnectorPointHandle) {
+			ConnectorPointHandle cph = (ConnectorPointHandle) handle;
+			cph.getConnector().removePoint(cph.getPosition());
+		}
 	}
 }

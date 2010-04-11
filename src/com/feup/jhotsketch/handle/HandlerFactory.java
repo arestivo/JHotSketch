@@ -1,5 +1,6 @@
 package com.feup.jhotsketch.handle;
 
+import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +30,14 @@ public class HandlerFactory {
 
 	public static List<Handle> getHandlesFor(Connector connector) {
 		List<Handle> handles = new LinkedList<Handle>();
-		handles.add(new ConnectorMiddleHandle(connector));
+		int position = 0;
+		for(Point2D point : connector.getMiddlePoints()) {
+			handles.add(new ConnectorMiddleHandle(connector, point, position++));
+		}
+		position = 0;
+		for(Point2D point : connector.getPoints()) {
+			handles.add(new ConnectorPointHandle(connector, point, position++));
+		}
 		return handles;
 	}
 

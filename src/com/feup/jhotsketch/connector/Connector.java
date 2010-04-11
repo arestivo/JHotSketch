@@ -3,6 +3,9 @@ package com.feup.jhotsketch.connector;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -32,6 +35,8 @@ public class Connector {
 	private ENDTYPE sourceEndType = ENDTYPE.NONE;
 	private ENDTYPE targetEndType = ENDTYPE.NONE;
 
+	private List<Point2D> points = new LinkedList<Point2D>();
+	
 	private Set<ConnectorObserver> observers = new HashSet<ConnectorObserver>();
 	
 	public Connector(Shape source, Shape target) {
@@ -56,13 +61,31 @@ public class Connector {
 		
 		Point2D pt = getIntersectionPoint(source, target);
 		Point2D ps = getIntersectionPoint(target, source);
-		
-		gc.drawLine((int)ps.getX(), (int)ps.getY(), (int)pt.getX(), (int)pt.getY());
-		
+
+		drawLines(gc);		
+				
 		gc.setLineStyle(SWT.LINE_SOLID);
 		
-		paintEnd(gc, targetEndSize, ps, pt, targetEndType);
-		paintEnd(gc, sourceEndSize, pt, ps, sourceEndType);
+		paintEnd(gc, targetEndSize, getLastPointBefore(target), pt, targetEndType);
+		paintEnd(gc, sourceEndSize, getLastPointBefore(source), ps, sourceEndType);
+	}
+
+	private void drawLines(GC gc) {
+		List<Line2D> lines = getLines();
+		for (Line2D line : lines) {
+			gc.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+		}
+	}
+
+	private List<Point2D> augmentedPoints() {
+		Point2D pt = getIntersectionPoint(source, target);
+		Point2D ps = getIntersectionPoint(target, source);
+
+		List<Point2D> aPoints = new LinkedList<Point2D>();
+		aPoints.add(ps);
+		aPoints.addAll(points);
+		aPoints.add(pt);
+		return aPoints;
 	}
 
 	private void paintEnd(GC gc, int endSize, Point2D source, Point2D target, ENDTYPE endType) {
@@ -111,9 +134,19 @@ public class Connector {
 	}
 
 	private Point2D getIntersectionPoint(Shape shape1, Shape shape2) {
-		Point2D p1 = new Point2D.Double(shape1.getBounds2D().getX() + shape1.getBounds2D().getWidth() / 2, shape1.getBounds2D().getY() + shape1.getBounds2D().getHeight() / 2);
+		Point2D p1 = getLastPointBefore(shape2);
 		Point2D p2 = new Point2D.Double(shape2.getBounds2D().getX() + shape2.getBounds2D().getWidth() / 2, shape2.getBounds2D().getY() + shape2.getBounds2D().getHeight() / 2);
 		return getIntersectionPoint(p1, p2, shape2);
+	}
+
+	private Point2D getLastPointBefore(Shape shape) {
+		if (shape.equals(source)) {
+			if (points.size() != 0) return points.get(0);
+			return target.getCenter();
+		} else {
+			if (points.size() != 0) return points.get(points.size() - 1);
+			return source.getCenter();
+		}
 	}
 
 	private Point2D getIntersectionPoint(Point2D p1, Point2D p2, Shape shape) {
@@ -151,14 +184,26 @@ public class Connector {
 	}
 
 	public boolean contains(int x, int y) {
-		Point2D pt = getIntersectionPoint(source, target);
-		Point2D ps = getIntersectionPoint(target, source);
+		List<Line2D> lines = getLines();
+		for (Line2D line : lines)
+			if (getBounds(line).contains(x, y) && 
+			    line.ptLineDist(x, y) < 5) return true;
+		return false;
+	}
 
-		Line2D line = new Line2D.Double(pt, ps);
-				
-		if (!getBounds().contains(x, y)) return false;
-		if (line.ptLineDist(x, y) > 5) return false;
-		return true;
+	private List<Line2D> getLines() {
+		List<Line2D> lines = new LinkedList<Line2D>();
+		ListIterator<Point2D> iterator = augmentedPoints().listIterator();
+		while (iterator.hasNext()) {
+			Point2D p1 = (Point2D) iterator.next();
+			if (iterator.hasNext()) {
+				Point2D p2 = (Point2D) iterator.next();
+				Line2D line = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+				lines.add(line);
+				iterator.previous();
+			}
+		}
+		return lines;
 	}
 
 	public Point2D getCenter() {
@@ -180,13 +225,10 @@ public class Connector {
 		}
 	}
 
-	public Rectangle getBounds() {
-		Point2D pt = getIntersectionPoint(source, target);
-		Point2D ps = getIntersectionPoint(target, source);
-		
-		Rectangle bounds = new Rectangle((int)Math.min(pt.getX(), ps.getX()), (int)Math.min(pt.getY(), (int)ps.getY()), (int)Math.abs(pt.getX() - ps.getX()), (int)Math.abs(pt.getY() - ps.getY()));
-		if (bounds.width < 5) { bounds.x -= 3; bounds.width += 6;}
-		if (bounds.height < 5) { bounds.y -= 3; bounds.height += 6;}
+	public Rectangle getBounds(Line2D line) {
+		Rectangle bounds = new Rectangle((int)Math.min(line.getX1(), line.getX2()), (int)Math.min(line.getY1(), (int)line.getY2()), (int)Math.abs(line.getX1() - line.getX2()), (int)Math.abs(line.getY1() - line.getY2()));
+		bounds.x -= 3; bounds.width += 6;
+		bounds.y -= 3; bounds.height += 6;
 		return bounds;
 	}
 
@@ -248,5 +290,49 @@ public class Connector {
 
 	public void setTarget(Shape target) {
 		this.target = target;
+	}
+
+	public List<Point2D> getMiddlePoints() {
+		List<Point2D> augmentedPoints = augmentedPoints();
+		List<Point2D> mPoints = new LinkedList<Point2D>();
+		ListIterator<Point2D> iterator = augmentedPoints .listIterator();
+		while (iterator.hasNext()) {
+			Point2D p1 = (Point2D) iterator.next();
+			if (iterator.hasNext()) {
+				Point2D p2 = iterator.next();
+				Point2D mp = new Point2D.Double((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2);
+				mPoints.add(mp);
+				iterator.previous();
+			}
+		}	
+		return mPoints;
+	}
+
+	public List<Point2D> getPoints() {
+		return points;
+	}
+
+	public void addPoint(Point2D point, int position) {
+		points.add(position, point);
+	}
+
+	public void removePoint(int position) {
+		points.remove(position);
+	}
+
+	public Rectangle getBounds() {
+		Rectangle bounds = null;
+		List<Line2D> lines = getLines();
+		for (Line2D line : lines) {
+			Rectangle lineBounds = getBounds(line);
+			if (bounds == null) bounds = lineBounds;
+			else bounds = bounds.union(lineBounds);
+		}
+		return bounds;
+	}
+
+	public void movePoint(int position, int x, int y) {
+		points.get(position).setLocation(new Point2D.Double(x, y));
+		
 	}
 }

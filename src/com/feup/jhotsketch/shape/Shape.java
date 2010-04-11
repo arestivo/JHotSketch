@@ -1,5 +1,6 @@
 package com.feup.jhotsketch.shape;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
@@ -172,5 +173,9 @@ public abstract class Shape {
 		if (getLineStyle() != shape.getLineStyle()) return false;
 		if (getLineWidth() != shape.getLineWidth()) return false;
 		return true;
+	}
+
+	public Point2D getCenter() {
+		return new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 	}
 }

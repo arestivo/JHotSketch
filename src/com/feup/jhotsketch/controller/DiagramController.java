@@ -43,9 +43,16 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
-		Set<Shape> selected = getSelectedShapes();
-		if (selected.size() != 1) return;
-		for (Shape shape : selected) {
+		for(Connector connector : getSelectedConnectors()) {
+			List<Handle> handles = HandlerFactory.getHandlesFor(connector);
+			for (Handle handle : handles) {
+				if (handle.contains(e.x, e.y))
+					new HandleController(handle, this).doubleClick(e.x, e.y);
+			}
+		}
+		
+		Set<Shape> selectedShapes = getSelectedShapes();
+		for (Shape shape : selectedShapes) {
 			final Text editor = new Text((Composite)e.getSource(), SWT.SINGLE);
 			int width = Math.max(shape.getBounds().width, 100);
 			editor.setSize(width, 20);
@@ -85,6 +92,16 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 	
 	@Override
 	public void mouseDown(MouseEvent e) {
+		for(Connector connector : getSelectedConnectors()) {
+			List<Handle> handles = HandlerFactory.getHandlesFor(connector);
+			for (Handle handle : handles) {
+				if (handle.contains(e.x, e.y)) {
+					controller = new HandleController(handle, this);
+					controller.mouseDown(e.x, e.y);
+				}
+			}
+		}
+
 		for (Shape shape : selectedShapes) {
 			List<Handle> handles = HandlerFactory.getHandlesFor(shape);
 			for (Handle handle : handles) {

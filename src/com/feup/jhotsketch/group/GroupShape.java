@@ -1,9 +1,10 @@
 package com.feup.jhotsketch.group;
 
 import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -19,7 +20,7 @@ public class GroupShape extends Shape{
 	private static int PADDING = 5;
 	
 	private List<Shape> shapes = new LinkedList<Shape>();
-	private LinkedList<Connector> connectors = new LinkedList<Connector>();
+	private List<Connector> connectors = new LinkedList<Connector>();
 	
 	public GroupShape() {
 		super(0, 0, 0, 0);
@@ -59,14 +60,27 @@ public class GroupShape extends Shape{
 	
 	@Override
 	public Shape clone() {
-		return null;
+		HashMap<Shape, Shape> clones = new HashMap<Shape, Shape>();
+		LinkedList<Connector> conns = new LinkedList<Connector>();
+		GroupShape clone = new GroupShape();
+		for (Shape shape : shapes)
+			clones.put(shape, shape.clone());
+		clone.addShapes(clones.values());
+		for (Connector connector : connectors) {
+			Connector cclone = connector.clone();
+			cclone.setSource(clones.get(connector.getSource()));
+			cclone.setTarget(clones.get(connector.getTarget()));
+			conns.add(cclone);
+		}
+		clone.addConnectors(conns);
+		return clone;
 	}
 
-	public void addShapes(Set<Shape> shapes){
+	public void addShapes(Collection<Shape> shapes){
 		this.shapes.addAll(shapes);
 	}
 
-	public void addConnectors(Set<Connector> connectors){
+	public void addConnectors(Collection<Connector> connectors){
 		this.connectors.addAll(connectors);
 	}
 

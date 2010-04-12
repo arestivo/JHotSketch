@@ -6,6 +6,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
 import com.feup.contribution.aida.annotations.PackageName;
+import com.feup.jhotsketch.application.Application;
+import com.feup.jhotsketch.connector.Connector;
 import com.feup.jhotsketch.shape.Shape;
 
 @PackageName("Controller")
@@ -28,6 +30,10 @@ public class MoveController implements ShapeController{
 	public void mouseMove(int x, int y) {
 		for (Shape shape : shapes) {
 			shape.move(x - lastPoint.x, y - lastPoint.y);
+		}
+		for (Connector connector : Application.getInstance().getActiveController().getDiagram().getConnectors()) {
+			if (shapes.contains(connector.getSource()) && shapes.contains(connector.getTarget()))
+			connector.move(x - lastPoint.x, y - lastPoint.y);
 		}
 		lastPoint = new Point(x, y);
 		moved = true;

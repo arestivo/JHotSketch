@@ -361,4 +361,10 @@ public class Connector {
 		if (getTargetEndType() != other.getTargetEndType()) return false;
 		return true;
 	}
+
+	public void move(int dx, int dy) {
+		for (Point2D point : points) {
+			point.setLocation(new Point2D.Double(point.getX() + dx, point.getY() + dy));
+		}
+	}
 }

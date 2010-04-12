@@ -21,6 +21,7 @@ import com.feup.jhotsketch.shape.Shape;
 @PackageName("Connector")
 public class Connector {
 	public enum ENDTYPE  {NONE, FILLEDCIRCLE, HOLLOWCIRCLE, FILLEDSQUARE, SIMPLEARROW, HOLLOWARROW, FILLEDARROW, HOLLOWSQUARE}
+	private enum SHAPE  {SOURCE, TARGET}
 	
 	private Shape source;
 	private Shape target;
@@ -43,6 +44,12 @@ public class Connector {
 		this.source = source;
 		this.target = target;
 		setLineColor(new Color(Display.getCurrent(), new RGB(30, 144, 255)));
+		
+		if (source == target) {
+			points.add(new Point2D.Double(source.getBounds2D().getCenterX() + source.getBounds2D().getWidth() + 30, source.getBounds2D().getCenterY()));
+			points.add(new Point2D.Double(source.getBounds2D().getCenterX() + source.getBounds2D().getWidth() + 30, source.getBounds2D().getCenterY() + source.getBounds2D().getHeight() + 30));
+			points.add(new Point2D.Double(source.getBounds2D().getCenterX(), source.getBounds2D().getCenterY() + source.getBounds2D().getHeight() + 30));
+		}
 	}	
 
 	public Shape getSource() {
@@ -59,15 +66,15 @@ public class Connector {
 		gc.setForeground(lineColor);
 		gc.setBackground(lineColor);
 		
-		Point2D pt = getIntersectionPoint(source, target);
-		Point2D ps = getIntersectionPoint(target, source);
+		Point2D pt = getIntersectionPoint(source, target, SHAPE.TARGET);
+		Point2D ps = getIntersectionPoint(target, source, SHAPE.SOURCE);
 
 		drawLines(gc);		
 				
 		gc.setLineStyle(SWT.LINE_SOLID);
 		
-		paintEnd(gc, targetEndSize, getLastPointBefore(target), pt, targetEndType);
-		paintEnd(gc, sourceEndSize, getLastPointBefore(source), ps, sourceEndType);
+		paintEnd(gc, targetEndSize, getLastPointBefore(SHAPE.TARGET), pt, targetEndType);
+		paintEnd(gc, sourceEndSize, getLastPointBefore(SHAPE.SOURCE), ps, sourceEndType);
 	}
 
 	private void drawLines(GC gc) {
@@ -78,8 +85,8 @@ public class Connector {
 	}
 
 	private List<Point2D> augmentedPoints() {
-		Point2D pt = getIntersectionPoint(source, target);
-		Point2D ps = getIntersectionPoint(target, source);
+		Point2D pt = getIntersectionPoint(source, target, SHAPE.TARGET);
+		Point2D ps = getIntersectionPoint(target, source, SHAPE.SOURCE);
 
 		List<Point2D> aPoints = new LinkedList<Point2D>();
 		aPoints.add(ps);
@@ -133,14 +140,14 @@ public class Connector {
 		return versor;
 	}
 
-	private Point2D getIntersectionPoint(Shape shape1, Shape shape2) {
-		Point2D p1 = getLastPointBefore(shape2);
+	private Point2D getIntersectionPoint(Shape shape1, Shape shape2, SHAPE s) {
+		Point2D p1 = getLastPointBefore(s);
 		Point2D p2 = new Point2D.Double(shape2.getBounds2D().getX() + shape2.getBounds2D().getWidth() / 2, shape2.getBounds2D().getY() + shape2.getBounds2D().getHeight() / 2);
 		return getIntersectionPoint(p1, p2, shape2);
 	}
 
-	private Point2D getLastPointBefore(Shape shape) {
-		if (shape.equals(source)) {
+	private Point2D getLastPointBefore(SHAPE s) {
+		if (s.equals(SHAPE.SOURCE)) {
 			if (points.size() != 0) return points.get(0);
 			return target.getCenter();
 		} else {
@@ -207,8 +214,8 @@ public class Connector {
 	}
 
 	public Point2D getCenter() {
-		Point2D pt = getIntersectionPoint(source, target);
-		Point2D ps = getIntersectionPoint(target, source);
+		Point2D pt = getIntersectionPoint(source, target, SHAPE.TARGET);
+		Point2D ps = getIntersectionPoint(target, source, SHAPE.SOURCE);
 
 		Line2D line = new Line2D.Double(pt, ps);
 				

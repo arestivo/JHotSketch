@@ -52,7 +52,6 @@ public class SnapController {
 			besth = getBestHorizontalSnapline(controller, rectangle, selected, null, 0);
 		}
 		if (controller.getCurrentController() instanceof HandleController) {
-			System.out.println("MM");
 			HandleController hc = (HandleController) controller.getCurrentController();
 			Handle handle = hc.getHandle();
 			if (handle instanceof ConnectorPointHandle) {

@@ -391,4 +391,9 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		selectedShapes.addAll(shapes);
 		controllerChanged();
 	}
+
+	public void selectConnector(Connector connector) {
+		selectedConnectors.add(connector);
+		controllerChanged();
+	}
 }

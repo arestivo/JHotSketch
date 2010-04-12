@@ -281,7 +281,7 @@ public class Connector {
 		return clone;
 	}
 
-	private void copyProperties(Connector other) {
+	public void copyProperties(Connector other) {
 		setLineColor(other.getLineColor());
 		setLineStyle(other.getLineStyle());
 		setLineWidth(other.getLineWidth());
@@ -349,5 +349,16 @@ public class Connector {
 
 	public void setPointY(int position, int y) {
 		points.get(position).setLocation(new Point2D.Double(points.get(position).getX(), y));
+	}
+
+	public boolean compareStyles(Connector other) {
+		if (!getLineColor().equals(other.getLineColor())) return false;
+		if (getLineStyle() != other.getLineStyle()) return false;
+		if (getLineWidth() != other.getLineWidth()) return false;
+		if (getSourceEndSize() != other.getSourceEndSize()) return false;
+		if (getTargetEndSize() != other.getTargetEndSize()) return false;
+		if (getSourceEndType() != other.getSourceEndType()) return false;
+		if (getTargetEndType() != other.getTargetEndType()) return false;
+		return true;
 	}
 }

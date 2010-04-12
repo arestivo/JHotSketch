@@ -335,4 +335,12 @@ public class Connector {
 		points.get(position).setLocation(new Point2D.Double(x, y));
 		
 	}
+
+	public void setPointX(int position, int x) {
+		points.get(position).setLocation(new Point2D.Double(x, points.get(position).getY()));
+	}
+
+	public void setPointY(int position, int y) {
+		points.get(position).setLocation(new Point2D.Double(points.get(position).getX(), y));
+	}
 }

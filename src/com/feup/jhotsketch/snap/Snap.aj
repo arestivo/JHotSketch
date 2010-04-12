@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import com.feup.contribution.aida.annotations.PackageName;
 import com.feup.jhotsketch.controller.DiagramController;
+import com.feup.jhotsketch.controller.HandleController;
 import com.feup.jhotsketch.controller.MoveController;
 import com.feup.jhotsketch.diagram.Diagram;
 import com.feup.jhotsketch.preferences.PreferencesMenu;
@@ -54,12 +55,14 @@ public aspect Snap {
 	after(DiagramController controller) : mouseMove(controller) {
 		if (snapToObject && controller.getCurrentController() instanceof MoveController)
 			SnapController.getInstance().mouseMove(controller);
+		if (snapToObject && controller.getCurrentController() instanceof HandleController)
+			SnapController.getInstance().mouseMove(controller);
 	}
 
 	pointcut mouseUp(DiagramController controller) :
 		execution(void DiagramController.mouseUp(..)) && this(controller);
 		
-	after(DiagramController controller) : mouseUp(controller) {
+	before(DiagramController controller) : mouseUp(controller) {
 		if (snapToObject) 
 			SnapController.getInstance().mouseUp(controller);
 	}

@@ -95,4 +95,8 @@ public class HandleController implements ShapeController{
 			cph.getConnector().removePoint(cph.getPosition());
 		}
 	}
+
+	public Handle getHandle() {
+		return handle;
+	}
 }

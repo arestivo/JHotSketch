@@ -1,11 +1,13 @@
 package com.feup.jhotsketch.application;
 
-import java.util.LinkedList;
+import java.util.LinkedList; 
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FontDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -44,6 +47,8 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 
 	private Scale alpha;
 
+	private Button textFont;
+
 	public PropertyPanel(Composite parent, int style) {
 		super(parent, style);	
 		
@@ -70,6 +75,7 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 		createLineStyleControl(group);
 		createEndSizeControl(group);
 		createEndTypeControl(group);
+		createTextControl(group);
 
 		GridData gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
@@ -77,6 +83,23 @@ public class PropertyPanel extends Composite implements ApplicationObserver, Con
 		group.setLayoutData(gd);
 		
 		group.pack();
+	}
+
+	private void createTextControl(final Group group) {
+		Label label = new Label(group, SWT.NONE);
+		label.setText("Font");
+
+		textFont = new Button(group, SWT.NONE);
+		textFont.setText("...");		
+		textFont.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				FontDialog fd = new FontDialog(group.getShell());
+				FontData newFont = fd.open();
+				if (newFont == null) return;
+		        currentController.setSelectedFont(new Font(Display.getCurrent(),newFont));
+			}
+		});
 	}
 
 	private void createAlphaControl(Group group) {

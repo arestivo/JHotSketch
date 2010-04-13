@@ -13,6 +13,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -395,5 +396,9 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 	public void selectConnector(Connector connector) {
 		selectedConnectors.add(connector);
 		controllerChanged();
+	}
+
+	public void setSelectedFont(Font font) {
+		for (Shape shape : selectedShapes) shape.setFont(font);		
 	}
 }

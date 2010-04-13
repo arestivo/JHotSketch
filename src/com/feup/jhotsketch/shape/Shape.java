@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -24,6 +25,7 @@ public abstract class Shape {
 	private int lineStyle = SWT.LINE_SOLID;
 	private int alpha = 255;
 
+	private Font font = new Font(Display.getCurrent(), "SansSerif", 12, SWT.NORMAL);
 	private Color textColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private String text = "";
 	
@@ -88,6 +90,7 @@ public abstract class Shape {
 	}
 	
 	protected void drawText(GC gc) {
+		gc.setFont(font);
 		gc.setForeground(textColor);
 		Point size = gc.textExtent(text);
 		gc.drawText(text, getBounds().x + getBounds().width / 2 - size.x / 2, getBounds().y + getBounds().height / 2 - size.y / 2);
@@ -177,5 +180,10 @@ public abstract class Shape {
 
 	public Point2D getCenter() {
 		return new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
+	}
+
+	public void setFont(Font font) {
+		this.font = font;
+		shapeChanged();
 	}
 }

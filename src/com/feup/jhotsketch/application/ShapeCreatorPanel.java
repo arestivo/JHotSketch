@@ -26,8 +26,6 @@ public class ShapeCreatorPanel extends Composite{
 		new ShapeControl(this, SWT.BORDER).setShape(new RegularPolygonShape(10, 10, 40, 30, 3, -Math.PI / 2));
 		new ShapeControl(this, SWT.BORDER).setShape(new RegularPolygonShape(10, 10, 40, 30, 5, -Math.PI / 2));
 		new ShapeControl(this, SWT.BORDER).setShape(new RegularPolygonShape(10, 10, 40, 30, 6, Math.PI));
-		new ShapeControl(this, SWT.BORDER).setShape(new RegularPolygonShape(10, 10, 40, 30, 8, Math.PI));
-		new ShapeControl(this, SWT.BORDER).setShape(new RegularPolygonShape(10, 10, 40, 30, 12, Math.PI));
 		setLayout(new RowLayout());
 		for (Control control : getChildren()) {
 			RowData rd = new RowData(60, 50);

@@ -94,7 +94,8 @@ public aspect EditMenu {
 		for (Connector connector : controller.getSelectedConnectors()) {
 			Shape source = clones.get(connector.getSource());
 			Shape target = clones.get(connector.getTarget());
-			if (source == null || target == null) continue;
+			if (source == null) source = connector.getSource();
+			if (target == null) target = connector.getTarget();
 
 			Connector clone = connector.clone();
 			clone.setSource(source);
@@ -117,7 +118,8 @@ public aspect EditMenu {
 		for (Connector connector : connectorClipboard) {
 			Shape source = clones.get(connector.getSource());
 			Shape target = clones.get(connector.getTarget());
-			if (source == null || target == null) continue;
+			if (source == null) source = connector.getSource();
+			if (target == null) target = connector.getTarget();
 
 			Connector clone = connector.clone();
 			clone.setSource(source);

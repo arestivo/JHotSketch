@@ -147,6 +147,12 @@ public abstract class Shape {
 		setLineColor(other.getLineColor());
 		setLineStyle(other.getLineStyle());
 		setLineWidth(other.getLineWidth());
+		setFont(other.getFont());
+		setText(other.getText());
+	}
+
+	private Font getFont() {
+		return font;
 	}
 
 	public void setText(String text) {

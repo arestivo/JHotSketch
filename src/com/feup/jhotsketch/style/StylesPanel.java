@@ -232,6 +232,7 @@ public class StylesPanel extends Composite{
 			if (!found) {
 				RectangleShape rect = new RectangleShape(c * swidth + (c + 1) * 10, l * sheight + (l + 1) * 10 + 10 , swidth, sheight);
 				rect.copyProperties(shape);
+				rect.setText("T");
 				shapes.add(rect);
 				c++; if (c == 4) {c = 0; l++;}
 			}

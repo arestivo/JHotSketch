@@ -57,8 +57,10 @@ public aspect Style {
 		call(void DiagramController.addShape(Shape)) && args(shape) && (this(MouseMoveListener) || this(MouseListener));
 	
 	after(Shape shape) : addShape(shape){
-		if (StylesPanel.getInstance().getSelectedShapeStyle() != null)
+		if (StylesPanel.getInstance().getSelectedShapeStyle() != null) {
 			shape.copyProperties(StylesPanel.getInstance().getSelectedShapeStyle());
+			shape.setText("");
+		}
 	}
 
 	pointcut addConnector(Connector connector) :

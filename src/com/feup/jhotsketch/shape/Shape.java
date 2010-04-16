@@ -181,6 +181,7 @@ public abstract class Shape {
 		if (!getLineColor().equals(shape.getLineColor())) return false;
 		if (getLineStyle() != shape.getLineStyle()) return false;
 		if (getLineWidth() != shape.getLineWidth()) return false;
+		if (getFont() != shape.getFont()) return false;
 		return true;
 	}
 

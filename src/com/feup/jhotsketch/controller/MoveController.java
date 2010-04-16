@@ -6,8 +6,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
 import com.feup.contribution.aida.annotations.PackageName;
-import com.feup.jhotsketch.application.Application;
 import com.feup.jhotsketch.connector.Connector;
+import com.feup.jhotsketch.diagram.Diagram;
 import com.feup.jhotsketch.shape.Shape;
 
 @PackageName("Controller")
@@ -16,9 +16,11 @@ public class MoveController implements ShapeController{
 	private final Set<Shape> shapes;
 	private Point lastPoint;
 	private boolean moved = false;
+	private Diagram diagram;
 	
-	public MoveController(Set<Shape> selected) {
+	public MoveController(Set<Shape> selected, Diagram diagram) {
 		this.shapes = selected;
+		this.diagram = diagram;
 	}
 
 	@Override
@@ -31,7 +33,7 @@ public class MoveController implements ShapeController{
 		for (Shape shape : shapes) {
 			shape.move(x - lastPoint.x, y - lastPoint.y);
 		}
-		for (Connector connector : Application.getInstance().getActiveController().getDiagram().getConnectors()) {
+		for (Connector connector : diagram.getConnectors()) {
 			if (shapes.contains(connector.getSource()) && shapes.contains(connector.getTarget()))
 			connector.move(x - lastPoint.x, y - lastPoint.y);
 		}

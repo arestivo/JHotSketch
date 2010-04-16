@@ -83,7 +83,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 		List<Shape> foundShapes = diagram.getShapesAt(x, y);
 		for (Shape shape : selectedShapes) {
 			if (foundShapes.contains(shape)) {
-				controller = new MoveController(selectedShapes);
+				controller = new MoveController(selectedShapes, diagram);
 				controller.mouseDown(x, y);
 				return true;
 			}
@@ -133,7 +133,7 @@ public class DiagramController implements MouseListener, MouseMoveListener, Diag
 			Shape next = getNextSelection(foundShapes);
 			if ((e.stateMask & SWT.CONTROL) == 0) clearSelection();
 			selectedShapes.add(next);
-			controller = new MoveController(selectedShapes);
+			controller = new MoveController(selectedShapes, diagram);
 			controller.mouseDown(e.x, e.y);
 		}
 		controllerChanged();

@@ -289,6 +289,11 @@ public class Connector {
 		setTargetEndType(other.getTargetEndType());
 		setSourceEndSize(other.getSourceEndSize());
 		setTargetEndSize(other.getTargetEndSize());
+		for (Point2D point : other.getPoints()) addPoint((Point2D) point.clone());
+	}
+
+	private void addPoint(Point2D point) {
+		points.add(point);
 	}
 
 	public void setSource(Shape source) {

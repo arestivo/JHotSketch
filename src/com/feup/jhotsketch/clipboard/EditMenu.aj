@@ -121,6 +121,8 @@ public aspect EditMenu {
 			if (source == null) source = connector.getSource();
 			if (target == null) target = connector.getTarget();
 
+			connector.move(20, 20);
+			
 			Connector clone = connector.clone();
 			clone.setSource(source);
 			clone.setTarget(target);

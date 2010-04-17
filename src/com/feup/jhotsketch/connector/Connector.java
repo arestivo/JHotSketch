@@ -372,4 +372,8 @@ public class Connector {
 			point.setLocation(new Point2D.Double(point.getX() + dx, point.getY() + dy));
 		}
 	}
+
+	public void removeAllPoints() {
+		points.clear();
+	}
 }

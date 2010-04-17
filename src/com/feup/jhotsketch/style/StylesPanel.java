@@ -257,6 +257,7 @@ public class StylesPanel extends Composite{
 				RectangleShape rs2 = new RectangleShape((c + 1) * swidth + (c + 1) * 10, l * sheight + (l + 1) * 10 + 10 , 1, sheight);
 				Connector conn = new Connector(rs1, rs2);
 				conn.copyProperties(connector);
+				conn.removeAllPoints();
 				connectors.add(conn);
 				c++; if (c == 4) {c = 0; l++;}
 			}

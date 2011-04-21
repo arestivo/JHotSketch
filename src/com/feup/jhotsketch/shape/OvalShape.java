@@ -36,7 +36,7 @@ public class OvalShape extends Shape{
 	@Override
 	public Shape clone() {
 		OvalShape clone = new OvalShape(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-		clone.copyProperties(this);
+		clone.copyProperties(this, true);
 		return clone;
 	}
 

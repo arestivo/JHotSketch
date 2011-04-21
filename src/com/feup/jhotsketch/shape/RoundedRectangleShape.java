@@ -26,7 +26,7 @@ public class RoundedRectangleShape extends Shape{
 		RoundedRectangleShape clone = new RoundedRectangleShape(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 		clone.setRadiusX(radiusx);
 		clone.setRadiusY(radiusy);
-		clone.copyProperties(this);
+		clone.copyProperties(this, true);
 		return clone;
 	}
 

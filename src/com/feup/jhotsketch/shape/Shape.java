@@ -141,14 +141,14 @@ public abstract class Shape {
 	
 	public abstract Shape clone();
 	
-	public void copyProperties(Shape other) {
+	public void copyProperties(Shape other, boolean text) {
 		setAlpha(other.getAlpha());
 		setFillColor(other.getFillColor());
 		setLineColor(other.getLineColor());
 		setLineStyle(other.getLineStyle());
 		setLineWidth(other.getLineWidth());
 		setFont(other.getFont());
-		setText(other.getText());
+		if (text) setText(other.getText());
 	}
 
 	private Font getFont() {

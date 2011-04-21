@@ -127,7 +127,7 @@ public class StylesPanel extends Composite{
 				Diagram diagram = controller.getDiagram();
 
 				for (Shape shape : controller.getSelectedShapes()) 
-					shape.copyProperties(style);
+					shape.copyProperties(style, false);
 				update(diagram);
 			}
 		});
@@ -231,7 +231,7 @@ public class StylesPanel extends Composite{
 			}
 			if (!found) {
 				RectangleShape rect = new RectangleShape(c * swidth + (c + 1) * 10, l * sheight + (l + 1) * 10 + 10 , swidth, sheight);
-				rect.copyProperties(shape);
+				rect.copyProperties(shape, false);
 				rect.setText("T");
 				shapes.add(rect);
 				c++; if (c == 4) {c = 0; l++;}

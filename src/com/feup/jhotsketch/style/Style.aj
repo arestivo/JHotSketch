@@ -58,7 +58,7 @@ public aspect Style {
 	
 	after(Shape shape) : addShape(shape){
 		if (StylesPanel.getInstance().getSelectedShapeStyle() != null) {
-			shape.copyProperties(StylesPanel.getInstance().getSelectedShapeStyle());
+			shape.copyProperties(StylesPanel.getInstance().getSelectedShapeStyle(), true);
 			shape.setText("");
 		}
 	}

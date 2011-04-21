@@ -48,7 +48,7 @@ public class RegularPolygonShape extends Shape{
 	@Override
 	public Shape clone() {
 		RegularPolygonShape clone = new RegularPolygonShape(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-		clone.copyProperties(this);
+		clone.copyProperties(this, true);
 		clone.setSides(sides);
 		clone.setStartAngle(startAngle);
 		return clone;

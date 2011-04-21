@@ -31,7 +31,7 @@ public class RhombusShape extends Shape{
 	@Override
 	public Shape clone() {
 		RhombusShape clone = new RhombusShape(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-		clone.copyProperties(this);
+		clone.copyProperties(this, true);
 		return clone;
 	}
 
